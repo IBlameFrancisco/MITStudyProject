@@ -4,38 +4,10 @@
  * Contains all course content including units, sections, and practice problems.
  */
 
-// =============================================================================
-// TYPE DEFINITIONS
-// =============================================================================
+import type { Course, Unit, TopicSection, PracticeProblem } from './types';
 
-export interface PracticeProblem {
-  id: string;
-  problem: string;
-  solution: string;
-}
-
-export interface TopicSection {
-  title: string;
-  content: string;
-}
-
-export interface Unit {
-  id: string;
-  title: string;
-  description: string;
-  sections?: TopicSection[];
-  practiceProblems?: PracticeProblem[];
-  visualizations: string[];
-}
-
-export interface Course {
-  id: string;
-  number: string;
-  title: string;
-  description: string;
-  color: string;
-  units: Unit[];
-}
+// Re-export types for backwards compatibility
+export type { Course, Unit, TopicSection, PracticeProblem };
 
 // =============================================================================
 // COURSE DATA
@@ -153,7 +125,7 @@ Total: $60 + 6 = \\boxed{66}$`
 
 $$\\sum_{k=0}^{n} \\binom{n}{k}^2 = \\binom{2n}{n}$$
 
-*Hint: Consider the coefficient of $x^n$ in $(1+x)^n(1+x)^n = (1+x)^{2n}$.*`,
+*Hint: Consider the coefficient of $x^n$ , in $(1+x)^n(1+x)^n = (1+x)^{2n}$.*`,
             solution: `**Algebraic Proof using Generating Functions:**
 
 Consider the identity $(1+x)^n \\cdot (1+x)^n = (1+x)^{2n}$.
@@ -188,7 +160,7 @@ $$P(\\text{each face once}) = \\frac{6!}{6^6} = \\frac{720}{46656} = \\frac{5}{3
 This is approximately **1.54%**.`
           }
         ],
-        visualizations: ['ProbabilityTree'],
+        visualizations: ['PascalTriangle', 'ProbabilityTree'],
       },
       // Unit 2: Conditional Probability and Independence
       {
@@ -344,7 +316,7 @@ $$P(B|HH) = \\frac{P(HH|B)P(B)}{P(HH)} = \\frac{(0.49)(0.5)}{0.37} = \\frac{0.24
 Given two heads, there's about a **66.2%** chance you picked the biased coin.`
           }
         ],
-        visualizations: ['ProbabilityTree'],
+        visualizations: ['BayesTheorem', 'ProbabilityTree'],
       },
       // Unit 3: Random Variables
       {
@@ -519,7 +491,7 @@ $$F_X(0.5) = 0.5/2 = 1/4$$
 $$P(0.5 < X \\leq 2) = 3/4 - 1/4 = \\boxed{1/2}$$`
           }
         ],
-        visualizations: ['DistributionPlot'],
+        visualizations: ['CDFPDFVisualizer', 'DistributionPlot'],
       },
       // Unit 4: Expectation and Variance
       {
@@ -701,7 +673,7 @@ $$\\boxed{\\Var(X) = \\min_{c} E[(X - c)^2]}$$
 **Interpretation:** The mean is the best constant predictor of $X$ in the mean squared error sense.`
           }
         ],
-        visualizations: ['DistributionPlot'],
+        visualizations: ['ExpectationVariance'],
       },
       // Unit 5: Common Discrete Distributions
       {
@@ -1083,7 +1055,7 @@ $f_Y(y) = \\int_0^1 6xy^2 \\, dx = 6y^2 \\cdot \\frac{1}{2} = \\boxed{3y^2}$ for
 **Yes, $X$ and $Y$ are independent.**`
           }
         ],
-        visualizations: ['DistributionPlot'],
+        visualizations: ['JointDistribution'],
       },
       // Unit 8: Sums of Random Variables
       {
@@ -1134,7 +1106,7 @@ $\\Var(X) = 48 - 36 = \\boxed{12}$
 This is the MGF of $\\boxed{\\text{Gamma}(3, 1/2)}$.`
           }
         ],
-        visualizations: ['DistributionPlot', 'MonteCarloSim'],
+        visualizations: ['ConvolutionVisualizer'],
       },
       // Unit 9: Limit Theorems
       {
@@ -1178,7 +1150,7 @@ $$P(480 \\leq X \\leq 520) \\approx \\Phi\\left(\\frac{520.5 - 500}{15.81}\\righ
 $$= \\Phi(1.30) - \\Phi(-1.30) = 2(0.9032) - 1 = \\boxed{0.806}$$`
           }
         ],
-        visualizations: ['DistributionPlot', 'MonteCarloSim'],
+        visualizations: ['CLTDemo'],
       },
       // Unit 10: Markov Chains
       {
@@ -1222,7 +1194,683 @@ $$\\frac{7}{3}\\pi_2 = 1 \\implies \\pi_2 = \\frac{3}{7}, \\quad \\pi_1 = \\frac
 $$\\boxed{\\boldsymbol{\\pi} = \\left(\\frac{4}{7}, \\frac{3}{7}\\right)}$$`
           }
         ],
-        visualizations: ['MonteCarloSim'],
+        visualizations: ['MarkovChain'],
+      },
+      // Unit 11: Entropy and Information Theory
+      {
+        id: 'entropy',
+        title: 'Entropy and Information Theory',
+        description: 'Shannon entropy, information theory fundamentals, and applications to probability.',
+        sections: [
+          {
+            title: 'Shannon Entropy',
+            content: `The **Shannon entropy** of a discrete random variable $X$ with PMF $p(x)$ measures uncertainty or information content:
+
+$$H(X) = -\\sum_{x} p(x) \\log_2 p(x) = E[-\\log_2 p(X)]$$
+
+**Convention:** $0 \\log 0 = 0$ (by continuity).
+
+**Units:** When using $\\log_2$, entropy is measured in **bits**. With natural log, it's in **nats**.
+
+**Properties of Entropy:**
+1. **Non-negativity:** $H(X) \\geq 0$, with $H(X) = 0$ iff $X$ is deterministic
+2. **Maximum entropy:** For $X$ taking $n$ values, $H(X) \\leq \\log_2 n$, with equality iff $X$ is uniform
+3. **Additivity for independent RVs:** $H(X, Y) = H(X) + H(Y)$ if $X \\perp Y$
+
+**Example:** For a fair coin ($p = 1/2$):
+$$H(X) = -\\frac{1}{2}\\log_2\\frac{1}{2} - \\frac{1}{2}\\log_2\\frac{1}{2} = 1 \\text{ bit}$$
+
+For a biased coin ($p = 0.9$):
+$$H(X) = -0.9\\log_2(0.9) - 0.1\\log_2(0.1) \\approx 0.469 \\text{ bits}$$`
+          },
+          {
+            title: 'Joint and Conditional Entropy',
+            content: `**Joint Entropy** for $(X, Y)$:
+$$H(X, Y) = -\\sum_{x,y} p(x, y) \\log_2 p(x, y)$$
+
+**Conditional Entropy** of $X$ given $Y$:
+$$H(X|Y) = \\sum_y p(y) H(X|Y=y) = -\\sum_{x,y} p(x,y) \\log_2 p(x|y)$$
+
+**Chain Rule for Entropy:**
+$$H(X, Y) = H(X) + H(Y|X) = H(Y) + H(X|Y)$$
+
+This extends to multiple variables:
+$$H(X_1, X_2, \\ldots, X_n) = \\sum_{i=1}^n H(X_i | X_1, \\ldots, X_{i-1})$$
+
+**Key inequality:** $H(X|Y) \\leq H(X)$
+
+"Conditioning reduces entropy" — knowing $Y$ can only decrease uncertainty about $X$, with equality iff $X \\perp Y$.`
+          },
+          {
+            title: 'Mutual Information',
+            content: `**Mutual Information** measures the information shared between $X$ and $Y$:
+
+$$I(X; Y) = H(X) - H(X|Y) = H(Y) - H(Y|X) = H(X) + H(Y) - H(X,Y)$$
+
+**Properties:**
+- $I(X; Y) \\geq 0$, with equality iff $X \\perp Y$
+- $I(X; Y) = I(Y; X)$ (symmetric)
+- $I(X; X) = H(X)$ (self-information)
+
+**Relation to KL Divergence:**
+$$I(X; Y) = D_{KL}(p(x,y) \\| p(x)p(y))$$
+
+where the **Kullback-Leibler divergence** is:
+$$D_{KL}(p \\| q) = \\sum_x p(x) \\log \\frac{p(x)}{q(x)}$$
+
+**Venn Diagram Interpretation:**
+- $H(X)$ and $H(Y)$ are the individual "circles"
+- $I(X;Y)$ is the overlap
+- $H(X,Y)$ is the union
+- $H(X|Y)$ is $H(X)$ minus the overlap`
+          },
+          {
+            title: 'Data Processing Inequality',
+            content: `If $X \\to Y \\to Z$ forms a **Markov chain** (i.e., $X$ and $Z$ are conditionally independent given $Y$), then:
+
+$$I(X; Z) \\leq I(X; Y)$$
+
+**Interpretation:** Processing data can only destroy information, never create it.
+
+**Consequences:**
+- No clever processing of $Y$ can extract more information about $X$ than $Y$ already contains
+- If $Z = f(Y)$ for any function $f$: $I(X; Z) \\leq I(X; Y)$
+
+**Fano's Inequality:** If $\\hat{X}$ is an estimate of $X$ based on $Y$, and $P_e = P(\\hat{X} \\neq X)$:
+$$H(X|Y) \\leq H(P_e) + P_e \\log(|\\mathcal{X}| - 1)$$
+
+where $H(P_e) = -P_e \\log P_e - (1-P_e)\\log(1-P_e)$ is the binary entropy.
+
+This bounds the probability of error in terms of conditional entropy.`
+          },
+          {
+            title: 'Entropy Rate and Source Coding',
+            content: `For a stochastic process $\\{X_n\\}$, the **entropy rate** is:
+$$H(\\mathcal{X}) = \\lim_{n \\to \\infty} \\frac{1}{n} H(X_1, X_2, \\ldots, X_n)$$
+
+For a stationary Markov chain with transition matrix $P$ and stationary distribution $\\pi$:
+$$H(\\mathcal{X}) = -\\sum_i \\pi_i \\sum_j p_{ij} \\log p_{ij}$$
+
+**Shannon's Source Coding Theorem:**
+A source with entropy rate $H$ cannot be compressed to fewer than $H$ bits per symbol on average. Moreover, it can be compressed to arbitrarily close to $H$ bits per symbol.
+
+**Typical Set:** For i.i.d. $X_1, \\ldots, X_n$ with entropy $H$, with high probability:
+$$2^{-n(H+\\epsilon)} \\leq p(x_1, \\ldots, x_n) \\leq 2^{-n(H-\\epsilon)}$$
+
+There are approximately $2^{nH}$ such "typical" sequences.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'entropy-1',
+            problem: `Let $X$ be a random variable with $P(X = 1) = 1/2$, $P(X = 2) = 1/4$, $P(X = 3) = 1/8$, $P(X = 4) = 1/8$.
+
+**(a)** Compute $H(X)$ in bits.
+
+**(b)** Design an optimal binary code for $X$ and verify it achieves the entropy bound.`,
+            solution: `**(a)** Computing entropy:
+$$H(X) = -\\sum_i p_i \\log_2 p_i$$
+$$= -\\frac{1}{2}\\log_2\\frac{1}{2} - \\frac{1}{4}\\log_2\\frac{1}{4} - \\frac{1}{8}\\log_2\\frac{1}{8} - \\frac{1}{8}\\log_2\\frac{1}{8}$$
+$$= \\frac{1}{2}(1) + \\frac{1}{4}(2) + \\frac{1}{8}(3) + \\frac{1}{8}(3)$$
+$$= 0.5 + 0.5 + 0.375 + 0.375 = \\boxed{1.75 \\text{ bits}}$$
+
+**(b)** Optimal code (Huffman):
+- $X = 1$: code "0" (1 bit)
+- $X = 2$: code "10" (2 bits)
+- $X = 3$: code "110" (3 bits)
+- $X = 4$: code "111" (3 bits)
+
+Expected code length:
+$$L = \\frac{1}{2}(1) + \\frac{1}{4}(2) + \\frac{1}{8}(3) + \\frac{1}{8}(3) = 1.75 \\text{ bits}$$
+
+This equals $H(X)$, achieving the optimal bound! This happens when all probabilities are powers of 2.`
+          },
+          {
+            id: 'entropy-2',
+            problem: `Let $(X, Y)$ be jointly distributed with:
+- $P(X=0, Y=0) = 1/4$
+- $P(X=0, Y=1) = 1/4$
+- $P(X=1, Y=0) = 1/4$
+- $P(X=1, Y=1) = 1/4$
+
+**(a)** Find $H(X)$, $H(Y)$, and $H(X,Y)$.
+
+**(b)** Find $H(X|Y)$ and $I(X;Y)$.
+
+**(c)** Are $X$ and $Y$ independent?`,
+            solution: `**(a)** Marginals: $P(X=0) = P(X=1) = 1/2$ and $P(Y=0) = P(Y=1) = 1/2$.
+
+$$H(X) = H(Y) = -2 \\cdot \\frac{1}{2}\\log_2\\frac{1}{2} = \\boxed{1 \\text{ bit}}$$
+
+$$H(X,Y) = -4 \\cdot \\frac{1}{4}\\log_2\\frac{1}{4} = 4 \\cdot \\frac{1}{4} \\cdot 2 = \\boxed{2 \\text{ bits}}$$
+
+**(b)** Using the chain rule:
+$$H(X|Y) = H(X,Y) - H(Y) = 2 - 1 = \\boxed{1 \\text{ bit}}$$
+
+$$I(X;Y) = H(X) - H(X|Y) = 1 - 1 = \\boxed{0 \\text{ bits}}$$
+
+**(c)** Since $I(X;Y) = 0$, **yes, $X$ and $Y$ are independent**.
+
+Verification: $p(x,y) = p(x)p(y) = \\frac{1}{2} \\cdot \\frac{1}{2} = \\frac{1}{4}$ for all $(x,y)$. ✓
+
+Note: $H(X,Y) = H(X) + H(Y)$ confirms independence.`
+          },
+          {
+            id: 'entropy-3',
+            problem: `A binary symmetric channel has input $X \\in \\{0, 1\\}$ and output $Y$, where each bit is flipped with probability $\\epsilon$.
+
+**(a)** Find $H(Y|X)$.
+
+**(b)** If $X$ is uniform, find the channel capacity $C = \\max_{p(x)} I(X;Y)$.`,
+            solution: `**(a)** Given $X$, the output $Y$ is $X$ with probability $1-\\epsilon$ and $1-X$ with probability $\\epsilon$.
+
+So $Y|X$ is Bernoulli($\\epsilon$) regardless of $X$.
+
+$$H(Y|X) = H(\\epsilon) = -\\epsilon\\log_2\\epsilon - (1-\\epsilon)\\log_2(1-\\epsilon) = \\boxed{H_2(\\epsilon)}$$
+
+where $H_2(\\epsilon)$ is the binary entropy function.
+
+**(b)** If $X$ is uniform, then by symmetry $Y$ is also uniform, so $H(Y) = 1$.
+
+$$I(X;Y) = H(Y) - H(Y|X) = 1 - H_2(\\epsilon)$$
+
+The capacity is maximized when $X$ is uniform:
+$$\\boxed{C = 1 - H_2(\\epsilon)}$$
+
+**Interpretation:**
+- If $\\epsilon = 0$ (no noise): $C = 1$ bit per channel use
+- If $\\epsilon = 1/2$ (pure noise): $C = 0$ (no information transmitted)
+- If $\\epsilon = 1$ (deterministic flip): $C = 1$ (still usable!)`
+          }
+        ],
+        visualizations: ['EntropyVisualizer'],
+      },
+      // Unit 12: Martingales
+      {
+        id: 'martingales',
+        title: 'Martingales',
+        description: 'Martingale theory, stopping times, and the Optional Stopping Theorem.',
+        sections: [
+          {
+            title: 'Definition of Martingales',
+            content: `A sequence of random variables $\\{X_n\\}$ is a **martingale** with respect to a filtration $\\{\\mathcal{F}_n\\}$ if:
+
+1. $X_n$ is $\\mathcal{F}_n$-measurable (adapted)
+2. $E[|X_n|] < \\infty$ for all $n$
+3. $E[X_{n+1} | \\mathcal{F}_n] = X_n$ (martingale property)
+
+**Interpretation:** A martingale is a "fair game" — the expected future value, given all current information, equals the current value.
+
+**Variants:**
+- **Submartingale:** $E[X_{n+1} | \\mathcal{F}_n] \\geq X_n$ (favorable game)
+- **Supermartingale:** $E[X_{n+1} | \\mathcal{F}_n] \\leq X_n$ (unfavorable game)
+
+**Key property:** Taking iterated expectations:
+$$E[X_m | \\mathcal{F}_n] = X_n \\quad \\text{for all } m > n$$
+
+And unconditionally: $E[X_n] = E[X_0]$ for all $n$.`
+          },
+          {
+            title: 'Examples of Martingales',
+            content: `**1. Simple Random Walk:**
+Let $S_n = \\sum_{i=1}^n Y_i$ where $Y_i = \\pm 1$ with probability $1/2$ each.
+$$E[S_{n+1} | S_1, \\ldots, S_n] = S_n + E[Y_{n+1}] = S_n$$
+
+$\\{S_n\\}$ is a martingale.
+
+**2. Partial Sums of Mean-Zero RVs:**
+If $Y_1, Y_2, \\ldots$ are independent with $E[Y_i] = 0$, then $S_n = \\sum_{i=1}^n Y_i$ is a martingale.
+
+**3. Product Martingale:**
+If $Z_i > 0$ are independent with $E[Z_i] = 1$, then $M_n = \\prod_{i=1}^n Z_i$ is a martingale.
+
+**4. Conditional Expectation Martingale:**
+For any integrable $X$ and filtration $\\{\\mathcal{F}_n\\}$:
+$$M_n = E[X | \\mathcal{F}_n]$$
+is a martingale (the "Doob martingale").
+
+**5. Likelihood Ratio Martingale:**
+If $X_1, X_2, \\ldots$ have density $f$ under $P$ and $g$ under $Q$:
+$$L_n = \\prod_{i=1}^n \\frac{g(X_i)}{f(X_i)}$$
+is a martingale under $P$.`
+          },
+          {
+            title: 'Stopping Times',
+            content: `A random variable $T: \\Omega \\to \\{0, 1, 2, \\ldots\\} \\cup \\{\\infty\\}$ is a **stopping time** if the event $\\{T = n\\}$ depends only on $X_0, X_1, \\ldots, X_n$.
+
+**Intuition:** At time $n$, you can decide whether to stop based only on information available at time $n$.
+
+**Examples:**
+- $T = \\min\\{n : S_n = 0\\}$ (first return to 0) ✓
+- $T = \\min\\{n : S_n = \\max_{k \\leq N} S_k\\}$ (when max is achieved) ✗
+
+**Non-examples:** Times that require knowledge of the future are NOT stopping times.
+
+**The Stopped Process:**
+For a martingale $\\{X_n\\}$ and stopping time $T$:
+$$X_{n \\wedge T} = X_{\\min(n, T)}$$
+is also a martingale ("stopped martingale").
+
+**Why this matters:** We can analyze the martingale at the (random) stopping time $T$ using properties of the stopped martingale.`
+          },
+          {
+            title: 'Optional Stopping Theorem',
+            content: `**Optional Stopping Theorem (OST):** Let $\\{X_n\\}$ be a martingale and $T$ a stopping time. Then $E[X_T] = E[X_0]$ provided ANY of:
+
+1. $T$ is bounded: $T \\leq N$ for some constant $N$
+2. $T$ has finite expectation AND $|X_{n+1} - X_n| \\leq c$ (bounded increments)
+3. $E[T] < \\infty$ and $E[|X_T|] < \\infty$
+
+**Counterexample when conditions fail:**
+Doubling strategy in gambling: Bet $2^n$ dollars on round $n$ until you win.
+- $T$ = first win has $E[T] = 2 < \\infty$
+- But $X_T = 1$ always (guaranteed profit!)
+- Yet $E[X_0] = 0$ (martingale starts at 0)
+
+This violates OST because $X_T$ is not integrable (infinite expected loss).
+
+**Key insight:** The OST says you can't beat a fair game by using a stopping rule — as long as the stopping rule is "reasonable."`
+          },
+          {
+            title: 'Applications of OST',
+            content: `**Application 1: Gambler's Ruin**
+Start with $\\$a$, win/lose $\\$1$ with prob $1/2$. Stop when fortune is $0$ or $b$.
+
+Since $S_n$ is a martingale: $E[S_T] = E[S_0] = a$
+
+Let $p$ = prob of reaching $b$. Then:
+$$E[S_T] = p \\cdot b + (1-p) \\cdot 0 = pb = a$$
+$$\\boxed{p = a/b}$$
+
+**Application 2: Expected Hitting Time**
+For $S_n$ = simple random walk, let $T = \\min\\{n : |S_n| = a\\}$.
+
+$S_n^2 - n$ is a martingale (verify: $E[S_{n+1}^2 | S_n] = S_n^2 + 1$).
+
+By OST: $E[S_T^2 - T] = E[S_0^2 - 0] = 0$
+
+Since $S_T = \\pm a$: $E[S_T^2] = a^2$
+
+Therefore: $\\boxed{E[T] = a^2}$
+
+**Application 3: Wald's Equation**
+If $Y_i$ are i.i.d. with $E[Y_i] = \\mu$ and $T$ is a stopping time with $E[T] < \\infty$:
+$$E\\left[\\sum_{i=1}^T Y_i\\right] = \\mu \\cdot E[T]$$`
+          },
+          {
+            title: 'Martingale Convergence',
+            content: `**Doob's Martingale Convergence Theorem:**
+If $\\{X_n\\}$ is a martingale (or submartingale) with $\\sup_n E[X_n^+] < \\infty$, then:
+$$X_n \\to X_\\infty \\quad \\text{a.s.}$$
+for some random variable $X_\\infty$ with $E[|X_\\infty|] < \\infty$.
+
+**Bounded Martingale Convergence:**
+If $|X_n| \\leq M$ for all $n$, then $X_n \\to X_\\infty$ a.s. and in $L^1$.
+
+**$L^2$ Martingale Convergence:**
+If $\\sup_n E[X_n^2] < \\infty$, then $X_n \\to X_\\infty$ in $L^2$ as well.
+
+**Application: Branching Processes**
+Let $Z_n$ = population size in generation $n$ with mean offspring $\\mu$.
+
+$W_n = Z_n / \\mu^n$ is a martingale.
+
+If $\\mu \\leq 1$: $W_n \\to 0$ a.s. (extinction)
+If $\\mu > 1$: $W_n \\to W_\\infty$ with $P(W_\\infty > 0) = $ survival probability`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'martingale-1',
+            problem: `Let $Y_1, Y_2, \\ldots$ be independent with $P(Y_i = 1) = p$ and $P(Y_i = -1) = 1-p$.
+
+**(a)** For what value of $p$ is $S_n = \\sum_{i=1}^n Y_i$ a martingale?
+
+**(b)** For general $p$, find a constant $c$ such that $M_n = S_n - cn$ is a martingale.
+
+**(c)** Show that $\\left(\\frac{1-p}{p}\\right)^{S_n}$ is always a martingale.`,
+            solution: `**(a)** $E[Y_i] = p - (1-p) = 2p - 1$
+
+For $S_n$ to be a martingale, we need $E[Y_i] = 0$:
+$$2p - 1 = 0 \\implies \\boxed{p = \\frac{1}{2}}$$
+
+**(b)** $E[S_{n+1} - c(n+1) | \\mathcal{F}_n] = S_n + E[Y_{n+1}] - c(n+1)$
+$= S_n + (2p-1) - cn - c$
+
+For martingale property: $(2p-1) = c$
+$$\\boxed{c = 2p - 1}$$
+
+**(c)** Let $r = \\frac{1-p}{p}$ and $M_n = r^{S_n}$.
+
+$$E[M_{n+1} | \\mathcal{F}_n] = E[r^{S_n + Y_{n+1}} | S_n] = r^{S_n} \\cdot E[r^{Y_{n+1}}]$$
+
+$$E[r^{Y_{n+1}}] = p \\cdot r^1 + (1-p) \\cdot r^{-1}$$
+$$= p \\cdot \\frac{1-p}{p} + (1-p) \\cdot \\frac{p}{1-p} = (1-p) + p = 1$$
+
+Therefore:
+$$E[M_{n+1} | \\mathcal{F}_n] = r^{S_n} = M_n \\quad \\checkmark$$
+
+This is the **exponential martingale** for random walks.`
+          },
+          {
+            id: 'martingale-2',
+            problem: `A gambler starts with $\\$50$ and bets $\\$1$ on each round of a fair game. Let $T$ = first time the gambler's fortune reaches $\\$0$ or $\\$100$.
+
+**(a)** What is the probability of reaching $\\$100$?
+
+**(b)** What is the expected number of rounds until the game ends?`,
+            solution: `Let $S_n$ = fortune after $n$ rounds. $S_0 = 50$.
+
+**(a)** $S_n$ is a martingale (fair game).
+
+By OST: $E[S_T] = S_0 = 50$
+
+Let $p$ = probability of reaching 100.
+$$E[S_T] = p \\cdot 100 + (1-p) \\cdot 0 = 100p = 50$$
+$$\\boxed{p = 0.5}$$
+
+**(b)** Consider $M_n = S_n^2 - n$.
+
+Check: $E[S_{n+1}^2 | S_n] = E[(S_n + Y_{n+1})^2 | S_n] = S_n^2 + 2S_n E[Y_{n+1}] + E[Y_{n+1}^2]$
+$= S_n^2 + 0 + 1 = S_n^2 + 1$
+
+So $E[M_{n+1} | \\mathcal{F}_n] = S_n^2 + 1 - (n+1) = M_n$ ✓
+
+By OST: $E[S_T^2 - T] = E[S_0^2] = 2500$
+
+$E[S_T^2] = (0.5)(100)^2 + (0.5)(0)^2 = 5000$
+
+Therefore:
+$$E[T] = E[S_T^2] - 2500 = 5000 - 2500 = \\boxed{2500 \\text{ rounds}}$$`
+          },
+          {
+            id: 'martingale-3',
+            problem: `A monkey types randomly on a 26-letter keyboard. Let $T$ be the first time the word "ABRACADABRA" appears.
+
+**(a)** Set up a martingale betting scheme to analyze this problem.
+
+**(b)** Use the Optional Stopping Theorem to find $E[T]$.`,
+            solution: `**(a)** **Martingale Betting Scheme:**
+
+At each time $n$, new gamblers arrive and bet that the pattern starts at position $n$.
+
+- Gambler $n$ bets $\\$1$ that position $n$ is 'A' (wins $\\$26$ if correct, pays $\\$1$ if wrong)
+- If correct, bets $\\$26$ that position $n+1$ is 'B' (wins $\\$26^2$ if correct)
+- Continue until pattern completes or fails
+
+The total fortune of all gamblers forms a martingale.
+
+**(b)** At stopping time $T$, compute the total winnings.
+
+The key insight is which gamblers can still be winning when "ABRACADABRA" appears:
+- The gambler who started at position $T-10$ wins $26^{11}$
+- But also: "ABRACADABRA" has the prefix "A" appearing again at positions 1, 4, 8 (the A's in the pattern)
+- When pattern completes, gamblers at $T-7$ (starting at second A: "ABRA") and $T-3$ (starting at third A: "A") could also be winning
+
+Overlaps that match:
+- Full pattern: wins $26^{11}$
+- "ABRA" suffix = "ABRA" prefix: wins $26^4$
+- "A" suffix = "A" prefix: wins $26^1$
+
+By OST with martingale starting at 0:
+$$E[\\text{winnings at } T] = 0$$
+$$26^{11} + 26^4 + 26^1 - E[T] = 0$$
+
+$$\\boxed{E[T] = 26^{11} + 26^4 + 26 \\approx 3.67 \\times 10^{15}}$$
+
+Note: This is much larger than $26^{11}$ alone due to the self-overlapping structure of "ABRACADABRA"!`
+          }
+        ],
+        visualizations: ['MartingaleVisualizer'],
+      },
+      // Unit 13: Financial Applications
+      {
+        id: 'financial-applications',
+        title: 'Financial Applications',
+        description: 'Black-Scholes option pricing, risk-neutral probability, and financial mathematics.',
+        sections: [
+          {
+            title: 'Introduction to Options',
+            content: `An **option** is a financial derivative that gives the holder the right (but not obligation) to buy or sell an asset.
+
+**European Call Option:**
+- Right to buy an asset at **strike price** $K$ at **expiration time** $T$
+- Payoff at time $T$: $(S_T - K)^+ = \\max(S_T - K, 0)$
+
+**European Put Option:**
+- Right to sell an asset at strike price $K$ at time $T$
+- Payoff at time $T$: $(K - S_T)^+ = \\max(K - S_T, 0)$
+
+**Put-Call Parity:** For European options on a non-dividend-paying stock:
+$$C - P = S_0 - Ke^{-rT}$$
+
+where $C$ = call price, $P$ = put price, $S_0$ = current stock price, $r$ = risk-free rate.
+
+**The Pricing Problem:** What is the fair price of an option today?`
+          },
+          {
+            title: 'Binomial Model',
+            content: `The **binomial model** provides a discrete-time framework for option pricing.
+
+**One-Period Model:**
+- Stock price $S_0$ can go to $S_u = uS_0$ (up) or $S_d = dS_0$ (down)
+- Risk-free rate $r$ per period
+- Option pays $C_u$ if up, $C_d$ if down
+
+**Replicating Portfolio:** Hold $\\Delta$ shares and $B$ dollars in bonds:
+$$\\Delta \\cdot uS_0 + B(1+r) = C_u$$
+$$\\Delta \\cdot dS_0 + B(1+r) = C_d$$
+
+Solving:
+$$\\Delta = \\frac{C_u - C_d}{(u-d)S_0}$$
+
+**Risk-Neutral Pricing:** Define the **risk-neutral probability**:
+$$q = \\frac{(1+r) - d}{u - d}$$
+
+Then the option price is:
+$$C_0 = \\frac{1}{1+r}[q C_u + (1-q) C_d] = \\frac{1}{1+r} E^Q[C_1]$$
+
+**No-Arbitrage Condition:** $d < 1+r < u$`
+          },
+          {
+            title: 'Risk-Neutral Valuation',
+            content: `**Risk-neutral measure** $Q$ is a probability measure under which:
+
+1. All traded assets, when discounted by the risk-free rate, are martingales
+2. $E^Q[e^{-rT} S_T] = S_0$
+
+**Fundamental Theorem of Asset Pricing:**
+A market is arbitrage-free if and only if there exists a risk-neutral measure.
+
+**Risk-Neutral Pricing Formula:**
+$$V_0 = e^{-rT} E^Q[V_T]$$
+
+The price of any derivative equals the discounted expected payoff under $Q$.
+
+**Key Insight:** Under $Q$, we don't need to know investors' risk preferences or the true probability of stock movements. We only need:
+- The risk-free rate $r$
+- The volatility $\\sigma$
+
+**Girsanov's Theorem** (informal): We can change from the real-world measure $P$ to the risk-neutral measure $Q$ by adjusting the drift of the stock price process.`
+          },
+          {
+            title: 'Geometric Brownian Motion',
+            content: `In continuous time, stock prices are modeled by **Geometric Brownian Motion (GBM)**:
+
+$$dS_t = \\mu S_t \\, dt + \\sigma S_t \\, dW_t$$
+
+where:
+- $\\mu$ = drift (expected return)
+- $\\sigma$ = volatility
+- $W_t$ = standard Brownian motion (Wiener process)
+
+**Solution:**
+$$S_T = S_0 \\exp\\left[(\\mu - \\frac{\\sigma^2}{2})T + \\sigma W_T\\right]$$
+
+**Properties:**
+- $\\log(S_T/S_0) \\sim N((\\mu - \\sigma^2/2)T, \\sigma^2 T)$
+- $S_T$ is **log-normally** distributed
+- $E[S_T] = S_0 e^{\\mu T}$
+
+**Under risk-neutral measure $Q$:**
+$$dS_t = r S_t \\, dt + \\sigma S_t \\, dW_t^Q$$
+
+The drift changes from $\\mu$ to $r$, but volatility $\\sigma$ remains the same.`
+          },
+          {
+            title: 'Black-Scholes Formula',
+            content: `The **Black-Scholes formula** gives the price of a European call option:
+
+$$C = S_0 N(d_1) - Ke^{-rT} N(d_2)$$
+
+where:
+$$d_1 = \\frac{\\ln(S_0/K) + (r + \\sigma^2/2)T}{\\sigma\\sqrt{T}}$$
+$$d_2 = d_1 - \\sigma\\sqrt{T}$$
+
+and $N(\\cdot)$ is the standard normal CDF.
+
+**For a European put:**
+$$P = Ke^{-rT} N(-d_2) - S_0 N(-d_1)$$
+
+**Derivation via Risk-Neutral Pricing:**
+$$C = e^{-rT} E^Q[(S_T - K)^+]$$
+
+Since $\\log S_T \\sim N(\\log S_0 + (r - \\sigma^2/2)T, \\sigma^2 T)$ under $Q$, we compute:
+$$E^Q[(S_T - K)^+] = E^Q[S_T \\mathbf{1}_{S_T > K}] - K \\cdot P^Q(S_T > K)$$
+
+After calculation, this yields the Black-Scholes formula.`
+          },
+          {
+            title: 'The Greeks',
+            content: `**The Greeks** measure sensitivity of option prices to various parameters:
+
+**Delta ($\\Delta$):** Sensitivity to stock price
+$$\\Delta = \\frac{\\partial C}{\\partial S} = N(d_1) \\quad \\text{(for calls)}$$
+
+**Gamma ($\\Gamma$):** Sensitivity of delta to stock price
+$$\\Gamma = \\frac{\\partial^2 C}{\\partial S^2} = \\frac{N'(d_1)}{S\\sigma\\sqrt{T}}$$
+
+**Theta ($\\Theta$):** Time decay
+$$\\Theta = \\frac{\\partial C}{\\partial t} = -\\frac{S N'(d_1) \\sigma}{2\\sqrt{T}} - rKe^{-rT}N(d_2)$$
+
+**Vega ($\\mathcal{V}$):** Sensitivity to volatility
+$$\\mathcal{V} = \\frac{\\partial C}{\\partial \\sigma} = S\\sqrt{T} N'(d_1)$$
+
+**Rho ($\\rho$):** Sensitivity to interest rate
+$$\\rho = \\frac{\\partial C}{\\partial r} = KTe^{-rT}N(d_2)$$
+
+**Delta Hedging:** To create a risk-free portfolio, hold $-\\Delta$ shares for each call option sold. This must be continuously rebalanced.`
+          },
+          {
+            title: 'Black-Scholes PDE',
+            content: `The **Black-Scholes PDE** governs the price $V(S, t)$ of any derivative:
+
+$$\\frac{\\partial V}{\\partial t} + rS\\frac{\\partial V}{\\partial S} + \\frac{1}{2}\\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} = rV$$
+
+**Boundary/Terminal Conditions:**
+- Call: $V(S, T) = (S - K)^+$
+- Put: $V(S, T) = (K - S)^+$
+
+**Derivation via Hedging:**
+1. Form portfolio: one option + $-\\Delta$ shares
+2. Apply Itô's lemma to get $dV$
+3. Choose $\\Delta = \\partial V/\\partial S$ to eliminate randomness
+4. Set return equal to risk-free rate (no arbitrage)
+
+**Feynman-Kac Formula:** The solution to the BS PDE can be written as:
+$$V(S, t) = e^{-r(T-t)} E^Q[V(S_T, T) | S_t = S]$$
+
+This connects PDEs to risk-neutral expectations.
+
+**Implied Volatility:** The volatility $\\sigma$ that, when input to Black-Scholes, gives the market price. Often varies with strike and maturity ("volatility smile/skew").`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'finance-1',
+            problem: `A stock currently priced at $\\$100$ can either go up to $\\$120$ or down to $\\$90$ in one period. The risk-free rate is 5% per period.
+
+**(a)** Find the risk-neutral probability $q$.
+
+**(b)** Price a call option with strike $K = \\$105$.
+
+**(c)** Find the replicating portfolio.`,
+            solution: `Given: $S_0 = 100$, $u = 1.2$, $d = 0.9$, $r = 0.05$, $K = 105$.
+
+**(a)** Risk-neutral probability:
+$$q = \\frac{(1+r) - d}{u - d} = \\frac{1.05 - 0.9}{1.2 - 0.9} = \\frac{0.15}{0.30} = \\boxed{0.5}$$
+
+**(b)** Option payoffs:
+- Up state: $C_u = (120 - 105)^+ = 15$
+- Down state: $C_d = (90 - 105)^+ = 0$
+
+Call price:
+$$C_0 = \\frac{1}{1.05}[0.5 \\times 15 + 0.5 \\times 0] = \\frac{7.5}{1.05} = \\boxed{\\$7.14}$$
+
+**(c)** Replicating portfolio:
+$$\\Delta = \\frac{C_u - C_d}{S_0(u - d)} = \\frac{15 - 0}{100(0.3)} = \\frac{15}{30} = \\boxed{0.5 \\text{ shares}}$$
+
+Bond position:
+$$B = \\frac{uC_d - dC_u}{(u-d)(1+r)} = \\frac{1.2(0) - 0.9(15)}{0.3(1.05)} = \\frac{-13.5}{0.315} = \\boxed{-\\$42.86}$$
+
+Verification: $0.5(100) + (-42.86) = 50 - 42.86 = 7.14$ ✓`
+          },
+          {
+            id: 'finance-2',
+            problem: `Use the Black-Scholes formula to price a European call option with:
+- Current stock price $S_0 = \\$50$
+- Strike price $K = \\$52$
+- Time to expiration $T = 0.5$ years
+- Risk-free rate $r = 4\\%$
+- Volatility $\\sigma = 30\\%$`,
+            solution: `**Step 1:** Compute $d_1$ and $d_2$:
+
+$$d_1 = \\frac{\\ln(50/52) + (0.04 + 0.09/2)(0.5)}{0.30\\sqrt{0.5}}$$
+$$= \\frac{\\ln(0.9615) + (0.085)(0.5)}{0.2121}$$
+$$= \\frac{-0.0392 + 0.0425}{0.2121} = \\frac{0.0033}{0.2121} = 0.0156$$
+
+$$d_2 = d_1 - \\sigma\\sqrt{T} = 0.0156 - 0.2121 = -0.1965$$
+
+**Step 2:** Look up standard normal CDF values:
+$$N(d_1) = N(0.0156) \\approx 0.5062$$
+$$N(d_2) = N(-0.1965) \\approx 0.4221$$
+
+**Step 3:** Apply Black-Scholes formula:
+$$C = S_0 N(d_1) - Ke^{-rT} N(d_2)$$
+$$= 50(0.5062) - 52 e^{-0.04(0.5)}(0.4221)$$
+$$= 25.31 - 52(0.9802)(0.4221)$$
+$$= 25.31 - 21.51 = \\boxed{\\$3.80}$$`
+          },
+          {
+            id: 'finance-3',
+            problem: `A stock follows geometric Brownian motion with $\\mu = 0.12$, $\\sigma = 0.25$, and current price $S_0 = \\$80$.
+
+**(a)** What is the probability that $S_1 > 100$ (in one year)?
+
+**(b)** What is $E[S_1]$?
+
+**(c)** Under the risk-neutral measure with $r = 0.05$, what is $P^Q(S_1 > 100)$?`,
+            solution: `**(a)** Under the real-world measure $P$:
+$$\\log(S_1/S_0) \\sim N((\\mu - \\sigma^2/2)T, \\sigma^2 T)$$
+$$\\log(S_1/80) \\sim N((0.12 - 0.03125)(1), 0.0625)$$
+$$\\log(S_1/80) \\sim N(0.08875, 0.0625)$$
+
+$P(S_1 > 100) = P(\\log(S_1) > \\log(100)) = P(\\log(S_1/80) > \\log(1.25))$
+$$= P\\left(Z > \\frac{\\log(1.25) - 0.08875}{0.25}\\right) = P\\left(Z > \\frac{0.2231 - 0.08875}{0.25}\\right)$$
+$$= P(Z > 0.537) = 1 - \\Phi(0.537) \\approx \\boxed{0.296}$$
+
+**(b)** $E[S_1] = S_0 e^{\\mu T} = 80 e^{0.12} = 80(1.127) = \\boxed{\\$90.19}$
+
+**(c)** Under $Q$, replace $\\mu$ with $r = 0.05$:
+$$\\log(S_1/80) \\sim N((0.05 - 0.03125), 0.0625) = N(0.01875, 0.0625)$$
+
+$$P^Q(S_1 > 100) = P\\left(Z > \\frac{0.2231 - 0.01875}{0.25}\\right) = P(Z > 0.817)$$
+$$= 1 - \\Phi(0.817) \\approx \\boxed{0.207}$$
+
+Note: The risk-neutral probability is lower because the drift under $Q$ ($r = 5\\%$) is less than under $P$ ($\\mu = 12\\%$).`
+          }
+        ],
+        visualizations: ['BlackScholesVisualizer'],
       },
     ],
   },
@@ -1230,12 +1878,4443 @@ $$\\boxed{\\boldsymbol{\\pi} = \\left(\\frac{4}{7}, \\frac{3}{7}\\right)}$$`
     id: '6-1210',
     number: '6.1210',
     title: 'Introduction to Algorithms',
-    description: 'Design and analysis of efficient algorithms.',
+    description: 'Design and analysis of efficient algorithms for computational problems. Covers data structures, sorting, hashing, graph algorithms, and dynamic programming.',
     color: 'bg-green-600',
     units: [
-      { id: 'sorting', title: 'Sorting Algorithms', description: 'Compare sorting algorithms.', visualizations: ['SortingVisualizer'] },
-      { id: 'graphs', title: 'Graph Algorithms', description: 'BFS, DFS, shortest paths.', visualizations: ['GraphVisualizer'] },
-      { id: 'trees', title: 'Tree Data Structures', description: 'BSTs and traversals.', visualizations: ['TreeVisualizer'] },
+      // Unit 1: Introduction
+      {
+        id: 'introduction',
+        title: 'Algorithms and Computational Tractability',
+        description: 'Introduction to algorithmic problem-solving, models of computation, and asymptotic analysis of running time.',
+        sections: [
+          {
+            title: 'What is an Algorithm?',
+            content: `An **algorithm** is a finite sequence of well-defined instructions for solving a computational problem. More formally, an algorithm is a procedure that:
+
+1. Takes an **input** from a specified set of valid inputs
+2. Produces an **output** satisfying a given input-output relation
+3. Terminates after a **finite** number of steps
+
+**Computational Problem:** A specification of the desired input-output relationship.
+
+**Problem Instance:** A specific input to a computational problem.
+
+**Example - Sorting Problem:**
+- **Input:** A sequence of $n$ numbers $\\langle a_1, a_2, \\ldots, a_n \\rangle$
+- **Output:** A permutation $\\langle a'_1, a'_2, \\ldots, a'_n \\rangle$ such that $a'_1 \\leq a'_2 \\leq \\cdots \\leq a'_n$
+
+An algorithm is **correct** if for every input instance, it halts with the correct output. We focus on proving correctness using **loop invariants** and **inductive arguments**.`
+          },
+          {
+            title: 'Model of Computation',
+            content: `To analyze algorithms rigorously, we need a precise computational model. We use the **Word-RAM (Random Access Machine)** model:
+
+**Word-RAM Model Assumptions:**
+- Memory consists of addressable **words** (typically $w = \\Theta(\\log n)$ bits)
+- Each word can store an integer in $\\{0, 1, \\ldots, 2^w - 1\\}$
+- Basic operations on $O(1)$ words take $O(1)$ time:
+  - Arithmetic: $+, -, *, /, \\%$
+  - Comparisons: $<, >, \\leq, \\geq, =, \\neq$
+  - Bitwise: AND, OR, XOR, NOT, shifts
+  - Memory access: read/write at any address
+
+**Why Word-RAM?**
+- Reflects modern computer architecture
+- Allows pointer manipulation in $O(1)$ time
+- Word size $w = \\Theta(\\log n)$ ensures we can address $n$ items
+
+**Running Time:** Count the number of fundamental operations as a function of input size $n$.`
+          },
+          {
+            title: 'Efficiency and Running Time',
+            content: `**Running Time** $T(n)$ is the number of primitive operations an algorithm performs on an input of size $n$.
+
+**Worst-Case Analysis:** $T(n) = \\max\\{T(I) : |I| = n\\}$
+
+We focus on worst-case because:
+1. It provides a **guarantee** that the algorithm never takes longer
+2. Average-case requires assumptions about input distribution
+3. Worst-case often equals or approximates average-case
+
+**Example - Linear Search:**
+
+\`\`\`
+LinearSearch(A, n, x):
+    for i = 1 to n:
+        if A[i] == x:
+            return i
+    return NOT_FOUND
+\`\`\`
+
+- **Best case:** $T(n) = O(1)$ (found at first position)
+- **Worst case:** $T(n) = O(n)$ (not found or found at last position)
+- **Average case:** $T(n) = O(n)$ (on average, scan half the array)
+
+**Why Asymptotic Analysis?**
+- Focuses on **scalability** as input grows
+- Ignores constant factors (machine-dependent)
+- Simplifies comparison between algorithms`
+          },
+          {
+            title: 'Asymptotic Notation',
+            content: `**Big-O Notation (Upper Bound):**
+$$f(n) = O(g(n)) \\iff \\exists c > 0, n_0 > 0 : \\forall n \\geq n_0, \\; 0 \\leq f(n) \\leq c \\cdot g(n)$$
+
+**Big-Omega Notation (Lower Bound):**
+$$f(n) = \\Omega(g(n)) \\iff \\exists c > 0, n_0 > 0 : \\forall n \\geq n_0, \\; 0 \\leq c \\cdot g(n) \\leq f(n)$$
+
+**Big-Theta Notation (Tight Bound):**
+$$f(n) = \\Theta(g(n)) \\iff f(n) = O(g(n)) \\text{ and } f(n) = \\Omega(g(n))$$
+
+**Common Growth Rates (in increasing order):**
+$$O(1) \\subset O(\\log n) \\subset O(n) \\subset O(n \\log n) \\subset O(n^2) \\subset O(n^3) \\subset O(2^n) \\subset O(n!)$$
+
+**Useful Properties:**
+- **Transitivity:** If $f = O(g)$ and $g = O(h)$, then $f = O(h)$
+- **Sum Rule:** $O(f) + O(g) = O(\\max(f, g))$
+- **Product Rule:** $O(f) \\cdot O(g) = O(f \\cdot g)$
+- **Logarithms:** $\\log_a n = \\Theta(\\log_b n)$ for any constants $a, b > 1$
+
+**Example:** $3n^2 + 5n + 2 = \\Theta(n^2)$
+- Upper bound: $3n^2 + 5n + 2 \\leq 10n^2$ for $n \\geq 1$, so $O(n^2)$
+- Lower bound: $3n^2 + 5n + 2 \\geq 3n^2$ for $n \\geq 1$, so $\\Omega(n^2)$`
+          },
+          {
+            title: 'Analyzing Algorithms',
+            content: `**Analyzing Loops:**
+
+For a simple loop:
+\`\`\`
+for i = 1 to n:
+    constant-time operation
+\`\`\`
+Running time: $T(n) = \\Theta(n)$
+
+For nested loops:
+\`\`\`
+for i = 1 to n:
+    for j = 1 to n:
+        constant-time operation
+\`\`\`
+Running time: $T(n) = \\Theta(n^2)$
+
+**Analyzing Recursion:**
+
+For recursive algorithms, we write a **recurrence relation**:
+
+**Example - Binary Search:**
+$$T(n) = T(n/2) + O(1)$$
+
+Solution: $T(n) = O(\\log n)$
+
+**Master Theorem** (for $T(n) = aT(n/b) + f(n)$):
+
+Let $c_{\\text{crit}} = \\log_b a$. Compare $f(n)$ with $n^{c_{\\text{crit}}}$:
+
+1. If $f(n) = O(n^{c_{\\text{crit}} - \\epsilon})$ for some $\\epsilon > 0$: $T(n) = \\Theta(n^{c_{\\text{crit}}})$
+2. If $f(n) = \\Theta(n^{c_{\\text{crit}}} \\log^k n)$: $T(n) = \\Theta(n^{c_{\\text{crit}}} \\log^{k+1} n)$
+3. If $f(n) = \\Omega(n^{c_{\\text{crit}} + \\epsilon})$ and $af(n/b) \\leq cf(n)$ for some $c < 1$: $T(n) = \\Theta(f(n))$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'intro-1',
+            problem: `Rank the following functions by order of growth from slowest to fastest growing:
+
+$$n^2, \\quad n\\log n, \\quad n^{1.5}, \\quad n\\log^2 n, \\quad n^2\\log n, \\quad 2^{\\sqrt{\\log n}}$$
+
+Justify your ranking.`,
+            solution: `To compare growth rates, we analyze each function:
+
+**Step-by-step comparison:**
+
+1. $2^{\\sqrt{\\log n}}$: Let $k = \\sqrt{\\log n}$, so this is $2^k$ where $k$ grows slower than $\\log n$. This grows **slower than any polynomial**.
+
+2. $n \\log n$ vs $n \\log^2 n$: The second has an extra $\\log n$ factor, so $n \\log n = o(n \\log^2 n)$.
+
+3. $n \\log^2 n$ vs $n^{1.5}$: Compare $\\log^2 n$ vs $n^{0.5} = \\sqrt{n}$. Since $\\log^2 n = o(n^\\epsilon)$ for any $\\epsilon > 0$, we have $n \\log^2 n = o(n^{1.5})$.
+
+4. $n^{1.5}$ vs $n^2$: Clearly $n^{1.5} = o(n^2)$.
+
+5. $n^2$ vs $n^2 \\log n$: The second has an extra $\\log n$ factor.
+
+**Final ranking (slowest to fastest):**
+$$\\boxed{2^{\\sqrt{\\log n}} \\prec n \\log n \\prec n \\log^2 n \\prec n^{1.5} \\prec n^2 \\prec n^2 \\log n}$$`
+          },
+          {
+            id: 'intro-2',
+            problem: `Solve the following recurrence relation using the Master Theorem:
+
+$$T(n) = 4T(n/2) + n^2$$
+
+State which case of the Master Theorem applies and find the tight bound $\\Theta$.`,
+            solution: `**Given:** $T(n) = 4T(n/2) + n^2$
+
+**Identify parameters:**
+- $a = 4$ (number of subproblems)
+- $b = 2$ (factor by which input shrinks)
+- $f(n) = n^2$ (cost of divide/combine)
+
+**Compute critical exponent:**
+$$c_{\\text{crit}} = \\log_b a = \\log_2 4 = 2$$
+
+**Compare $f(n)$ with $n^{c_{\\text{crit}}} = n^2$:**
+
+$f(n) = n^2 = \\Theta(n^2) = \\Theta(n^{c_{\\text{crit}}})$
+
+This matches **Case 2** of the Master Theorem with $k = 0$ (since $f(n) = \\Theta(n^2 \\log^0 n)$).
+
+**Apply Case 2:**
+$$T(n) = \\Theta(n^{c_{\\text{crit}}} \\log^{k+1} n) = \\Theta(n^2 \\log n)$$
+
+**Answer:** $\\boxed{T(n) = \\Theta(n^2 \\log n)}$
+
+**Intuition:** The work at each level is $n^2$, and there are $\\log n$ levels, so total work is $n^2 \\cdot \\log n$.`
+          },
+          {
+            id: 'intro-3',
+            problem: `Prove that $\\log(n!) = \\Theta(n \\log n)$.
+
+*Hint: Use Stirling's approximation or bound $n!$ between $(n/2)^{n/2}$ and $n^n$.*`,
+            solution: `**Upper Bound ($O(n \\log n)$):**
+
+$$n! = n \\cdot (n-1) \\cdot (n-2) \\cdots 1 \\leq n \\cdot n \\cdot n \\cdots n = n^n$$
+
+Taking logarithms:
+$$\\log(n!) \\leq \\log(n^n) = n \\log n$$
+
+So $\\log(n!) = O(n \\log n)$.
+
+**Lower Bound ($\\Omega(n \\log n)$):**
+
+Consider the first $n/2$ terms (the larger ones):
+$$n! = n \\cdot (n-1) \\cdots (n/2+1) \\cdot (n/2) \\cdots 1 \\geq \\left(\\frac{n}{2}\\right)^{n/2}$$
+
+Taking logarithms:
+$$\\log(n!) \\geq \\frac{n}{2} \\log\\left(\\frac{n}{2}\\right) = \\frac{n}{2}(\\log n - 1) = \\frac{n \\log n}{2} - \\frac{n}{2}$$
+
+For large $n$: $\\log(n!) \\geq \\frac{n \\log n}{4}$, so $\\log(n!) = \\Omega(n \\log n)$.
+
+**Combining bounds:**
+$$\\boxed{\\log(n!) = \\Theta(n \\log n)}$$
+
+**Alternative (Stirling's Approximation):**
+$$n! \\approx \\sqrt{2\\pi n}\\left(\\frac{n}{e}\\right)^n$$
+$$\\log(n!) \\approx n \\log n - n \\log e + \\frac{1}{2}\\log(2\\pi n) = \\Theta(n \\log n)$$`
+          }
+        ],
+        visualizations: ['AsymptoticNotation'],
+      },
+      // Unit 2: Data Structures
+      {
+        id: 'data-structures',
+        title: 'Data Structures and Sequences',
+        description: 'Interfaces vs data structures, sequence and set interfaces, arrays, and linked lists.',
+        sections: [
+          {
+            title: 'Interface vs Data Structure',
+            content: `A critical distinction in algorithm design:
+
+**Interface (ADT - Abstract Data Type):**
+- Specification of **what** operations are supported
+- Defines the **contract** between user and implementation
+- Says nothing about **how** operations are performed
+- Examples: Stack, Queue, Priority Queue, Dictionary
+
+**Data Structure:**
+- **How** data is stored and organized in memory
+- Concrete implementation of an interface
+- Determines time/space complexity of operations
+- Examples: Array, Linked List, Hash Table, Binary Tree
+
+**Analogy:** An interface is like a job description, while a data structure is like the employee who does the job.
+
+**Example:** The "Set" interface supports:
+- \`insert(x)\`: Add element $x$
+- \`delete(x)\`: Remove element $x$
+- \`find(x)\`: Check if $x$ is present
+
+Many data structures can implement this interface: sorted array, hash table, balanced BST—each with different performance characteristics.`
+          },
+          {
+            title: 'Sequence Interface',
+            content: `The **Sequence** interface maintains a collection of items in an **extrinsic order** (order is externally imposed, not based on item values).
+
+**Static Sequence Operations:**
+- \`build(X)\`: Create sequence from items in $X$
+- \`len()\`: Return number of items
+- \`iter_seq()\`: Output items in sequence order
+- \`get_at(i)\`: Return the $i$th item
+- \`set_at(i, x)\`: Set the $i$th item to $x$
+
+**Dynamic Sequence Operations:**
+- \`insert_at(i, x)\`: Insert $x$ at position $i$, shifting items $\\{i, \\ldots, n-1\\}$ to $\\{i+1, \\ldots, n\\}$
+- \`delete_at(i)\`: Delete item at position $i$, shifting items $\\{i+1, \\ldots, n-1\\}$ to $\\{i, \\ldots, n-2\\}$
+- \`insert_first(x)\`, \`insert_last(x)\`: Special cases
+- \`delete_first()\`, \`delete_last()\`: Special cases
+
+**Key Insight:** The sequence interface is about **positional access** — we care about the order, not the values of items.
+
+**Applications:** Arrays, lists, stacks (last-in-first-out), queues (first-in-first-out).`
+          },
+          {
+            title: 'Set Interface',
+            content: `The **Set** interface maintains a collection based on **intrinsic order** (order determined by item keys).
+
+**Core Set Operations:**
+- \`build(X)\`: Create set from items in $X$
+- \`len()\`: Return number of items
+- \`find(k)\`: Return item with key $k$ (or null)
+
+**Dynamic Set Operations:**
+- \`insert(x)\`: Add item $x$ (replacing if key exists)
+- \`delete(k)\`: Remove item with key $k$
+
+**Order Operations (for sorted sets):**
+- \`iter_ord()\`: Output items in key order
+- \`find_min()\`, \`find_max()\`: Return extreme items
+- \`find_next(k)\`, \`find_prev(k)\`: Return successor/predecessor
+
+**Set vs Sequence:**
+
+| Aspect | Sequence | Set |
+|--------|----------|-----|
+| Order | Extrinsic (position) | Intrinsic (keys) |
+| Access | By index $i$ | By key $k$ |
+| Duplicates | Allowed | No (keys unique) |
+| Main use | Ordered collections | Lookup, dictionary |`
+          },
+          {
+            title: 'Static Arrays',
+            content: `An **array** is a contiguous block of memory storing $n$ items.
+
+**Key Property:** **Random Access** — any item can be accessed in $O(1)$ time via index arithmetic.
+
+Given base address $A$ and word size $w$:
+$$\\text{Address of } A[i] = A + w \\cdot i$$
+
+**Static Array Complexity:**
+
+| Operation | Time |
+|-----------|------|
+| \`build(X)\` | $O(n)$ |
+| \`get_at(i)\` | $O(1)$ |
+| \`set_at(i, x)\` | $O(1)$ |
+| \`len()\` | $O(1)$ |
+| \`iter_seq()\` | $O(n)$ |
+
+**Limitation:** Static arrays have **fixed size**. Inserting or deleting requires:
+- Allocating new array
+- Copying all elements
+- Cost: $O(n)$ per operation
+
+**Space:** $\\Theta(n)$ words for $n$ items (optimal).
+
+**Static arrays are excellent for:**
+- Fixed-size collections
+- Random access patterns
+- Cache-efficient traversal (memory locality)`
+          },
+          {
+            title: 'Dynamic Arrays',
+            content: `**Dynamic arrays** (Python list, Java ArrayList, C++ vector) support efficient resizing.
+
+**Key Idea:** Maintain a static array with **extra capacity**. When full, allocate a larger array and copy.
+
+**Resizing Strategy:** When array of size $n$ is full, allocate new array of size $2n$ (doubling).
+
+**Amortized Analysis of \`insert_last(x)\`:**
+
+Cost of $n$ insertions:
+- Most insertions: $O(1)$ (just append)
+- Resize at sizes $1, 2, 4, 8, \\ldots, n$: copy costs $1 + 2 + 4 + \\cdots + n = 2n - 1$
+
+$$\\text{Total cost} = n + (2n - 1) = O(n)$$
+
+**Amortized cost per insertion:** $O(n)/n = O(1)$
+
+**Dynamic Array Complexity:**
+
+| Operation | Time (worst) | Time (amortized) |
+|-----------|--------------|------------------|
+| \`get_at(i)\` | $O(1)$ | $O(1)$ |
+| \`set_at(i, x)\` | $O(1)$ | $O(1)$ |
+| \`insert_last(x)\` | $O(n)$ | $O(1)$ |
+| \`delete_last()\` | $O(1)$ | $O(1)$ |
+| \`insert_at(i, x)\` | $O(n)$ | $O(n)$ |
+| \`delete_at(i)\` | $O(n)$ | $O(n)$ |
+
+**Note:** Inserting/deleting at arbitrary positions still requires shifting, hence $O(n)$.`
+          },
+          {
+            title: 'Linked Lists',
+            content: `A **linked list** stores items in **nodes** that contain:
+1. The item value
+2. A pointer to the next node (and previous, for doubly-linked)
+
+**Singly Linked List:**
+\`\`\`
+head -> [a|->] -> [b|->] -> [c|->] -> null
+\`\`\`
+
+**Doubly Linked List:**
+\`\`\`
+head <-> [a] <-> [b] <-> [c] <-> tail
+\`\`\`
+
+**Linked List Complexity:**
+
+| Operation | Array | Linked List |
+|-----------|-------|-------------|
+| \`get_at(i)\` | $O(1)$ | $O(n)$ |
+| \`set_at(i, x)\` | $O(1)$ | $O(n)$ |
+| \`insert_first(x)\` | $O(n)$ | $O(1)$ |
+| \`delete_first()\` | $O(n)$ | $O(1)$ |
+| \`insert_last(x)\` | $O(1)$ amortized | $O(1)$ with tail |
+| \`delete_last()\` | $O(1)$ | $O(1)$ doubly |
+
+**When to use Linked Lists:**
+- Frequent insertions/deletions at ends
+- Unknown or highly variable size
+- No need for random access
+
+**When to use Arrays:**
+- Random access needed
+- Cache efficiency important
+- Known or bounded size`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'ds-1',
+            problem: `Design a data structure that supports the following operations, all in $O(1)$ time:
+
+- \`push(x)\`: Add element $x$ to the top
+- \`pop()\`: Remove and return the top element
+- \`get_min()\`: Return the minimum element (without removing)
+
+All elements are distinct integers. Describe your approach and prove the time bounds.`,
+            solution: `**Solution: Two-Stack Approach**
+
+Maintain two stacks:
+1. **Main stack $S$**: stores all elements
+2. **Min stack $M$**: stores minimums (element at top of $M$ is current minimum)
+
+**Operations:**
+
+**push(x):**
+\`\`\`
+S.push(x)
+if M.is_empty() or x <= M.top():
+    M.push(x)
+\`\`\`
+
+**pop():**
+\`\`\`
+x = S.pop()
+if x == M.top():
+    M.pop()
+return x
+\`\`\`
+
+**get_min():**
+\`\`\`
+return M.top()
+\`\`\`
+
+**Correctness Proof:**
+
+**Invariant:** $M$ contains exactly the elements that are minimum at some prefix of $S$.
+
+- When we push $x$, if $x$ is new minimum (or tied), we add it to $M$
+- When we pop $x$, if $x$ was the current minimum, we remove it from $M$
+- The top of $M$ is always the minimum of current elements
+
+**Time Complexity:** Each operation does $O(1)$ stack operations = $\\boxed{O(1)}$
+
+**Space Complexity:** $O(n)$ for both stacks (in worst case where elements are in decreasing order).`
+          },
+          {
+            id: 'ds-2',
+            problem: `You are given a **dynamic array** implementation that doubles capacity when full and halves capacity when less than 1/4 full.
+
+**(a)** Show that a sequence of $n$ insertions and deletions can be done in $O(n)$ total time.
+
+**(b)** Why do we halve at 1/4 full instead of 1/2 full?`,
+            solution: `**(a)** Amortized Analysis using Potential Method:
+
+Define potential $\\Phi$:
+$$\\Phi = 2 \\cdot |\\text{num elements} - \\text{capacity}/2|$$
+
+**For insertion when not full:**
+- Actual cost: 1
+- $\\Delta\\Phi = 2$ (if above half) or $-2$ (if below half)
+- Amortized cost: $1 + 2 = 3$
+
+**For insertion triggering resize (at capacity $c$, doubling to $2c$):**
+- Actual cost: $c + 1$ (copy $c$ elements + insert 1)
+- Before: $\\Phi = 2(c - c/2) = c$
+- After: $\\Phi = 2(c + 1 - c) = 2$
+- $\\Delta\\Phi = 2 - c$
+- Amortized cost: $c + 1 + (2 - c) = 3$
+
+**For deletion triggering resize (at $c/4$ elements, halving to capacity $c/2$):**
+- Actual cost: $c/4$ (copy elements)
+- Before: $\\Phi = 2(c/2 - c/4) = c/2$
+- After: $\\Phi = 2(c/4 - c/4) = 0$
+- $\\Delta\\Phi = -c/2$
+- Amortized cost: $c/4 - c/2 = -c/4 \\leq 0$
+
+All operations have $O(1)$ amortized cost, so $n$ operations cost $\\boxed{O(n)}$.
+
+**(b)** If we halved at 1/2 full:
+
+After doubling (array half full), one delete would trigger halving, then one insert triggers doubling, etc.
+
+This **thrashing** pattern gives $\\Omega(n)$ cost per operation!
+
+By halving at 1/4 full, we ensure at least $n/4$ operations between resizes, preventing thrashing.`
+          },
+          {
+            id: 'ds-3',
+            problem: `Implement a **queue** (FIFO: first-in-first-out) using two **stacks** such that the amortized cost of each \`enqueue\` and \`dequeue\` operation is $O(1)$.
+
+Describe your algorithm and prove the amortized bound.`,
+            solution: `**Two-Stack Queue Implementation:**
+
+Use two stacks:
+- **In-stack**: for enqueue operations
+- **Out-stack**: for dequeue operations
+
+**enqueue(x):**
+\`\`\`
+In.push(x)
+\`\`\`
+
+**dequeue():**
+\`\`\`
+if Out.is_empty():
+    while not In.is_empty():
+        Out.push(In.pop())
+return Out.pop()
+\`\`\`
+
+**Correctness:**
+- Items enter via In-stack (LIFO order)
+- Transfer to Out-stack **reverses** order (now FIFO)
+- Out-stack provides items in correct queue order
+
+**Amortized Analysis (Accounting Method):**
+
+Charge 3 "coins" per enqueue:
+- 1 coin for the push to In
+- 2 coins saved for future transfer
+
+On dequeue:
+- If Out not empty: 1 coin for pop (we have credit)
+- If Out empty: use saved coins to pay for transfers
+
+Each element is:
+- Pushed to In: 1 coin
+- Popped from In: 1 coin (saved)
+- Pushed to Out: 1 coin (saved)
+- Popped from Out: 1 coin
+
+Total: 4 coins per element, paid at enqueue time.
+
+**Amortized cost:**
+- enqueue: $O(1)$ (pay 3, do 1)
+- dequeue: $O(1)$ (spend saved coins)
+
+$$\\boxed{\\text{Both operations are } O(1) \\text{ amortized}}$$`
+          }
+        ],
+        visualizations: ['SequenceDataStructures'],
+      },
+      // Unit 3: Sorting
+      {
+        id: 'sorting',
+        title: 'Sorting',
+        description: 'Comparison sorting algorithms, insertion sort, merge sort, recurrences, and lower bounds.',
+        sections: [
+          {
+            title: 'The Sorting Problem',
+            content: `**Sorting Problem Definition:**
+- **Input:** A sequence of $n$ items $A = \\langle a_1, a_2, \\ldots, a_n \\rangle$ with keys
+- **Output:** A permutation $A' = \\langle a'_1, a'_2, \\ldots, a'_n \\rangle$ such that $a'_1.\\text{key} \\leq a'_2.\\text{key} \\leq \\cdots \\leq a'_n.\\text{key}$
+
+**Why Sorting Matters:**
+1. Many problems become easy after sorting (e.g., finding duplicates, median, range queries)
+2. Sorting is a fundamental primitive in databases, search engines, graphics
+3. Many important algorithmic techniques appear in sorting algorithms
+
+**Types of Sorting:**
+- **In-place:** Uses $O(1)$ extra space (modifies input array)
+- **Stable:** Equal keys maintain their original relative order
+- **Comparison-based:** Only uses pairwise comparisons between keys
+
+**Stability Example:**
+Sort students by grade. Stable sort preserves alphabetical order within same grade:
+
+\`\`\`
+Before: (Alice, B), (Bob, A), (Carol, B)
+Stable:  (Bob, A), (Alice, B), (Carol, B) ✓
+Unstable: (Bob, A), (Carol, B), (Alice, B) (Alice, Carol swapped)
+\`\`\``
+          },
+          {
+            title: 'Insertion Sort',
+            content: `**Algorithm:** Build sorted portion from left to right, inserting each new element into its correct position.
+
+**Pseudocode:**
+\`\`\`
+InsertionSort(A, n):
+    for i = 1 to n-1:
+        key = A[i]
+        j = i - 1
+        while j >= 0 and A[j] > key:
+            A[j + 1] = A[j]
+            j = j - 1
+        A[j + 1] = key
+\`\`\`
+
+**Loop Invariant:** At the start of each iteration, $A[0..i-1]$ contains the original elements in sorted order.
+
+**Analysis:**
+
+| Case | Comparisons | Swaps | Time |
+|------|-------------|-------|------|
+| Best (sorted) | $n - 1$ | $0$ | $O(n)$ |
+| Worst (reverse) | $\\sum_{i=1}^{n-1} i = \\frac{n(n-1)}{2}$ | $\\frac{n(n-1)}{2}$ | $O(n^2)$ |
+| Average | $\\frac{n(n-1)}{4}$ | $\\frac{n(n-1)}{4}$ | $O(n^2)$ |
+
+**Properties:**
+- **In-place:** Yes ($O(1)$ extra space)
+- **Stable:** Yes (equal elements maintain order)
+- **Adaptive:** Yes (fast on nearly-sorted data)
+
+**When to use:** Small arrays or nearly-sorted data where $O(n^2)$ is acceptable.`
+          },
+          {
+            title: 'Merge Sort',
+            content: `**Divide and Conquer Paradigm:**
+1. **Divide:** Split problem into smaller subproblems
+2. **Conquer:** Solve subproblems recursively
+3. **Combine:** Merge solutions to solve original problem
+
+**Merge Sort Algorithm:**
+\`\`\`
+MergeSort(A, l, r):
+    if l < r:
+        m = (l + r) / 2
+        MergeSort(A, l, m)      // Sort left half
+        MergeSort(A, m+1, r)    // Sort right half
+        Merge(A, l, m, r)        // Combine
+
+Merge(A, l, m, r):
+    Create temp arrays L = A[l..m], R = A[m+1..r]
+    i = j = 0, k = l
+    while i < |L| and j < |R|:
+        if L[i] <= R[j]:
+            A[k++] = L[i++]
+        else:
+            A[k++] = R[j++]
+    Copy remaining elements
+\`\`\`
+
+**Recurrence Relation:**
+$$T(n) = 2T(n/2) + \\Theta(n)$$
+
+- $2T(n/2)$: Two recursive calls on half-sized arrays
+- $\\Theta(n)$: Merge step scans all elements once
+
+**Solving via Master Theorem:**
+- $a = 2$, $b = 2$, $f(n) = \\Theta(n)$
+- $c_{\\text{crit}} = \\log_2 2 = 1$
+- $f(n) = \\Theta(n^1)$ → Case 2
+
+$$T(n) = \\Theta(n \\log n)$$
+
+**Properties:**
+- **In-place:** No (requires $\\Theta(n)$ extra space for merging)
+- **Stable:** Yes (use $\\leq$ in merge comparison)
+- **Time:** $\\Theta(n \\log n)$ always (no worst case)`
+          },
+          {
+            title: 'Recurrence Relations',
+            content: `**Common Recurrence Patterns:**
+
+**1. Linear Recurrence** (process each element once):
+$$T(n) = T(n-1) + O(1) \\Rightarrow T(n) = O(n)$$
+
+**2. Divide by constant** (binary search style):
+$$T(n) = T(n/2) + O(1) \\Rightarrow T(n) = O(\\log n)$$
+
+**3. Full binary recursion** (explore all possibilities):
+$$T(n) = 2T(n-1) + O(1) \\Rightarrow T(n) = O(2^n)$$
+
+**4. Divide and conquer** (merge sort style):
+$$T(n) = 2T(n/2) + O(n) \\Rightarrow T(n) = O(n \\log n)$$
+
+**Recursion Tree Method:**
+
+For $T(n) = 2T(n/2) + cn$:
+
+Level 0: $cn$ work (root)
+Level 1: $2 \\cdot c(n/2) = cn$ work
+Level 2: $4 \\cdot c(n/4) = cn$ work
+...
+Level $\\log n$: $n \\cdot c(1) = cn$ work
+
+Total: $cn \\cdot \\log n = \\Theta(n \\log n)$
+
+**Substitution Method:**
+
+Guess $T(n) = O(n \\log n)$, prove by induction:
+
+Assume $T(k) \\leq ck \\log k$ for $k < n$.
+
+$$T(n) = 2T(n/2) + n \\leq 2c(n/2)\\log(n/2) + n$$
+$$= cn(\\log n - 1) + n = cn \\log n - cn + n$$
+
+For $c \\geq 1$: $T(n) \\leq cn \\log n$ ✓`
+          },
+          {
+            title: 'Lower Bound for Comparison Sorting',
+            content: `**Theorem:** Any comparison-based sorting algorithm requires $\\Omega(n \\log n)$ comparisons in the worst case.
+
+**Proof (Decision Tree Argument):**
+
+Any comparison sort can be viewed as a **decision tree**:
+- Each internal node is a comparison $a_i \\leq a_j$?
+- Each leaf is a permutation of the input
+- The algorithm's execution traces a path from root to leaf
+
+**Key observations:**
+1. There are $n!$ possible input orderings
+2. Each requires a distinct leaf (different output)
+3. The tree must have at least $n!$ leaves
+
+**Height of decision tree:**
+A binary tree with $L$ leaves has height at least $\\log_2 L$.
+
+$$\\text{Height} \\geq \\log_2(n!) = \\Theta(n \\log n)$$
+
+Using Stirling's approximation:
+$$\\log(n!) = n \\log n - n \\log e + O(\\log n) = \\Theta(n \\log n)$$
+
+**Conclusion:**
+$$\\boxed{\\text{Any comparison sort requires } \\Omega(n \\log n) \\text{ comparisons}}$$
+
+**Implications:**
+- Merge sort is **asymptotically optimal** for comparison sorting
+- To do better, we need non-comparison techniques (counting sort, radix sort)
+
+**Note:** This is an **information-theoretic** lower bound. We need $\\log_2(n!)$ bits of information to determine the correct permutation, and each comparison provides at most 1 bit.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'sort-1',
+            problem: `Analyze the following algorithm:
+
+\`\`\`
+StrangeSort(A, n):
+    if n <= 1:
+        return
+    m = floor(2n/3)
+    StrangeSort(A[0..m-1], m)
+    StrangeSort(A[n-m..n-1], m)
+    StrangeSort(A[0..m-1], m)
+\`\`\`
+
+**(a)** Prove that StrangeSort correctly sorts the array.
+
+**(b)** Write and solve the recurrence for its running time.`,
+            solution: `**(a)** Correctness Proof:
+
+**Claim:** After StrangeSort(A, n), A is sorted.
+
+**Proof by strong induction on $n$:**
+
+**Base case:** $n \\leq 1$ — trivially sorted.
+
+**Inductive step:** Assume correctness for all sizes $< n$.
+
+After first call StrangeSort(A[0..m-1]):
+- First $m = \\lfloor 2n/3 \\rfloor$ elements are sorted
+
+After second call StrangeSort(A[n-m..n-1]):
+- Last $m$ elements are sorted
+- Since $m > n/2$, the largest $n-m$ elements are now in the last $n-m$ positions
+
+After third call StrangeSort(A[0..m-1]):
+- First $m$ elements (containing the smallest $m$ elements) are sorted
+- Combined with already-sorted last $n-m$ elements → **entire array sorted**
+
+The key insight: $m + m - n = 2m - n = \\lfloor 4n/3 \\rfloor - n \\geq n/3$, so there's sufficient overlap. $\\square$
+
+**(b)** Recurrence:
+
+$$T(n) = 3T(2n/3) + O(1)$$
+
+Using Master Theorem:
+- $a = 3$, $b = 3/2$, $f(n) = O(1)$
+- $c_{\\text{crit}} = \\log_{3/2} 3 = \\frac{\\log 3}{\\log 3 - \\log 2} \\approx 2.71$
+- $f(n) = O(1) = O(n^{2.71 - \\epsilon})$ → Case 1
+
+$$\\boxed{T(n) = \\Theta(n^{\\log_{3/2} 3}) = \\Theta(n^{2.71})}$$
+
+This is worse than $O(n^2)$!`
+          },
+          {
+            id: 'sort-2',
+            problem: `Given an array of $n$ elements, you need to find if there are two elements whose sum equals a target value $T$.
+
+**(a)** Describe an $O(n^2)$ algorithm.
+
+**(b)** Describe an $O(n \\log n)$ algorithm using sorting.
+
+**(c)** Can you do better using a hash table?`,
+            solution: `**(a)** Brute Force $O(n^2)$:
+
+\`\`\`
+TwoSumBrute(A, n, T):
+    for i = 0 to n-1:
+        for j = i+1 to n-1:
+            if A[i] + A[j] == T:
+                return (i, j)
+    return NOT_FOUND
+\`\`\`
+
+Nested loops: $\\binom{n}{2} = O(n^2)$ comparisons.
+
+**(b)** Sorting-based $O(n \\log n)$:
+
+\`\`\`
+TwoSumSort(A, n, T):
+    Sort(A)                    // O(n log n)
+    left = 0, right = n-1
+    while left < right:        // O(n)
+        sum = A[left] + A[right]
+        if sum == T:
+            return (left, right)
+        else if sum < T:
+            left++
+        else:
+            right--
+    return NOT_FOUND
+\`\`\`
+
+**Correctness:** Two-pointer technique works because array is sorted:
+- If sum < T: need larger sum → move left pointer right
+- If sum > T: need smaller sum → move right pointer left
+
+Total: $O(n \\log n) + O(n) = \\boxed{O(n \\log n)}$
+
+**(c)** Hash Table $O(n)$ expected:
+
+\`\`\`
+TwoSumHash(A, n, T):
+    H = empty hash table
+    for i = 0 to n-1:
+        complement = T - A[i]
+        if H.find(complement):
+            return (H[complement], i)
+        H.insert(A[i], i)
+    return NOT_FOUND
+\`\`\`
+
+Each insert/find is $O(1)$ expected with hash table.
+
+Total: $\\boxed{O(n)}$ expected time.`
+          },
+          {
+            id: 'sort-3',
+            problem: `You have $k$ sorted arrays, each of size $n/k$. You want to merge them into a single sorted array of size $n$.
+
+**(a)** Describe an $O(n \\log k)$ algorithm.
+
+**(b)** If you instead repeatedly merge pairs of arrays, what is the total time complexity?`,
+            solution: `**(a)** Min-Heap Merge ($O(n \\log k)$):
+
+Maintain a min-heap of size $k$, containing one element from each array (along with array index and position).
+
+\`\`\`
+MultiMerge(arrays[0..k-1]):
+    result = []
+    heap = MinHeap()
+    for i = 0 to k-1:
+        heap.insert((arrays[i][0], i, 0))
+
+    while heap not empty:
+        (val, arr_idx, pos) = heap.extractMin()  // O(log k)
+        result.append(val)
+        if pos + 1 < len(arrays[arr_idx]):
+            heap.insert((arrays[arr_idx][pos+1], arr_idx, pos+1))
+
+    return result
+\`\`\`
+
+**Analysis:**
+- Each of $n$ elements is inserted and extracted once from heap
+- Each heap operation: $O(\\log k)$
+- Total: $\\boxed{O(n \\log k)}$
+
+**(b)** Pairwise Merging:
+
+**Round 1:** Merge $k$ arrays in pairs → $k/2$ arrays, each of size $2n/k$
+- Work: $(k/2) \\cdot O(2n/k) = O(n)$
+
+**Round 2:** Merge $k/2$ arrays in pairs → $k/4$ arrays
+- Work: $O(n)$
+
+...continuing for $\\log k$ rounds.
+
+**Total:** $O(n) \\cdot \\log k = \\boxed{O(n \\log k)}$
+
+**Comparison:** Both approaches give $O(n \\log k)$, but:
+- Heap merge: streams output (good for limited memory)
+- Pairwise merge: simpler implementation, better cache behavior`
+          }
+        ],
+        visualizations: ['SortingVisualizer', 'MergeSortVisualizer'],
+      },
+      // Unit 4: Hashing
+      {
+        id: 'hashing',
+        title: 'Hashing',
+        description: 'Hash tables, hash functions, collision resolution via chaining and open addressing.',
+        sections: [
+          {
+            title: 'The Dictionary Problem',
+            content: `The **Set** interface requires efficient:
+- \`find(k)\`: Return item with key $k$
+- \`insert(x)\`: Add item $x$
+- \`delete(k)\`: Remove item with key $k$
+
+**Comparison of Data Structures:**
+
+| Data Structure | find | insert | delete |
+|---------------|------|--------|--------|
+| Unsorted Array | $O(n)$ | $O(1)$ | $O(n)$ |
+| Sorted Array | $O(\\log n)$ | $O(n)$ | $O(n)$ |
+| Balanced BST | $O(\\log n)$ | $O(\\log n)$ | $O(\\log n)$ |
+| **Hash Table** | $O(1)$ expected | $O(1)$ expected | $O(1)$ expected |
+
+**Goal:** Achieve $O(1)$ expected time for all operations!
+
+**Key Idea:** Use a **hash function** $h: U \\to \\{0, 1, \\ldots, m-1\\}$ to map keys from a large universe $U$ to a small table of size $m$.`
+          },
+          {
+            title: 'Hash Functions',
+            content: `A **hash function** $h: U \\to \\{0, 1, \\ldots, m-1\\}$ maps keys to table indices.
+
+**Desirable Properties:**
+1. **Deterministic:** Same key always maps to same index
+2. **Efficient:** Computable in $O(1)$ time
+3. **Uniform:** Distributes keys evenly across table
+
+**Division Method:**
+$$h(k) = k \\mod m$$
+
+Choose $m$ to be a prime not close to a power of 2.
+
+**Multiplication Method:**
+$$h(k) = \\lfloor m(kA \\mod 1) \\rfloor$$
+
+where $A$ is a constant, often $A = (\\sqrt{5} - 1)/2 \\approx 0.618$ (golden ratio).
+
+**Universal Hashing:** Choose hash function randomly from a family $\\mathcal{H}$:
+$$h_{a,b}(k) = ((ak + b) \\mod p) \\mod m$$
+
+where $p$ is a large prime, $a \\in \\{1, \\ldots, p-1\\}$, $b \\in \\{0, \\ldots, p-1\\}$.
+
+**Universal Property:** For any two keys $k_1 \\neq k_2$:
+$$P_{h \\in \\mathcal{H}}[h(k_1) = h(k_2)] \\leq \\frac{1}{m}$$`
+          },
+          {
+            title: 'Collision Resolution: Chaining',
+            content: `**Collision:** When $h(k_1) = h(k_2)$ for $k_1 \\neq k_2$.
+
+**Chaining:** Each table slot holds a linked list of items that hash to that slot.
+
+\`\`\`
+Table:
+[0] -> (k1, v1) -> (k5, v5) -> null
+[1] -> null
+[2] -> (k2, v2) -> null
+[3] -> (k3, v3) -> (k7, v7) -> (k9, v9) -> null
+...
+\`\`\`
+
+**Operations with Chaining:**
+
+**insert(x):** Add $x$ to the list at $T[h(x.key)]$ — $O(1)$
+
+**find(k):** Search the list at $T[h(k)]$ — $O(\\text{list length})$
+
+**delete(k):** Remove from list at $T[h(k)]$ — $O(\\text{list length})$
+
+**Load Factor:** $\\alpha = n/m$ (average items per slot)
+
+**Expected chain length:** $\\alpha$ (with uniform hashing)
+
+**Expected time for find:** $O(1 + \\alpha)$
+
+If we maintain $\\alpha = O(1)$ (resize when needed), all operations are $O(1)$ expected.`
+          },
+          {
+            title: 'Collision Resolution: Open Addressing',
+            content: `**Open Addressing:** All items stored directly in table (no linked lists). On collision, probe for next empty slot.
+
+**Probe Sequence:** $h(k, 0), h(k, 1), h(k, 2), \\ldots$
+
+**Linear Probing:**
+$$h(k, i) = (h'(k) + i) \\mod m$$
+
+Simple but suffers from **primary clustering** — long runs of occupied slots.
+
+**Quadratic Probing:**
+$$h(k, i) = (h'(k) + c_1 i + c_2 i^2) \\mod m$$
+
+Reduces primary clustering but can have **secondary clustering**.
+
+**Double Hashing:**
+$$h(k, i) = (h_1(k) + i \\cdot h_2(k)) \\mod m$$
+
+Best distribution; requires $h_2(k) \\neq 0$ and $\\gcd(h_2(k), m) = 1$.
+
+**Deletion Problem:** Can't simply remove items (breaks probe sequences). Use **tombstones** or **lazy deletion**.
+
+**Load Factor Constraint:** Must keep $\\alpha < 1$ (table can't be completely full). Typically resize at $\\alpha > 0.7$.
+
+**Expected probes for successful search:** $\\frac{1}{\\alpha} \\ln \\frac{1}{1-\\alpha}$ (uniform hashing)`
+          },
+          {
+            title: 'Hash Table Analysis',
+            content: `**Simple Uniform Hashing Assumption (SUHA):**
+Each key is equally likely to hash to any slot, independent of other keys.
+
+**Theorem (Chaining):** Under SUHA with load factor $\\alpha$:
+- Expected time for unsuccessful search: $\\Theta(1 + \\alpha)$
+- Expected time for successful search: $\\Theta(1 + \\alpha/2)$
+
+**Theorem (Open Addressing):** Under uniform hashing with load factor $\\alpha < 1$:
+- Expected probes for unsuccessful search: $\\frac{1}{1-\\alpha}$
+- Expected probes for successful search: $\\frac{1}{\\alpha} \\ln \\frac{1}{1-\\alpha}$
+
+**Dynamic Resizing:**
+When $\\alpha$ exceeds threshold:
+1. Allocate new table of size $2m$
+2. Rehash all $n$ items: $O(n)$
+3. Amortized cost per operation: $O(1)$
+
+**Python's dict:** Uses open addressing with pseudo-random probing. Resizes when 2/3 full.
+
+**Real-world Considerations:**
+- Cache performance (open addressing often better)
+- Worst-case guarantees (use universal hashing)
+- String hashing (polynomial rolling hash)`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'hash-1',
+            problem: `Consider a hash table with $m = 11$ slots using the division method $h(k) = k \\mod 11$.
+
+Insert the keys 10, 22, 31, 4, 15, 28, 17, 88, 59 in order using:
+
+**(a)** Chaining
+
+**(b)** Linear probing
+
+**(c)** Double hashing with $h_2(k) = 7 - (k \\mod 7)$
+
+Show the final state of the table for each method.`,
+            solution: `**Hash values:** $h(k) = k \\mod 11$
+- $h(10) = 10$, $h(22) = 0$, $h(31) = 9$, $h(4) = 4$, $h(15) = 4$
+- $h(28) = 6$, $h(17) = 6$, $h(88) = 0$, $h(59) = 4$
+
+**(a) Chaining:**
+\`\`\`
+[0]: 22 -> 88
+[1]: empty
+[2]: empty
+[3]: empty
+[4]: 4 -> 15 -> 59
+[5]: empty
+[6]: 28 -> 17
+[7]: empty
+[8]: empty
+[9]: 31
+[10]: 10
+\`\`\`
+
+**(b) Linear Probing:** (probe sequence: $i, i+1, i+2, \\ldots$)
+- 10 → slot 10
+- 22 → slot 0
+- 31 → slot 9
+- 4 → slot 4
+- 15 → slot 4 occupied → 5
+- 28 → slot 6
+- 17 → slot 6 occupied → 7
+- 88 → slot 0 occupied → 1
+- 59 → slot 4,5 occupied → slot 8 (wraps: 4→5→6→7→8)
+
+\`\`\`
+[0]: 22  [1]: 88  [2]: empty  [3]: empty  [4]: 4
+[5]: 15  [6]: 28  [7]: 17     [8]: 59     [9]: 31  [10]: 10
+\`\`\`
+
+**(c) Double Hashing:** $h_2(k) = 7 - (k \\mod 7)$
+- $h_2(15) = 7 - 1 = 6$, so 15: slot 4 → 4+6=10 occupied → 10+6=5
+- $h_2(17) = 7 - 3 = 4$, so 17: slot 6 → 6+4=10 occupied → 10+4=3
+- $h_2(88) = 7 - 4 = 3$, so 88: slot 0 → 0+3=3 occupied → 3+3=6 occupied → 9 occupied → 1
+- $h_2(59) = 7 - 3 = 4$, so 59: slot 4 → 8
+
+\`\`\`
+[0]: 22  [1]: 88  [2]: empty  [3]: 17  [4]: 4
+[5]: 15  [6]: 28  [7]: empty  [8]: 59  [9]: 31  [10]: 10
+\`\`\``
+          },
+          {
+            id: 'hash-2',
+            problem: `Prove that for a hash table with chaining, if we use a universal hash family, then for any key $k$:
+
+$$E[\\text{chain length at } h(k)] \\leq 1 + \\alpha$$
+
+where $\\alpha = n/m$ is the load factor.`,
+            solution: `**Proof:**
+
+Let $X_i$ be an indicator random variable:
+$$X_i = \\begin{cases} 1 & \\text{if } h(k_i) = h(k) \\text{ for } k_i \\neq k \\\\ 0 & \\text{otherwise} \\end{cases}$$
+
+The chain length at slot $h(k)$ is:
+$$L = 1 + \\sum_{i: k_i \\neq k} X_i$$
+
+(The 1 accounts for $k$ itself if it's in the table.)
+
+**Taking expectation:**
+$$E[L] = 1 + \\sum_{i: k_i \\neq k} E[X_i] = 1 + \\sum_{i: k_i \\neq k} P[h(k_i) = h(k)]$$
+
+**By universal hashing property:**
+$$P[h(k_i) = h(k)] \\leq \\frac{1}{m}$$
+
+**Therefore:**
+$$E[L] \\leq 1 + \\sum_{i: k_i \\neq k} \\frac{1}{m} = 1 + \\frac{n-1}{m} < 1 + \\frac{n}{m} = \\boxed{1 + \\alpha}$$
+
+**Interpretation:** Even with adversarial input, universal hashing guarantees expected $O(1 + \\alpha)$ chain length, giving $O(1)$ expected operations when $\\alpha = O(1)$.`
+          },
+          {
+            id: 'hash-3',
+            problem: `Design a data structure to support the following operations on a set of integers, all in $O(1)$ expected time:
+
+- \`insert(x)\`: Add $x$ to the set
+- \`delete(x)\`: Remove $x$ from the set
+- \`getRandom()\`: Return a uniformly random element from the set
+
+Describe your approach and justify the time bounds.`,
+            solution: `**Solution: Hash Table + Dynamic Array**
+
+Maintain two data structures:
+1. **Array $A$**: Stores elements contiguously (for random access)
+2. **Hash Table $H$**: Maps each element to its index in $A$
+
+**insert(x):**
+\`\`\`
+if x not in H:
+    A.append(x)
+    H[x] = len(A) - 1
+\`\`\`
+Time: $O(1)$ expected (hash table insert + array append)
+
+**delete(x):**
+\`\`\`
+if x in H:
+    idx = H[x]
+    last = A[-1]
+    # Swap with last element
+    A[idx] = last
+    H[last] = idx
+    # Remove last element
+    A.pop()
+    del H[x]
+\`\`\`
+Time: $O(1)$ expected (swap trick avoids shifting)
+
+**getRandom():**
+\`\`\`
+idx = random(0, len(A) - 1)
+return A[idx]
+\`\`\`
+Time: $O(1)$ (array random access)
+
+**Why it works:**
+- Array enables $O(1)$ random access for getRandom
+- Hash table enables $O(1)$ lookup for insert/delete
+- Swap-with-last trick enables $O(1)$ deletion from array
+
+**Space:** $O(n)$ for both structures.
+
+$$\\boxed{\\text{All operations } O(1) \\text{ expected}}$$`
+          }
+        ],
+        visualizations: ['HashTableVisualizer'],
+      },
+      // Unit 5: Linear Sorting
+      {
+        id: 'linear-sorting',
+        title: 'Linear Sorting',
+        description: 'Non-comparison sorting: counting sort, radix sort, and bucket sort.',
+        sections: [
+          {
+            title: 'Breaking the Ω(n log n) Barrier',
+            content: `**Recall:** Any comparison-based sorting algorithm requires $\\Omega(n \\log n)$ comparisons in the worst case.
+
+**Key Insight:** The lower bound assumes we only use comparisons. If we have additional information about the keys, we can sort faster!
+
+**When can we beat $O(n \\log n)$?**
+1. Keys are integers in a bounded range $\\{0, 1, \\ldots, u-1\\}$
+2. Keys have a special structure (e.g., strings, tuples)
+3. Keys are uniformly distributed
+
+**Linear-time sorting algorithms:**
+- **Counting Sort:** $O(n + u)$ for integers in $\\{0, \\ldots, u-1\\}$
+- **Radix Sort:** $O(d(n + b))$ for $d$-digit numbers in base $b$
+- **Bucket Sort:** $O(n)$ expected for uniformly distributed keys
+
+**Trade-off:** These algorithms use more space and have restrictions on input types.`
+          },
+          {
+            title: 'Counting Sort',
+            content: `**Assumption:** Keys are integers in $\\{0, 1, \\ldots, u-1\\}$ where $u$ is known.
+
+**Algorithm:**
+\`\`\`
+CountingSort(A, n, u):
+    C = array of size u, initialized to 0
+
+    # Count occurrences
+    for i = 0 to n-1:
+        C[A[i].key] += 1
+
+    # Compute cumulative counts (positions)
+    for j = 1 to u-1:
+        C[j] += C[j-1]
+
+    # Place elements in output (backwards for stability)
+    B = array of size n
+    for i = n-1 downto 0:
+        B[C[A[i].key] - 1] = A[i]
+        C[A[i].key] -= 1
+
+    return B
+\`\`\`
+
+**Example:** Sort $[4, 1, 3, 4, 3]$ with $u = 5$
+
+1. Count: $C = [0, 1, 0, 2, 2]$
+2. Cumulative: $C = [0, 1, 1, 3, 5]$
+3. Place backwards: $[1, 3, 3, 4, 4]$
+
+**Analysis:**
+- Time: $O(n + u)$ — linear when $u = O(n)$
+- Space: $O(n + u)$
+- **Stable:** Yes (backwards iteration preserves order of equal keys)
+
+**When to use:** Small integer keys where $u = O(n)$.`
+          },
+          {
+            title: 'Radix Sort',
+            content: `**Idea:** Sort multi-digit numbers digit by digit, from least significant to most significant, using a stable sort for each digit.
+
+**Algorithm (LSD Radix Sort):**
+\`\`\`
+RadixSort(A, d, b):
+    # d = number of digits, b = base
+    for i = 0 to d-1:
+        StableSort(A by digit i)  # Use counting sort
+\`\`\`
+
+**Example:** Sort $[329, 457, 657, 839, 436, 720, 355]$ in base 10
+
+- By ones digit: $[720, 355, 436, 457, 657, 329, 839]$
+- By tens digit: $[720, 329, 436, 839, 355, 457, 657]$
+- By hundreds: $[329, 355, 436, 457, 657, 720, 839]$ ✓
+
+**Why least-significant first?**
+Stability preserves work from previous passes. If we sorted most-significant first, later passes would destroy the ordering.
+
+**Analysis:**
+- $d$ passes, each using counting sort on base-$b$ digits
+- Each pass: $O(n + b)$
+- Total: $O(d(n + b))$
+
+**Choosing $b$:** For $n$ numbers with max value $u$:
+- $d = \\log_b u$ digits needed
+- Time: $O(\\frac{\\log u}{\\log b}(n + b))$
+- Optimal $b = n$: $O(n \\cdot \\frac{\\log u}{\\log n})$
+
+If $u = n^c$ for constant $c$: Time = $O(cn) = O(n)$`
+          },
+          {
+            title: 'Bucket Sort',
+            content: `**Assumption:** Keys are uniformly distributed in $[0, 1)$.
+
+**Algorithm:**
+\`\`\`
+BucketSort(A, n):
+    B = array of n empty lists (buckets)
+
+    # Distribute into buckets
+    for i = 0 to n-1:
+        bucket_idx = floor(n * A[i])
+        B[bucket_idx].append(A[i])
+
+    # Sort each bucket
+    for j = 0 to n-1:
+        sort(B[j])  # Insertion sort or any sort
+
+    # Concatenate buckets
+    return concatenate(B[0], B[1], ..., B[n-1])
+\`\`\`
+
+**Intuition:** Uniform distribution → each bucket gets ~1 element → sorting buckets is cheap.
+
+**Analysis:**
+
+Let $n_i$ = number of elements in bucket $i$.
+
+Expected time to sort bucket $i$: $O(E[n_i^2])$ (using insertion sort)
+
+$$E\\left[\\sum_{i=0}^{n-1} n_i^2\\right] = \\sum_{i=0}^{n-1} E[n_i^2]$$
+
+For uniform distribution: $E[n_i^2] = 2 - 1/n$ (can be shown)
+
+Total expected time: $O(n \\cdot (2 - 1/n)) = O(n)$
+
+**When to use:** Data uniformly distributed or can be transformed to be uniform.
+
+**Generalization:** Bucket sort works well when elements are roughly evenly distributed into buckets.`
+          },
+          {
+            title: 'Comparison of Sorting Algorithms',
+            content: `**Summary Table:**
+
+| Algorithm | Time (worst) | Time (avg/exp) | Space | Stable | Notes |
+|-----------|-------------|----------------|-------|--------|-------|
+| Insertion Sort | $O(n^2)$ | $O(n^2)$ | $O(1)$ | Yes | Good for small/nearly sorted |
+| Merge Sort | $O(n \\log n)$ | $O(n \\log n)$ | $O(n)$ | Yes | Optimal comparison sort |
+| Quick Sort | $O(n^2)$ | $O(n \\log n)$ | $O(\\log n)$ | No | Fast in practice |
+| Heap Sort | $O(n \\log n)$ | $O(n \\log n)$ | $O(1)$ | No | In-place, not stable |
+| Counting Sort | $O(n + u)$ | $O(n + u)$ | $O(n + u)$ | Yes | Integers in $[0, u)$ |
+| Radix Sort | $O(d(n+b))$ | $O(d(n+b))$ | $O(n + b)$ | Yes | $d$ digits, base $b$ |
+| Bucket Sort | $O(n^2)$ | $O(n)$ | $O(n)$ | Yes | Uniform distribution |
+
+**Choosing an Algorithm:**
+- Small arrays: Insertion sort
+- General purpose: Merge sort (stable) or Quick sort (fast)
+- Integer keys in small range: Counting sort
+- Large integers: Radix sort
+- Uniformly distributed: Bucket sort
+- In-place needed: Heap sort or Quick sort`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'linear-1',
+            problem: `You have an array of $n$ strings, each of length exactly $k$, where each character is from an alphabet of size $\\sigma$.
+
+**(a)** Describe an algorithm to sort these strings in $O(k(n + \\sigma))$ time.
+
+**(b)** What is the time complexity if strings have variable length, with total characters $= L$?`,
+            solution: `**(a)** Use Radix Sort (LSD) on strings:
+
+\`\`\`
+StringRadixSort(A, n, k, σ):
+    for i = k-1 downto 0:  # Right to left
+        CountingSort(A by character at position i)
+\`\`\`
+
+**Analysis:**
+- $k$ passes (one per character position)
+- Each pass: Counting sort with alphabet size $\\sigma$
+- Per pass: $O(n + \\sigma)$
+- Total: $\\boxed{O(k(n + \\sigma))}$
+
+**Correctness:** LSD radix sort with stable counting sort correctly sorts strings lexicographically.
+
+**(b)** Variable-length strings:
+
+**Approach 1:** Pad strings to max length $k_{max}$
+- Time: $O(k_{max}(n + \\sigma))$ — wasteful if lengths vary greatly
+
+**Approach 2:** MSD Radix Sort (recursive)
+- Sort by first character, then recursively sort each group
+- Time: $O(L + n \\cdot \\sigma)$ where $L$ = total characters
+
+**Approach 3:** Sort by length first, then use LSD within each length group
+- Group strings by length: $O(n)$
+- Sort each group: $O(\\sum_i k_i \\cdot n_i) = O(L)$ total
+- Merge: $O(n)$
+- Total: $\\boxed{O(L + n)}$ with proper implementation`
+          },
+          {
+            id: 'linear-2',
+            problem: `Given an array of $n$ integers in the range $[0, n^2 - 1]$, sort the array in $O(n)$ time.
+
+*Hint: Think about representing numbers in a different base.*`,
+            solution: `**Key Insight:** Integers in $[0, n^2 - 1]$ can be written as 2-digit numbers in base $n$.
+
+Any integer $x \\in [0, n^2 - 1]$ can be written as:
+$$x = a \\cdot n + b$$
+where $a = \\lfloor x/n \\rfloor$ (high digit) and $b = x \\mod n$ (low digit), both in $[0, n-1]$.
+
+**Algorithm:**
+\`\`\`
+Sort(A, n):
+    # Extract digits (base n)
+    for i = 0 to n-1:
+        A[i].low = A[i] mod n
+        A[i].high = A[i] / n
+
+    # Radix sort: 2 passes of counting sort
+    CountingSort(A by low digit, range [0, n-1])
+    CountingSort(A by high digit, range [0, n-1])
+
+    return A
+\`\`\`
+
+**Analysis:**
+- Extract digits: $O(n)$
+- Pass 1 (low digit): Counting sort with $u = n$ → $O(n + n) = O(n)$
+- Pass 2 (high digit): Counting sort with $u = n$ → $O(n)$
+- Total: $\\boxed{O(n)}$
+
+**Generalization:** For integers in $[0, n^c - 1]$:
+- Use $c$ digits in base $n$
+- $c$ passes of counting sort
+- Time: $O(cn)$
+
+If $c$ is constant, this is $O(n)$.`
+          },
+          {
+            id: 'linear-3',
+            problem: `You have $n$ points in the plane, where each coordinate is an integer in $[0, n-1]$. Sort the points by their distance from the origin.
+
+Can you do this in $O(n)$ time? Justify your answer.`,
+            solution: `**Analysis of the problem:**
+
+Distance from origin: $d(x, y) = \\sqrt{x^2 + y^2}$
+
+Since we only need relative ordering, we can sort by $d^2 = x^2 + y^2$ instead (avoids square root).
+
+**Range of $d^2$:**
+- Minimum: $0$ (point at origin)
+- Maximum: $(n-1)^2 + (n-1)^2 = 2(n-1)^2 \\approx 2n^2$
+
+So $d^2 \\in [0, 2n^2 - 2n]$.
+
+**Can we use counting sort?**
+The range is $O(n^2)$, so counting sort would be $O(n + n^2) = O(n^2)$.
+
+**Can we use radix sort?**
+Yes! $d^2$ values are in $[0, 2n^2)$, which can be represented as 2-digit numbers in base $2n$.
+
+**Algorithm:**
+\`\`\`
+SortByDistance(points, n):
+    # Compute squared distances
+    for i = 0 to n-1:
+        points[i].d2 = points[i].x^2 + points[i].y^2
+
+    # Radix sort by d2 (base 2n, 2 digits)
+    CountingSort(points by d2 mod (2n))    # Low digit
+    CountingSort(points by d2 / (2n))      # High digit
+
+    return points
+\`\`\`
+
+**Time Analysis:**
+- Compute $d^2$: $O(n)$
+- Two counting sort passes with range $2n$: $O(n + 2n) \\times 2 = O(n)$
+
+$$\\boxed{\\text{Yes, } O(n) \\text{ time is achievable}}$$
+
+**Note:** If coordinates were real numbers or in a larger range, $O(n)$ would not be possible without additional assumptions.`
+          }
+        ],
+        visualizations: ['LinearSortingVisualizer'],
+      },
+      // Unit 6: Binary Trees, Part 1
+      {
+        id: 'binary-trees-1',
+        title: 'Binary Trees, Part 1',
+        description: 'Binary search tree properties, traversals, and basic operations.',
+        sections: [
+          {
+            title: 'Binary Tree Fundamentals',
+            content: `A **binary tree** is a rooted tree where each node has at most two children: **left** and **right**.
+
+**Terminology:**
+- **Root:** The topmost node (no parent)
+- **Leaf:** A node with no children
+- **Internal node:** A node with at least one child
+- **Depth of node:** Number of edges from root to node
+- **Height of node:** Number of edges on longest path to a leaf
+- **Height of tree:** Height of root = max depth of any node
+
+**Key Properties:**
+- A binary tree with $n$ nodes has $n - 1$ edges
+- A binary tree of height $h$ has at most $2^{h+1} - 1$ nodes
+- A binary tree with $n$ nodes has height at least $\\lfloor \\log_2 n \\rfloor$
+
+**Complete Binary Tree:** All levels except possibly the last are full, and the last level has nodes as far left as possible.
+
+**Perfect Binary Tree:** All internal nodes have two children, and all leaves are at the same level. Has exactly $2^{h+1} - 1$ nodes.`
+          },
+          {
+            title: 'Binary Search Tree Property',
+            content: `A **Binary Search Tree (BST)** is a binary tree satisfying the **BST property**:
+
+For every node $x$:
+- All keys in left subtree of $x$ are **less than** $x.key$
+- All keys in right subtree of $x$ are **greater than** $x.key$
+
+**Example:**
+\`\`\`
+        8
+       / \\
+      3   10
+     / \\    \\
+    1   6    14
+       / \\   /
+      4   7 13
+\`\`\`
+
+**Key Insight:** An **inorder traversal** of a BST visits nodes in sorted order!
+
+**BST Representation:**
+\`\`\`
+class Node:
+    key         # The key value
+    left        # Pointer to left child
+    right       # Pointer to right child
+    parent      # Pointer to parent (optional)
+\`\`\`
+
+**Why BSTs?**
+- Support Set interface operations efficiently
+- Maintain sorted order dynamically
+- Enable range queries and order statistics`
+          },
+          {
+            title: 'Tree Traversals',
+            content: `**Three classical traversals** (all $O(n)$ time):
+
+**Inorder (Left, Root, Right):**
+\`\`\`
+inorder(node):
+    if node != null:
+        inorder(node.left)
+        visit(node)
+        inorder(node.right)
+\`\`\`
+For BST: visits nodes in sorted order.
+
+**Preorder (Root, Left, Right):**
+\`\`\`
+preorder(node):
+    if node != null:
+        visit(node)
+        preorder(node.left)
+        preorder(node.right)
+\`\`\`
+Useful for: copying tree, prefix expressions.
+
+**Postorder (Left, Right, Root):**
+\`\`\`
+postorder(node):
+    if node != null:
+        postorder(node.left)
+        postorder(node.right)
+        visit(node)
+\`\`\`
+Useful for: deleting tree, postfix expressions, computing heights.
+
+**Level-order (BFS):**
+\`\`\`
+levelorder(root):
+    queue = [root]
+    while queue not empty:
+        node = queue.dequeue()
+        visit(node)
+        if node.left: queue.enqueue(node.left)
+        if node.right: queue.enqueue(node.right)
+\`\`\`
+Visits level by level, left to right.`
+          },
+          {
+            title: 'BST Operations: Search and Insert',
+            content: `**Search (find):**
+\`\`\`
+search(node, k):
+    if node == null or node.key == k:
+        return node
+    if k < node.key:
+        return search(node.left, k)
+    else:
+        return search(node.right, k)
+\`\`\`
+Time: $O(h)$ where $h$ is tree height.
+
+**Insert:**
+\`\`\`
+insert(root, k):
+    if root == null:
+        return new Node(k)
+    if k < root.key:
+        root.left = insert(root.left, k)
+    else if k > root.key:
+        root.right = insert(root.right, k)
+    return root
+\`\`\`
+Time: $O(h)$
+
+**Finding Min/Max:**
+\`\`\`
+findMin(node):           findMax(node):
+    while node.left:         while node.right:
+        node = node.left         node = node.right
+    return node              return node
+\`\`\`
+Time: $O(h)$
+
+**Successor/Predecessor:**
+The **successor** of node $x$ is the node with the smallest key greater than $x.key$.
+
+\`\`\`
+successor(x):
+    if x.right != null:
+        return findMin(x.right)
+    y = x.parent
+    while y != null and x == y.right:
+        x = y
+        y = y.parent
+    return y
+\`\`\`
+Time: $O(h)$`
+          },
+          {
+            title: 'BST Deletion',
+            content: `**Deleting node $z$ has three cases:**
+
+**Case 1: $z$ has no children (leaf)**
+Simply remove $z$.
+
+**Case 2: $z$ has one child**
+Replace $z$ with its child.
+
+**Case 3: $z$ has two children**
+1. Find $z$'s successor $y$ (minimum in right subtree)
+2. Replace $z$'s key with $y$'s key
+3. Delete $y$ (which has at most one child)
+
+\`\`\`
+delete(root, k):
+    if root == null:
+        return null
+
+    if k < root.key:
+        root.left = delete(root.left, k)
+    else if k > root.key:
+        root.right = delete(root.right, k)
+    else:  # Found node to delete
+        if root.left == null:
+            return root.right
+        if root.right == null:
+            return root.left
+        # Two children: replace with successor
+        successor = findMin(root.right)
+        root.key = successor.key
+        root.right = delete(root.right, successor.key)
+
+    return root
+\`\`\`
+
+**Time:** $O(h)$
+
+**BST Performance Summary:**
+| Operation | Time |
+|-----------|------|
+| search | $O(h)$ |
+| insert | $O(h)$ |
+| delete | $O(h)$ |
+| min/max | $O(h)$ |
+| successor | $O(h)$ |
+
+**Problem:** Height $h$ can be $O(n)$ in worst case (degenerate/skewed tree)!`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'bst-1',
+            problem: `Given the following sequence of insertions into an initially empty BST:
+$$15, 6, 18, 3, 7, 17, 20, 2, 4, 13, 9$$
+
+**(a)** Draw the resulting BST.
+
+**(b)** List the nodes in inorder, preorder, and postorder.
+
+**(c)** Delete node 6. Draw the resulting tree.`,
+            solution: `**(a)** BST after insertions:
+
+\`\`\`
+            15
+           /  \\
+          6    18
+         / \\   / \\
+        3   7 17  20
+       / \\   \\
+      2   4   13
+             /
+            9
+\`\`\`
+
+**(b)** Traversals:
+
+**Inorder** (sorted order):
+$$\\boxed{2, 3, 4, 6, 7, 9, 13, 15, 17, 18, 20}$$
+
+**Preorder** (root first):
+$$\\boxed{15, 6, 3, 2, 4, 7, 13, 9, 18, 17, 20}$$
+
+**Postorder** (root last):
+$$\\boxed{2, 4, 3, 9, 13, 7, 6, 17, 20, 18, 15}$$
+
+**(c)** Delete node 6:
+
+Node 6 has two children. Find successor = 7 (minimum in right subtree).
+Replace 6 with 7, then delete original 7.
+
+\`\`\`
+            15
+           /  \\
+          7    18
+         / \\   / \\
+        3  13 17  20
+       / \\  /
+      2   4 9
+\`\`\``
+          },
+          {
+            id: 'bst-2',
+            problem: `Write an algorithm to check if a given binary tree is a valid BST.
+
+Your algorithm should run in $O(n)$ time where $n$ is the number of nodes.
+
+*Hint: What constraints must each node satisfy?*`,
+            solution: `**Key Insight:** Each node must have a key within a valid range determined by its ancestors.
+
+**Algorithm:**
+\`\`\`
+isValidBST(root):
+    return checkBST(root, -∞, +∞)
+
+checkBST(node, minVal, maxVal):
+    if node == null:
+        return true
+
+    if node.key <= minVal or node.key >= maxVal:
+        return false
+
+    # Left subtree: all keys must be < node.key
+    # Right subtree: all keys must be > node.key
+    return checkBST(node.left, minVal, node.key) and
+           checkBST(node.right, node.key, maxVal)
+\`\`\`
+
+**Example trace:**
+\`\`\`
+        5
+       / \\
+      3   7
+     / \\
+    2   6  ← Invalid! 6 > 5 but in left subtree
+\`\`\`
+
+checkBST(5, -∞, +∞): valid range for 5 ✓
+  checkBST(3, -∞, 5): valid range for 3 ✓
+    checkBST(6, 3, 5): 6 > 5, **INVALID** ✗
+
+**Alternative: Inorder Traversal**
+\`\`\`
+isValidBST(root):
+    prev = -∞
+    return inorderCheck(root)
+
+inorderCheck(node):
+    if node == null: return true
+    if not inorderCheck(node.left): return false
+    if node.key <= prev: return false
+    prev = node.key
+    return inorderCheck(node.right)
+\`\`\`
+
+Inorder of valid BST is strictly increasing.
+
+**Time:** $O(n)$ — each node visited once.
+**Space:** $O(h)$ for recursion stack.`
+          },
+          {
+            id: 'bst-3',
+            problem: `Given a BST and two values $k_1 < k_2$, write an algorithm to print all keys in the range $[k_1, k_2]$ in sorted order.
+
+Analyze the time complexity in terms of $n$ (total nodes), $h$ (tree height), and $m$ (number of keys in range).`,
+            solution: `**Algorithm (modified inorder):**
+\`\`\`
+rangeQuery(node, k1, k2):
+    if node == null:
+        return
+
+    # Prune left if all keys would be < k1
+    if node.key > k1:
+        rangeQuery(node.left, k1, k2)
+
+    # Print if in range
+    if k1 <= node.key <= k2:
+        print(node.key)
+
+    # Prune right if all keys would be > k2
+    if node.key < k2:
+        rangeQuery(node.right, k1, k2)
+\`\`\`
+
+**Correctness:**
+- BST property ensures nodes are visited in sorted order (inorder)
+- Pruning ensures we only visit relevant subtrees
+
+**Time Analysis:**
+
+Let $m$ = number of keys in $[k_1, k_2]$.
+
+The algorithm visits:
+1. $O(h)$ nodes on the path to $k_1$
+2. $O(h)$ nodes on the path to $k_2$
+3. $O(m)$ nodes that are in the range
+
+**Total time:** $\\boxed{O(h + m)}$
+
+**Why not $O(n)$?** Pruning prevents visiting subtrees entirely outside the range.
+
+**Space:** $O(h)$ for recursion stack.
+
+**Example:**
+\`\`\`
+        15
+       /  \\
+      6    18
+     / \\   / \\
+    3   7 17  20
+\`\`\`
+
+rangeQuery(root, 5, 17):
+- Visit 15 (in range, print), explore both
+- Visit 6 (in range, print), explore right only (3 < 5)
+- Visit 7 (in range, print)
+- Visit 18 (> 17), explore left only
+- Visit 17 (in range, print)
+
+Output: $\\boxed{6, 7, 15, 17}$`
+          }
+        ],
+        visualizations: ['BSTVisualizer'],
+      },
+      // Unit 7: Binary Trees, Part 2: AVL
+      {
+        id: 'binary-trees-avl',
+        title: 'Binary Trees, Part 2: AVL',
+        description: 'Self-balancing BSTs, AVL tree rotations, and height maintenance.',
+        sections: [
+          {
+            title: 'The Balance Problem',
+            content: `**Problem with BSTs:** Height can be $O(n)$ in worst case.
+
+**Example:** Insert 1, 2, 3, 4, 5 into empty BST:
+\`\`\`
+1
+ \\
+  2
+   \\
+    3
+     \\
+      4
+       \\
+        5
+\`\`\`
+This is just a linked list! All operations become $O(n)$.
+
+**Goal:** Maintain height $h = O(\\log n)$ after every operation.
+
+**Balanced BST:** A BST where the height is guaranteed to be $O(\\log n)$.
+
+**Approaches:**
+1. **AVL Trees:** Balance condition on heights of children
+2. **Red-Black Trees:** Coloring rules ensure balance
+3. **2-3 Trees / B-Trees:** Allow more children per node
+4. **Splay Trees:** Self-adjusting (amortized bounds)
+
+**Trade-off:** Maintaining balance requires extra work during insert/delete.`
+          },
+          {
+            title: 'AVL Tree Definition',
+            content: `**AVL Tree** (Adelson-Velsky and Landis, 1962): A BST where for every node, the heights of left and right subtrees differ by at most 1.
+
+**Balance Factor:**
+$$\\text{BF}(x) = \\text{height}(x.\\text{left}) - \\text{height}(x.\\text{right})$$
+
+**AVL Property:** For every node $x$: $\\text{BF}(x) \\in \\{-1, 0, 1\\}$
+
+**Example (valid AVL):**
+\`\`\`
+        10 (BF=0)
+       /  \\
+      5    15 (BF=1)
+     / \\   /
+    3   7 12
+\`\`\`
+
+**Example (invalid AVL):**
+\`\`\`
+        10 (BF=2) ← VIOLATION!
+       /
+      5
+     /
+    3
+\`\`\`
+
+**Height Bound:**
+An AVL tree with $n$ nodes has height $h \\leq 1.44 \\log_2(n+2)$.
+
+**Proof sketch:** Let $N(h)$ = minimum nodes in AVL tree of height $h$.
+- $N(0) = 1$, $N(1) = 2$
+- $N(h) = N(h-1) + N(h-2) + 1$ (Fibonacci-like)
+- $N(h) > \\phi^h$ where $\\phi = (1+\\sqrt{5})/2 \\approx 1.618$
+- Therefore $h < \\log_\\phi n \\approx 1.44 \\log_2 n$`
+          },
+          {
+            title: 'AVL Rotations',
+            content: `**Rotations** are local operations that preserve BST property while changing tree structure.
+
+**Right Rotation (at node y):**
+\`\`\`
+      y                x
+     / \\              / \\
+    x   C    →       A   y
+   / \\                  / \\
+  A   B                B   C
+\`\`\`
+
+**Left Rotation (at node x):**
+\`\`\`
+    x                  y
+   / \\                / \\
+  A   y      →       x   C
+     / \\            / \\
+    B   C          A   B
+\`\`\`
+
+**Key Properties:**
+- Rotations maintain BST property (inorder unchanged)
+- Rotations take $O(1)$ time
+- Rotations change heights of affected nodes
+
+**Implementation:**
+\`\`\`
+rightRotate(y):
+    x = y.left
+    B = x.right
+
+    x.right = y
+    y.left = B
+
+    # Update heights
+    y.height = max(height(y.left), height(y.right)) + 1
+    x.height = max(height(x.left), height(x.right)) + 1
+
+    return x  # New root of subtree
+\`\`\``
+          },
+          {
+            title: 'AVL Rebalancing Cases',
+            content: `After insert/delete, check balance factors bottom-up. If $|\\text{BF}| > 1$, rebalance.
+
+**Four cases based on imbalance direction:**
+
+**Case 1: Left-Left (LL)** — BF = +2 and left child has BF ≥ 0
+\`\`\`
+      z (+2)              y
+     /                   / \\
+    y (+1 or 0)    →    x   z
+   /
+  x
+\`\`\`
+**Fix:** Right rotate at z.
+
+**Case 2: Left-Right (LR)** — BF = +2 and left child has BF = -1
+\`\`\`
+      z (+2)         z (+2)          x
+     /              /               / \\
+    y (-1)    →    x          →    y   z
+     \\            /
+      x          y
+\`\`\`
+**Fix:** Left rotate at y, then right rotate at z.
+
+**Case 3: Right-Right (RR)** — BF = -2 and right child has BF ≤ 0
+\`\`\`
+  z (-2)                y
+   \\                   / \\
+    y (-1 or 0)   →   z   x
+     \\
+      x
+\`\`\`
+**Fix:** Left rotate at z.
+
+**Case 4: Right-Left (RL)** — BF = -2 and right child has BF = +1
+\`\`\`
+  z (-2)       z (-2)         x
+   \\            \\           / \\
+    y (+1)  →    x     →   z   y
+   /              \\
+  x                y
+\`\`\`
+**Fix:** Right rotate at y, then left rotate at z.`
+          },
+          {
+            title: 'AVL Insert and Delete',
+            content: `**AVL Insert:**
+\`\`\`
+insert(node, key):
+    # Standard BST insert
+    if node == null:
+        return new Node(key)
+    if key < node.key:
+        node.left = insert(node.left, key)
+    else:
+        node.right = insert(node.right, key)
+
+    # Update height
+    node.height = 1 + max(height(node.left), height(node.right))
+
+    # Check balance and rotate if needed
+    bf = balanceFactor(node)
+
+    if bf > 1 and key < node.left.key:    # LL
+        return rightRotate(node)
+    if bf < -1 and key > node.right.key:  # RR
+        return leftRotate(node)
+    if bf > 1 and key > node.left.key:    # LR
+        node.left = leftRotate(node.left)
+        return rightRotate(node)
+    if bf < -1 and key < node.right.key:  # RL
+        node.right = rightRotate(node.right)
+        return leftRotate(node)
+
+    return node
+\`\`\`
+
+**AVL Delete:** Similar to BST delete, but rebalance on way up.
+
+**Key insight:** After insert, at most 2 rotations needed. After delete, up to $O(\\log n)$ rotations may be needed.
+
+**Time Complexity:**
+| Operation | Time |
+|-----------|------|
+| search | $O(\\log n)$ |
+| insert | $O(\\log n)$ |
+| delete | $O(\\log n)$ |
+
+All operations are $O(\\log n)$ because height is guaranteed $O(\\log n)$.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'avl-1',
+            problem: `Insert the following keys into an initially empty AVL tree, showing the tree after each insertion and any rotations performed:
+
+$$10, 20, 30, 40, 50, 25$$`,
+            solution: `**Insert 10:**
+\`\`\`
+10
+\`\`\`
+
+**Insert 20:**
+\`\`\`
+10
+  \\
+   20
+\`\`\`
+Balanced.
+
+**Insert 30:**
+\`\`\`
+10 (BF = -2)    →    20
+  \\                 /  \\
+   20              10   30
+     \\
+      30
+\`\`\`
+RR case: Left rotate at 10.
+
+**Insert 40:**
+\`\`\`
+    20
+   /  \\
+  10   30
+         \\
+          40
+\`\`\`
+Balanced (BF of 30 = -1).
+
+**Insert 50:**
+\`\`\`
+    20                20
+   /  \\              /  \\
+  10   30 (BF=-2) → 10   40
+         \\              /  \\
+          40           30   50
+            \\
+             50
+\`\`\`
+RR case at 30: Left rotate at 30.
+
+**Insert 25:**
+\`\`\`
+    20 (BF = -2)           20                    30
+   /  \\                   /  \\                  /  \\
+  10   40 (BF = +1)  →   10   30          →    20   40
+      /  \\                     \\              /  \\    \\
+     30   50                    40           10  25   50
+    /                          /  \\
+   25                         25   50
+\`\`\`
+RL case at 20: Right rotate at 40, then left rotate at 20.
+
+**Final AVL tree:**
+\`\`\`
+        30
+       /  \\
+      20   40
+     /  \\    \\
+    10  25   50
+\`\`\``
+          },
+          {
+            id: 'avl-2',
+            problem: `Prove that an AVL tree with $n$ nodes has height at most $1.44 \\log_2(n + 2) - 0.328$.
+
+*Hint: Find a recurrence for the minimum number of nodes in an AVL tree of height $h$.*`,
+            solution: `**Define:** $N(h)$ = minimum number of nodes in an AVL tree of height $h$.
+
+**Base cases:**
+- $N(0) = 1$ (single node)
+- $N(1) = 2$ (root plus one child)
+
+**Recurrence:** An AVL tree of height $h$ has:
+- Root (1 node)
+- One subtree of height $h - 1$ (to achieve height $h$)
+- One subtree of height at least $h - 2$ (AVL property)
+
+Minimum nodes achieved when second subtree has height exactly $h - 2$:
+$$N(h) = N(h-1) + N(h-2) + 1$$
+
+**Solving the recurrence:**
+
+Let $F(h) = N(h) + 1$. Then:
+$$F(h) = F(h-1) + F(h-2)$$
+
+This is the Fibonacci recurrence! With $F(0) = 2$, $F(1) = 3$:
+$$F(h) = \\frac{\\phi^{h+3} - \\psi^{h+3}}{\\sqrt{5}}$$
+
+where $\\phi = \\frac{1+\\sqrt{5}}{2} \\approx 1.618$ and $\\psi = \\frac{1-\\sqrt{5}}{2}$.
+
+**Bounding height:**
+
+Since $N(h) = F(h) - 1 \\geq \\frac{\\phi^{h+3}}{\\sqrt{5}} - 2$, we have:
+
+$$n \\geq N(h) > \\frac{\\phi^{h+3}}{\\sqrt{5}} - 2$$
+
+$$\\phi^{h+3} < \\sqrt{5}(n + 2)$$
+
+$$h + 3 < \\log_\\phi(\\sqrt{5}(n+2))$$
+
+$$h < \\log_\\phi(n+2) + \\log_\\phi(\\sqrt{5}) - 3$$
+
+Since $\\log_\\phi x = \\frac{\\log_2 x}{\\log_2 \\phi} \\approx 1.44 \\log_2 x$:
+
+$$\\boxed{h < 1.44 \\log_2(n+2) - 0.328}$$`
+          },
+          {
+            id: 'avl-3',
+            problem: `Design an algorithm to merge two AVL trees $T_1$ and $T_2$ into a single AVL tree, given that all keys in $T_1$ are smaller than all keys in $T_2$.
+
+What is the time complexity if $T_1$ has $m$ nodes and $T_2$ has $n$ nodes?`,
+            solution: `**Algorithm:**
+
+**Step 1:** Extract maximum from $T_1$ (will be root of merged tree)
+\`\`\`
+max_node = extractMax(T1)  # O(log m)
+\`\`\`
+
+**Step 2:** Join $T_1$ (without max) and $T_2$ using max_node as pivot
+\`\`\`
+merge(T1, T2):
+    if T1 empty: return T2
+    if T2 empty: return T1
+
+    max_node = extractMax(T1)  # All T1 < max_node < all T2
+    return join(T1, max_node, T2)
+\`\`\`
+
+**Step 3:** Join operation — attach smaller tree at appropriate height
+\`\`\`
+join(T1, pivot, T2):
+    h1 = height(T1)
+    h2 = height(T2)
+
+    if |h1 - h2| <= 1:
+        # Can directly combine
+        pivot.left = T1
+        pivot.right = T2
+        return pivot
+
+    if h1 > h2:
+        # Walk down right spine of T1
+        T1.right = join(T1.right, pivot, T2)
+        return rebalance(T1)
+    else:
+        # Walk down left spine of T2
+        T2.left = join(T1, pivot, T2.left)
+        return rebalance(T2)
+\`\`\`
+
+**Time Complexity:**
+
+- extractMax: $O(\\log m)$
+- join walks down the taller tree until heights match
+- Number of steps: $|h_1 - h_2| = O(|\\log m - \\log n|)$
+- Each step does $O(1)$ work plus possible $O(1)$ rotations
+
+**Total:** $\\boxed{O(\\log m + \\log n) = O(\\log(mn))}$
+
+**Note:** This is much better than the naive $O(m + n)$ approach of extracting all elements and rebuilding!`
+          }
+        ],
+        visualizations: ['AVLTreeVisualizer'],
+      },
+      // Unit 8: Binary Heaps
+      {
+        id: 'binary-heaps',
+        title: 'Binary Heaps',
+        description: 'Priority queue interface, binary heap structure, heapify, and heap sort.',
+        sections: [
+          {
+            title: 'Priority Queue Interface',
+            content: `A **Priority Queue** maintains a set of elements, each with a priority (key), supporting:
+
+- \`insert(x)\`: Add element $x$ with its priority
+- \`find_max()\`: Return element with highest priority
+- \`extract_max()\`: Remove and return element with highest priority
+
+(Can also define min-priority queue with find_min/extract_min)
+
+**Applications:**
+- Job scheduling (highest priority job first)
+- Dijkstra's shortest path algorithm
+- Huffman coding
+- Event-driven simulation
+
+**Implementation Comparison:**
+
+| Structure | insert | find_max | extract_max |
+|-----------|--------|----------|-------------|
+| Unsorted Array | $O(1)$ | $O(n)$ | $O(n)$ |
+| Sorted Array | $O(n)$ | $O(1)$ | $O(1)$ |
+| Balanced BST | $O(\\log n)$ | $O(\\log n)$ | $O(\\log n)$ |
+| **Binary Heap** | $O(\\log n)$ | $O(1)$ | $O(\\log n)$ |
+
+Binary heap offers the best combination for priority queue operations.`
+          },
+          {
+            title: 'Binary Heap Structure',
+            content: `A **(max) Binary Heap** is a complete binary tree satisfying the **heap property**:
+$$\\text{For every node } x: \\text{key}(x) \\geq \\text{key}(\\text{children of } x)$$
+
+**Consequences:**
+- Maximum element is always at the root
+- Path from any node to root is in decreasing order
+
+**Array Representation:**
+Store complete binary tree in array level by level:
+\`\`\`
+        90
+       /  \\
+      85   70
+     / \\   / \\
+    50 80 60 65
+\`\`\`
+Array: [90, 85, 70, 50, 80, 60, 65]
+Index:   0   1   2   3   4   5   6
+
+**Parent-Child Relationships (0-indexed):**
+- Parent of node $i$: $\\lfloor (i-1)/2 \\rfloor$
+- Left child of node $i$: $2i + 1$
+- Right child of node $i$: $2i + 2$
+
+**1-indexed (often simpler):**
+- Parent: $\\lfloor i/2 \\rfloor$
+- Left child: $2i$
+- Right child: $2i + 1$
+
+**Key advantage:** No explicit pointers needed! Complete binary tree ↔ contiguous array.`
+          },
+          {
+            title: 'Heap Operations: Insert and Extract-Max',
+            content: `**Insert (Swim Up / Bubble Up):**
+1. Add new element at the end (next available position)
+2. "Swim up": while element > parent, swap with parent
+
+\`\`\`
+insert(heap, key):
+    heap.append(key)
+    swimUp(heap, len(heap) - 1)
+
+swimUp(heap, i):
+    while i > 0 and heap[i] > heap[parent(i)]:
+        swap(heap[i], heap[parent(i)])
+        i = parent(i)
+\`\`\`
+Time: $O(\\log n)$ — at most height swaps.
+
+**Extract-Max (Sink Down / Bubble Down):**
+1. Save the root (max element)
+2. Move last element to root
+3. "Sink down": while element < larger child, swap with larger child
+
+\`\`\`
+extractMax(heap):
+    max = heap[0]
+    heap[0] = heap.pop()  # Move last to root
+    sinkDown(heap, 0)
+    return max
+
+sinkDown(heap, i):
+    while True:
+        largest = i
+        left = 2*i + 1
+        right = 2*i + 2
+
+        if left < len(heap) and heap[left] > heap[largest]:
+            largest = left
+        if right < len(heap) and heap[right] > heap[largest]:
+            largest = right
+
+        if largest == i:
+            break
+        swap(heap[i], heap[largest])
+        i = largest
+\`\`\`
+Time: $O(\\log n)$ — at most height swaps.`
+          },
+          {
+            title: 'Building a Heap: Heapify',
+            content: `**Problem:** Given an unsorted array, convert it to a valid heap.
+
+**Naive approach:** Insert elements one by one.
+Time: $n \\times O(\\log n) = O(n \\log n)$
+
+**Better approach (Bottom-up Heapify):**
+1. Leaves are already valid heaps
+2. Process nodes from bottom to top, calling sinkDown on each
+
+\`\`\`
+buildHeap(A):
+    n = len(A)
+    # Start from last non-leaf node
+    for i = n/2 - 1 downto 0:
+        sinkDown(A, i)
+\`\`\`
+
+**Time Analysis:**
+
+At height $h$, there are at most $\\lceil n/2^{h+1} \\rceil$ nodes, each requiring $O(h)$ work.
+
+$$T(n) = \\sum_{h=0}^{\\log n} \\frac{n}{2^{h+1}} \\cdot O(h) = O\\left(n \\sum_{h=0}^{\\log n} \\frac{h}{2^h}\\right)$$
+
+Using $\\sum_{h=0}^{\\infty} \\frac{h}{2^h} = 2$:
+
+$$T(n) = O(n)$$
+
+**Surprising result:** Building a heap is $O(n)$, not $O(n \\log n)$!
+
+**Intuition:** Most nodes are near the bottom and require little work. Few nodes are near the top and require more work.`
+          },
+          {
+            title: 'Heap Sort',
+            content: `**Heap Sort Algorithm:**
+1. Build a max-heap from the array: $O(n)$
+2. Repeatedly extract max and place at end: $O(n \\log n)$
+
+\`\`\`
+heapSort(A):
+    n = len(A)
+
+    # Build max-heap
+    buildHeap(A)
+
+    # Extract elements one by one
+    for i = n-1 downto 1:
+        swap(A[0], A[i])    # Move max to sorted portion
+        heapSize -= 1        # Reduce heap size
+        sinkDown(A, 0)       # Restore heap property
+\`\`\`
+
+**Analysis:**
+- Build heap: $O(n)$
+- $n$ extract-max operations: $O(n \\log n)$
+- Total: $O(n \\log n)$
+
+**Properties of Heap Sort:**
+
+| Property | Value |
+|----------|-------|
+| Time (worst) | $O(n \\log n)$ |
+| Time (average) | $O(n \\log n)$ |
+| Time (best) | $O(n \\log n)$ |
+| Space | $O(1)$ — in-place! |
+| Stable | No |
+
+**Comparison with other sorts:**
+- Unlike merge sort: $O(1)$ space
+- Unlike quicksort: $O(n \\log n)$ guaranteed
+- Unlike both: not stable
+
+**In practice:** Often slower than quicksort due to poor cache behavior (jumping around array).`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'heap-1',
+            problem: `Starting with an empty max-heap, insert the following keys in order: 15, 10, 20, 17, 25, 8, 12.
+
+Then perform two extract-max operations.
+
+Draw the heap after each step.`,
+            solution: `**Insert 15:**
+\`\`\`
+[15]
+\`\`\`
+
+**Insert 10:**
+\`\`\`
+    15
+   /
+  10
+[15, 10]
+\`\`\`
+
+**Insert 20:** (swim up: 20 > 15)
+\`\`\`
+    20
+   /  \\
+  10   15
+[20, 10, 15]
+\`\`\`
+
+**Insert 17:** (swim up: 17 > 10)
+\`\`\`
+    20
+   /  \\
+  17   15
+ /
+10
+[20, 17, 15, 10]
+\`\`\`
+
+**Insert 25:** (swim up: 25 > 17 > 20)
+\`\`\`
+    25
+   /  \\
+  20   15
+ / \\
+10  17
+[25, 20, 15, 10, 17]
+\`\`\`
+
+**Insert 8:**
+\`\`\`
+    25
+   /  \\
+  20   15
+ / \\  /
+10 17 8
+[25, 20, 15, 10, 17, 8]
+\`\`\`
+
+**Insert 12:**
+\`\`\`
+    25
+   /  \\
+  20   15
+ / \\  / \\
+10 17 8  12
+[25, 20, 15, 10, 17, 8, 12]
+\`\`\`
+
+**Extract-max (25):** Move 12 to root, sink down.
+\`\`\`
+    20
+   /  \\
+  17   15
+ / \\  /
+10 12 8
+[20, 17, 15, 10, 12, 8]
+\`\`\`
+
+**Extract-max (20):** Move 8 to root, sink down.
+\`\`\`
+    17
+   /  \\
+  12   15
+ / \\
+10  8
+[17, 12, 15, 10, 8]
+\`\`\``
+          },
+          {
+            id: 'heap-2',
+            problem: `Design a data structure that supports the following operations, all in $O(\\log n)$ time:
+
+- \`insert(x)\`: Add element $x$
+- \`findMin()\`: Return the minimum element
+- \`findMax()\`: Return the maximum element
+- \`deleteMin()\`: Remove and return the minimum
+- \`deleteMax()\`: Remove and return the maximum
+
+*Hint: Use two heaps.*`,
+            solution: `**Solution: Min-Max Heap or Double Heap**
+
+**Approach 1: Two Heaps with Cross-References**
+
+Maintain:
+- Min-heap $H_{min}$ for min operations
+- Max-heap $H_{max}$ for max operations
+- Each element has pointers to its positions in both heaps
+
+**insert(x):**
+\`\`\`
+pos_min = Hmin.insert(x)
+pos_max = Hmax.insert(x)
+x.min_pos = pos_min
+x.max_pos = pos_max
+\`\`\`
+Time: $O(\\log n)$
+
+**findMin():** Return $H_{min}$.root — $O(1)$
+
+**findMax():** Return $H_{max}$.root — $O(1)$
+
+**deleteMin():**
+\`\`\`
+x = Hmin.extractMin()
+# Also remove x from Hmax using its stored position
+Hmax.delete(x.max_pos)
+return x
+\`\`\`
+Time: $O(\\log n)$ for each heap operation
+
+**deleteMax():** Symmetric to deleteMin.
+
+**Space:** $O(n)$ for each heap, total $O(n)$.
+
+**Approach 2: Min-Max Heap**
+
+A specialized heap where:
+- Even levels (0, 2, 4, ...) follow min-heap property
+- Odd levels (1, 3, 5, ...) follow max-heap property
+
+- Minimum is at root
+- Maximum is among root's children
+
+All operations: $O(\\log n)$
+
+$$\\boxed{\\text{Both approaches achieve } O(\\log n) \\text{ for all operations}}$$`
+          },
+          {
+            id: 'heap-3',
+            problem: `Given $k$ sorted arrays, each of size $n$, design an algorithm to find the $k$-th smallest element among all $kn$ elements.
+
+Analyze the time and space complexity.`,
+            solution: `**Key Insight:** Use a min-heap to track the smallest unprocessed element from each array.
+
+**Algorithm:**
+\`\`\`
+kthSmallest(arrays, k):
+    # Min-heap stores (value, array_index, element_index)
+    heap = MinHeap()
+
+    # Initialize with first element of each array
+    for i = 0 to k-1:
+        heap.insert((arrays[i][0], i, 0))
+
+    # Extract minimum k times
+    for count = 1 to k:
+        (val, arr_idx, elem_idx) = heap.extractMin()
+
+        if count == k:
+            return val
+
+        # Add next element from same array if exists
+        if elem_idx + 1 < n:
+            heap.insert((arrays[arr_idx][elem_idx + 1], arr_idx, elem_idx + 1))
+
+    return val
+\`\`\`
+
+**Correctness:**
+- Heap always contains smallest unprocessed element from each array
+- Extracting minimum $k$ times gives us elements in sorted order
+- $k$-th extraction is the $k$-th smallest
+
+**Time Complexity:**
+- Initialize heap: $O(k)$ (insert $k$ elements into empty heap)
+- $k$ iterations, each with extractMin + insert: $O(k \\cdot \\log k)$
+- Total: $\\boxed{O(k \\log k)}$
+
+**Space Complexity:**
+- Heap stores at most $k$ elements: $\\boxed{O(k)}$
+
+**Note:** This is better than:
+- Merge all arrays first: $O(kn \\log k)$
+- Sort all elements: $O(kn \\log(kn))$
+
+For finding $k$-th smallest, we only need $O(k \\log k)$ time regardless of array sizes!`
+          }
+        ],
+        visualizations: ['HeapVisualizer'],
+      },
+      // Unit 9: Breadth-First Search
+      {
+        id: 'bfs',
+        title: 'Breadth-First Search',
+        description: 'Graph representation, BFS algorithm, shortest paths in unweighted graphs.',
+        sections: [
+          {
+            title: 'Graph Representations',
+            content: `A **graph** $G = (V, E)$ consists of:
+- $V$: set of **vertices** (nodes)
+- $E$: set of **edges** (connections between vertices)
+
+**Types of Graphs:**
+- **Undirected:** Edges have no direction $(u, v) = (v, u)$
+- **Directed:** Edges have direction $(u, v) \\neq (v, u)$
+- **Weighted:** Edges have associated weights
+
+**Adjacency List Representation:**
+Store a list of neighbors for each vertex.
+\`\`\`
+0: [1, 2]
+1: [0, 2, 3]
+2: [0, 1]
+3: [1]
+\`\`\`
+Space: $O(V + E)$
+
+**Adjacency Matrix Representation:**
+$n \\times n$ matrix $A$ where $A[i][j] = 1$ if edge $(i, j)$ exists.
+\`\`\`
+    0 1 2 3
+0 [ 0 1 1 0 ]
+1 [ 1 0 1 1 ]
+2 [ 1 1 0 0 ]
+3 [ 0 1 0 0 ]
+\`\`\`
+Space: $O(V^2)$
+
+**Comparison:**
+
+| Operation | Adj List | Adj Matrix |
+|-----------|----------|------------|
+| Space | $O(V + E)$ | $O(V^2)$ |
+| Check edge $(u,v)$ | $O(\\deg(u))$ | $O(1)$ |
+| Iterate neighbors | $O(\\deg(u))$ | $O(V)$ |
+| Add edge | $O(1)$ | $O(1)$ |
+
+**Use adjacency list** for sparse graphs ($E \\ll V^2$).
+**Use adjacency matrix** for dense graphs or frequent edge queries.`
+          },
+          {
+            title: 'Breadth-First Search Algorithm',
+            content: `**BFS** explores a graph level by level, visiting all vertices at distance $d$ before distance $d+1$.
+
+**Algorithm:**
+\`\`\`
+BFS(G, s):
+    for each vertex v in V:
+        v.color = WHITE      # Unvisited
+        v.dist = ∞
+        v.parent = null
+
+    s.color = GRAY          # Discovered
+    s.dist = 0
+
+    Q = empty queue
+    Q.enqueue(s)
+
+    while Q not empty:
+        u = Q.dequeue()
+        for each v in Adj[u]:
+            if v.color == WHITE:
+                v.color = GRAY
+                v.dist = u.dist + 1
+                v.parent = u
+                Q.enqueue(v)
+        u.color = BLACK     # Finished
+\`\`\`
+
+**Key Properties:**
+- Vertices are discovered in order of distance from source
+- \`v.dist\` = shortest path length from $s$ to $v$ (in unweighted graph)
+- \`v.parent\` forms a **BFS tree** (shortest path tree)
+
+**Time Complexity:** $O(V + E)$
+- Each vertex enqueued/dequeued at most once: $O(V)$
+- Each edge examined at most twice (once per endpoint): $O(E)$
+
+**Space Complexity:** $O(V)$ for queue and vertex attributes.`
+          },
+          {
+            title: 'BFS for Shortest Paths',
+            content: `**Theorem:** BFS finds shortest paths in unweighted graphs.
+
+After BFS from source $s$:
+- \`v.dist\` = length of shortest path from $s$ to $v$
+- \`v.dist = ∞\` if $v$ is unreachable from $s$
+
+**Proof Sketch:**
+
+**Lemma 1:** For any edge $(u, v)$: $v.dist \\leq u.dist + 1$
+
+**Lemma 2:** When $v$ is enqueued, $v.dist$ equals the shortest path distance.
+
+**Induction:** Vertices are discovered in non-decreasing order of distance.
+
+**Reconstructing the Path:**
+\`\`\`
+printPath(s, v):
+    if v == s:
+        print(s)
+    else if v.parent == null:
+        print("No path exists")
+    else:
+        printPath(s, v.parent)
+        print(v)
+\`\`\`
+
+**Example:**
+\`\`\`
+Graph:       BFS from A:
+A---B        A: dist=0
+|   |        B: dist=1, parent=A
+C---D        C: dist=1, parent=A
+    |        D: dist=2, parent=B or C
+    E        E: dist=3, parent=D
+\`\`\`
+
+**Applications:**
+- Finding shortest paths in unweighted graphs
+- Testing connectivity
+- Finding connected components
+- Testing bipartiteness`
+          },
+          {
+            title: 'BFS Applications',
+            content: `**1. Connected Components (Undirected Graph):**
+\`\`\`
+findComponents(G):
+    component = 0
+    for each vertex v:
+        if v.color == WHITE:
+            BFS(G, v)
+            component += 1
+            # All vertices reached have same component
+\`\`\`
+Time: $O(V + E)$
+
+**2. Bipartiteness Testing:**
+A graph is **bipartite** if vertices can be 2-colored such that no edge connects same colors.
+
+\`\`\`
+isBipartite(G, s):
+    BFS with modification:
+    when discovering v from u:
+        v.color = opposite of u.color
+        if any neighbor has same color: return false
+    return true
+\`\`\`
+
+**Key insight:** Graph is bipartite ↔ no odd-length cycles.
+
+**3. Level Structure:**
+BFS naturally partitions vertices into levels:
+- Level 0: $\\{s\\}$
+- Level $i$: vertices at distance $i$ from $s$
+
+**4. Web Crawling:**
+- Start from seed URLs
+- BFS explores pages level by level
+- Discovers pages closer to seed first
+
+**5. Social Network Analysis:**
+- Degrees of separation
+- Finding friends within $k$ hops`
+          },
+          {
+            title: 'BFS vs DFS',
+            content: `**Comparison:**
+
+| Property | BFS | DFS |
+|----------|-----|-----|
+| Data structure | Queue (FIFO) | Stack (LIFO) |
+| Order | Level by level | Go deep first |
+| Shortest path | Yes (unweighted) | No |
+| Space | $O(V)$ worst case | $O(V)$ worst case |
+| Memory for tree | Higher (wide) | Lower (deep) |
+
+**When to use BFS:**
+- Finding shortest path (unweighted)
+- Level-order traversal
+- Finding nodes within distance $k$
+- Testing bipartiteness
+- Minimum spanning tree (unweighted)
+
+**When to use DFS:**
+- Topological sort
+- Detecting cycles
+- Finding strongly connected components
+- Maze solving (finding any path)
+- Generating permutations/combinations
+
+**Memory Comparison:**
+For a tree of branching factor $b$ and depth $d$:
+- BFS: $O(b^d)$ — stores entire level
+- DFS: $O(d)$ — stores only current path
+
+For wide, shallow graphs: DFS uses less memory.
+For deep, narrow graphs: BFS uses less memory.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'bfs-1',
+            problem: `Run BFS on the following graph starting from vertex A. Show the order in which vertices are discovered and the final BFS tree.
+
+\`\`\`
+    A --- B --- C
+    |     |     |
+    D --- E --- F
+          |
+          G
+\`\`\`
+
+Also give the shortest path from A to G.`,
+            solution: `**BFS from A:**
+
+**Initialization:**
+- Queue: [A]
+- A.dist = 0
+
+**Step 1:** Dequeue A, explore neighbors B, D
+- Queue: [B, D]
+- B.dist = 1, B.parent = A
+- D.dist = 1, D.parent = A
+
+**Step 2:** Dequeue B, explore neighbors C, E (A already visited)
+- Queue: [D, C, E]
+- C.dist = 2, C.parent = B
+- E.dist = 2, E.parent = B
+
+**Step 3:** Dequeue D, explore neighbors E (A already visited, E already discovered)
+- Queue: [C, E]
+
+**Step 4:** Dequeue C, explore neighbors F (B already visited)
+- Queue: [E, F]
+- F.dist = 3, F.parent = C
+
+**Step 5:** Dequeue E, explore neighbors G (B, D, F already visited/discovered)
+- Queue: [F, G]
+- G.dist = 3, G.parent = E
+
+**Step 6:** Dequeue F (C, E already visited)
+**Step 7:** Dequeue G (E already visited)
+
+**Discovery order:** $\\boxed{A, B, D, C, E, F, G}$
+
+**BFS Tree:**
+\`\`\`
+      A (0)
+     / \\
+   B(1) D(1)
+   / \\
+ C(2) E(2)
+ |     |
+F(3)  G(3)
+\`\`\`
+
+**Shortest path A to G:**
+Trace parents: G ← E ← B ← A
+
+$$\\boxed{A \\to B \\to E \\to G}$$ (length 3)`
+          },
+          {
+            id: 'bfs-2',
+            problem: `Given an $m \\times n$ grid where each cell is either land (1) or water (0), find the shortest path from the top-left corner to the bottom-right corner, moving only through land cells (4-directional movement).
+
+Return -1 if no path exists.
+
+Design an algorithm and analyze its complexity.`,
+            solution: `**Algorithm: BFS on Grid**
+
+\`\`\`
+shortestPath(grid):
+    m, n = grid dimensions
+
+    if grid[0][0] == 0 or grid[m-1][n-1] == 0:
+        return -1  # Start or end is water
+
+    # Directions: up, down, left, right
+    dirs = [(-1,0), (1,0), (0,-1), (0,1)]
+
+    queue = [(0, 0, 1)]  # (row, col, distance)
+    visited = set((0, 0))
+
+    while queue not empty:
+        (r, c, dist) = queue.dequeue()
+
+        if r == m-1 and c == n-1:
+            return dist  # Reached destination
+
+        for (dr, dc) in dirs:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < m and 0 <= nc < n:
+                if grid[nr][nc] == 1 and (nr, nc) not in visited:
+                    visited.add((nr, nc))
+                    queue.enqueue((nr, nc, dist + 1))
+
+    return -1  # No path found
+\`\`\`
+
+**Correctness:**
+- BFS explores cells in order of distance from source
+- First time we reach destination is via shortest path
+- Only land cells are visited
+
+**Time Complexity:**
+- Each cell visited at most once
+- Each cell has at most 4 neighbors
+- Total: $\\boxed{O(mn)}$
+
+**Space Complexity:**
+- Queue can hold all cells: $O(mn)$
+- Visited set: $O(mn)$
+- Total: $\\boxed{O(mn)}$
+
+**Example:**
+\`\`\`
+1 1 0 1
+1 1 1 0
+0 1 1 1
+1 0 1 1
+
+Shortest path: (0,0)→(0,1)→(1,1)→(1,2)→(2,2)→(2,3)→(3,3)
+Length: 7
+\`\`\``
+          },
+          {
+            id: 'bfs-3',
+            problem: `In a social network, the **degree of separation** between two people is the length of the shortest path between them.
+
+Design a data structure and algorithm to efficiently answer queries: "What is the degree of separation between persons $u$ and $v$?"
+
+Consider both:
+**(a)** Single query
+**(b)** Many queries on the same graph`,
+            solution: `**(a) Single Query:**
+
+Use standard BFS from $u$ to find shortest path to $v$.
+
+\`\`\`
+degreeOfSeparation(G, u, v):
+    if u == v: return 0
+    return BFS(G, u, v).dist  # -1 if unreachable
+\`\`\`
+
+**Time:** $O(V + E)$ per query
+**Space:** $O(V)$
+
+**(b) Many Queries - Preprocessing:**
+
+**Approach 1: All-Pairs BFS**
+Precompute all pairwise distances.
+
+\`\`\`
+preprocess(G):
+    dist = V × V matrix
+    for each vertex s:
+        BFS(G, s)  # Sets dist[s][v] for all v
+    return dist
+
+query(u, v):
+    return dist[u][v]  # O(1)
+\`\`\`
+
+- Preprocessing: $O(V(V + E))$
+- Space: $O(V^2)$
+- Query: $O(1)$
+
+**Approach 2: Bidirectional BFS (for single query optimization)**
+
+Run BFS from both $u$ and $v$ simultaneously, stop when they meet.
+
+\`\`\`
+bidirectionalBFS(G, u, v):
+    forwardQ = {u}, backwardQ = {v}
+    forwardDist[u] = 0, backwardDist[v] = 0
+
+    while forwardQ and backwardQ not empty:
+        # Expand smaller frontier
+        if |forwardQ| < |backwardQ|:
+            expand forward one level
+            if any node in backwardQ found:
+                return forwardDist[node] + backwardDist[node]
+        else:
+            expand backward one level
+            if any node in forwardQ found:
+                return forwardDist[node] + backwardDist[node]
+
+    return -1
+\`\`\`
+
+**Time:** $O(b^{d/2})$ vs $O(b^d)$ for regular BFS
+(where $b$ = branching factor, $d$ = distance)
+
+**Approach 3: Landmarks (for approximate queries)**
+- Precompute distances from $k$ landmark vertices
+- Approximate $d(u,v) \\approx \\min_L(d(u,L) + d(L,v))$
+
+$$\\boxed{\\text{Choose approach based on query frequency and accuracy needs}}$$`
+          }
+        ],
+        visualizations: ['BFSVisualizer'],
+      },
+      // Unit 10: Depth-First Search
+      {
+        id: 'dfs',
+        title: 'Depth-First Search',
+        description: 'DFS algorithm, edge classification, cycle detection, and topological sort.',
+        sections: [
+          {
+            title: 'DFS Algorithm Overview',
+            content: `## Depth-First Search (DFS)
+
+DFS explores as far as possible along each branch before backtracking. Unlike BFS which explores level-by-level, DFS goes deep first.
+
+### Vertex Colors
+
+DFS uses three colors to track vertex state:
+
+| Color | Meaning | Time Interval |
+|-------|---------|---------------|
+| **White** | Undiscovered | Before $d[v]$ |
+| **Gray** | Discovered, in progress | $[d[v], f[v]]$ |
+| **Black** | Finished | After $f[v]$ |
+
+### Discovery and Finish Times
+
+Each vertex $v$ has two timestamps:
+- **$d[v]$** (discovery time): When $v$ is first discovered (turns gray)
+- **$f[v]$** (finish time): When $v$ is finished (turns black)
+
+**Parenthesis Theorem:** For any vertices $u, v$, exactly one of these holds:
+1. $[d[u], f[u]]$ and $[d[v], f[v]]$ are entirely disjoint
+2. $[d[u], f[u]]$ is entirely contained in $[d[v], f[v]]$ (or vice versa)
+
+### DFS Pseudocode
+
+\`\`\`
+DFS(G):
+    for each vertex u in V:
+        color[u] = WHITE
+        parent[u] = NIL
+    time = 0
+    for each vertex u in V:
+        if color[u] == WHITE:
+            DFS-Visit(G, u)
+
+DFS-Visit(G, u):
+    time = time + 1
+    d[u] = time          # Discovery time
+    color[u] = GRAY
+    for each v in Adj[u]:
+        if color[v] == WHITE:
+            parent[v] = u
+            DFS-Visit(G, v)
+    color[u] = BLACK
+    time = time + 1
+    f[u] = time          # Finish time
+\`\`\`
+
+$$\\boxed{\\text{Time Complexity: } O(V + E)}$$`
+          },
+          {
+            title: 'Edge Classification',
+            content: `## Edge Classification in DFS
+
+DFS classifies edges based on the state of vertices when the edge is explored:
+
+### Edge Types
+
+| Edge Type | Definition | Detection |
+|-----------|------------|-----------|
+| **Tree Edge** | Edge to a white vertex | $color[v] = \\text{WHITE}$ |
+| **Back Edge** | Edge to a gray ancestor | $color[v] = \\text{GRAY}$ |
+| **Forward Edge** | Non-tree edge to a descendant | $color[v] = \\text{BLACK}$ and $d[u] < d[v]$ |
+| **Cross Edge** | All other edges | $color[v] = \\text{BLACK}$ and $d[u] > d[v]$ |
+
+### Undirected Graphs
+
+In undirected graphs, there are only **tree edges** and **back edges**:
+- No forward or cross edges exist
+- Every non-tree edge connects an ancestor to a descendant
+
+### Back Edges and Cycles
+
+**Key Theorem:** A directed graph has a cycle if and only if DFS discovers a back edge.
+
+\`\`\`
+hasCycle(G):
+    Run DFS on G
+    return (back edge was found)
+\`\`\`
+
+**Proof:**
+- **If back edge $(u, v)$ exists:** $v$ is an ancestor of $u$, so path $v \\leadsto u$ exists in DFS tree. With edge $(u, v)$, we have a cycle.
+- **If cycle exists:** Let $v$ be the first vertex discovered in the cycle. Some vertex $u$ in the cycle has edge $(u, v)$, and $v$ is gray when exploring this edge (back edge).
+
+$$\\boxed{\\text{Cycle Detection: } O(V + E)}$$`
+          },
+          {
+            title: 'Topological Sort',
+            content: `## Topological Sort
+
+A **topological sort** of a DAG (Directed Acyclic Graph) is a linear ordering of vertices such that for every edge $(u, v)$, vertex $u$ appears before $v$.
+
+### Algorithm Using DFS
+
+\`\`\`
+TopologicalSort(G):
+    Run DFS(G)
+    Output vertices in decreasing order of finish time f[v]
+\`\`\`
+
+**Implementation with a Stack:**
+\`\`\`
+TopologicalSort(G):
+    for each vertex u in V:
+        color[u] = WHITE
+    S = empty stack
+
+    for each vertex u in V:
+        if color[u] == WHITE:
+            DFS-Visit-Topo(G, u, S)
+
+    return S  # Pop to get topological order
+
+DFS-Visit-Topo(G, u, S):
+    color[u] = GRAY
+    for each v in Adj[u]:
+        if color[v] == WHITE:
+            DFS-Visit-Topo(G, v, S)
+        else if color[v] == GRAY:
+            # Back edge found - not a DAG!
+            error "Graph has a cycle"
+    color[u] = BLACK
+    S.push(u)  # Add to front of order when finished
+\`\`\`
+
+### Correctness
+
+**Claim:** For edge $(u, v)$, we have $f[u] > f[v]$.
+
+**Proof:** When exploring $(u, v)$:
+- If $v$ is white: $v$ becomes a descendant, so $f[v] < f[u]$
+- If $v$ is black: $v$ already finished, so $f[v] < f[u]$
+- If $v$ is gray: Back edge → cycle → not a DAG
+
+### Applications
+
+1. **Task scheduling** with dependencies
+2. **Build systems** (Makefile ordering)
+3. **Course prerequisites**
+4. **Compilation order** for modules
+
+$$\\boxed{\\text{Topological Sort runs in } O(V + E)}$$`
+          },
+          {
+            title: 'Strongly Connected Components',
+            content: `## Strongly Connected Components (SCCs)
+
+A **strongly connected component** is a maximal set of vertices such that every vertex is reachable from every other vertex.
+
+### Kosaraju's Algorithm
+
+Two-pass DFS algorithm:
+
+\`\`\`
+Kosaraju(G):
+    # Pass 1: Compute finish times
+    Run DFS on G, compute finish times f[v]
+
+    # Pass 2: Process in reverse finish order
+    Compute G^T (transpose graph)
+    for each vertex u in decreasing order of f[u]:
+        if u not visited:
+            DFS-Visit(G^T, u)  # Each tree is an SCC
+\`\`\`
+
+### Why It Works
+
+**Key Insight:** If we process vertices of $G^T$ in decreasing finish time order from the first DFS, each DFS tree in pass 2 forms exactly one SCC.
+
+**Component Graph:** The DAG of SCCs:
+- Vertices: SCCs $C_1, C_2, \\ldots, C_k$
+- Edge $(C_i, C_j)$ if edge exists from some $u \\in C_i$ to some $v \\in C_j$
+
+### Tarjan's Algorithm (Single Pass)
+
+Uses a stack and low-link values:
+- $low[v]$ = smallest discovery time reachable from $v$'s subtree
+- SCC root: vertex where $low[v] = d[v]$
+
+\`\`\`
+Tarjan(G):
+    index = 0
+    S = empty stack
+    for each vertex v:
+        if v.index undefined:
+            strongconnect(v)
+
+strongconnect(v):
+    v.index = v.lowlink = index++
+    S.push(v)
+    v.onStack = true
+
+    for each (v, w) in E:
+        if w.index undefined:
+            strongconnect(w)
+            v.lowlink = min(v.lowlink, w.lowlink)
+        else if w.onStack:
+            v.lowlink = min(v.lowlink, w.index)
+
+    if v.lowlink == v.index:
+        # v is root of SCC
+        repeat:
+            w = S.pop()
+            w.onStack = false
+            add w to current SCC
+        until w == v
+\`\`\`
+
+$$\\boxed{\\text{Both algorithms: } O(V + E)}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dfs-1',
+            problem: `**Edge Classification**
+
+Given a directed graph, classify each edge after running DFS starting from vertex A.
+
+*Hint: Track vertex colors: white (undiscovered), gray (in progress), black (finished).*`,
+            solution: `**Edge Classification Rules:**
+
+When exploring edge $(u, v)$:
+- **Tree edge:** $v$ is white (undiscovered)
+- **Back edge:** $v$ is gray (ancestor in current path)
+- **Forward edge:** $v$ is black and $d[u] < d[v]$ (descendant)
+- **Cross edge:** $v$ is black and $d[u] > d[v]$ (neither ancestor nor descendant)
+
+**Key insight:** In undirected graphs, only tree and back edges exist.`
+          },
+          {
+            id: 'dfs-2',
+            problem: `**Cycle Detection**
+
+Write an algorithm to detect if a directed graph contains a cycle.
+
+*Hint: A back edge indicates a cycle.*`,
+            solution: `**Algorithm:**
+\`\`\`
+hasCycle(G):
+    for each vertex v:
+        color[v] = WHITE
+
+    for each vertex v:
+        if color[v] == WHITE:
+            if DFS-Cycle(v):
+                return true
+    return false
+
+DFS-Cycle(u):
+    color[u] = GRAY
+    for each v in Adj[u]:
+        if color[v] == GRAY:
+            return true  # Back edge = cycle
+        if color[v] == WHITE and DFS-Cycle(v):
+            return true
+    color[u] = BLACK
+    return false
+\`\`\`
+
+**Time:** $O(V + E)$`
+          },
+          {
+            id: 'dfs-3',
+            problem: `**Topological Sort Validity**
+
+Prove that decreasing finish time order gives a valid topological sort.
+
+*Hint: Show that for every edge (u,v), f[u] > f[v].*`,
+            solution: `**Proof:**
+
+For any edge $(u, v)$ in a DAG:
+
+When we explore edge $(u, v)$ during DFS:
+
+**Case 1:** $v$ is white
+- We recursively visit $v$
+- $v$ finishes before $u$
+- Therefore $f[v] < f[u]$ ✓
+
+**Case 2:** $v$ is black
+- $v$ already finished
+- Therefore $f[v] < f[u]$ ✓
+
+**Case 3:** $v$ is gray
+- This would be a back edge
+- But DAGs have no cycles
+- This case is impossible ✓
+
+**Conclusion:** For every edge $(u, v)$: $f[u] > f[v]$
+
+So decreasing finish time order respects all edges → valid topological sort.`
+          }
+        ],
+        visualizations: ['DFSVisualizer'],
+      },
+      // Unit 11: Weighted Shortest Paths
+      {
+        id: 'weighted-shortest-paths',
+        title: 'Weighted Shortest Paths',
+        description: 'Weighted graphs, DAG relaxation, and shortest path properties.',
+        sections: [
+          {
+            title: 'Weighted Graphs and Shortest Paths',
+            content: `## Weighted Graphs
+
+A **weighted graph** $G = (V, E, w)$ has a weight function $w: E \\to \\mathbb{R}$ assigning a real number to each edge.
+
+### Shortest Path Problem
+
+Given a weighted directed graph and source vertex $s$:
+- **Single-source shortest paths (SSSP):** Find shortest paths from $s$ to all vertices
+- **Single-pair:** Find shortest path from $s$ to specific target $t$
+- **All-pairs shortest paths (APSP):** Find shortest paths between all pairs
+
+### Path Weight
+
+For path $p = \\langle v_0, v_1, \\ldots, v_k \\rangle$:
+
+$$w(p) = \\sum_{i=1}^{k} w(v_{i-1}, v_i)$$
+
+### Shortest Path Weight
+
+$$\\delta(u, v) = \\begin{cases} \\min\\{w(p) : u \\overset{p}{\\leadsto} v\\} & \\text{if path exists} \\\\ \\infty & \\text{otherwise} \\end{cases}$$
+
+### Negative Edges
+
+- **Negative edges allowed:** Some algorithms handle them (Bellman-Ford)
+- **Negative cycles:** If reachable from source, shortest path is $-\\infty$
+
+$$\\boxed{\\text{Negative cycle} \\Rightarrow \\delta(s, v) = -\\infty \\text{ for affected vertices}}$$`
+          },
+          {
+            title: 'Optimal Substructure',
+            content: `## Optimal Substructure of Shortest Paths
+
+Shortest paths exhibit **optimal substructure**: subpaths of shortest paths are shortest paths.
+
+### Theorem
+
+Let $p = \\langle v_0, v_1, \\ldots, v_k \\rangle$ be a shortest path from $v_0$ to $v_k$.
+
+For any $0 \\leq i \\leq j \\leq k$, the subpath $p_{ij} = \\langle v_i, v_{i+1}, \\ldots, v_j \\rangle$ is a shortest path from $v_i$ to $v_j$.
+
+### Proof (Cut-and-Paste)
+
+Suppose $p_{ij}$ is not a shortest path. Then there exists a shorter path $p'_{ij}$ from $v_i$ to $v_j$.
+
+Replace $p_{ij}$ with $p'_{ij}$ in $p$ to get path $p'$:
+$$w(p') = w(p_{0i}) + w(p'_{ij}) + w(p_{jk}) < w(p_{0i}) + w(p_{ij}) + w(p_{jk}) = w(p)$$
+
+This contradicts $p$ being a shortest path. ∎
+
+### Corollary: Prefix Property
+
+If $p = \\langle s, \\ldots, u, v \\rangle$ is a shortest $s \\leadsto v$ path:
+- $p' = \\langle s, \\ldots, u \\rangle$ is a shortest $s \\leadsto u$ path
+- $\\delta(s, v) = \\delta(s, u) + w(u, v)$
+
+$$\\boxed{\\text{Optimal substructure enables dynamic programming approaches}}$$`
+          },
+          {
+            title: 'The Relaxation Framework',
+            content: `## Edge Relaxation
+
+The foundation of all shortest path algorithms is the **relax** operation.
+
+### The Relax Operation
+
+For edge $(u, v)$ with weight $w(u, v)$:
+
+\`\`\`
+Relax(u, v, w):
+    if d[v] > d[u] + w(u, v):
+        d[v] = d[u] + w(u, v)
+        π[v] = u
+\`\`\`
+
+**Intuition:** If we can improve the path to $v$ by going through $u$, do it.
+
+### Properties of Relaxation
+
+**Triangle Inequality:**
+$$\\delta(s, v) \\leq \\delta(s, u) + w(u, v)$$
+
+**Upper-Bound Property:**
+We always have $d[v] \\geq \\delta(s, v)$, and once $d[v] = \\delta(s, v)$, it never changes.
+
+**Convergence Property:**
+If $s \\leadsto u \\to v$ is a shortest path and $d[u] = \\delta(s, u)$ before relaxing $(u, v)$, then $d[v] = \\delta(s, v)$ afterward.
+
+**Path-Relaxation Property:**
+If $p = \\langle v_0, v_1, \\ldots, v_k \\rangle$ is a shortest path and we relax edges in the order $(v_0, v_1), (v_1, v_2), \\ldots, (v_{k-1}, v_k)$ (possibly with other relaxations interspersed), then $d[v_k] = \\delta(s, v_k)$.
+
+$$\\boxed{\\text{Different algorithms = Different relaxation orders}}$$`
+          },
+          {
+            title: 'DAG Shortest Paths',
+            content: `## Shortest Paths in DAGs
+
+For DAGs, we can find shortest paths in **linear time** using topological sort.
+
+### Algorithm
+
+\`\`\`
+DAG-Shortest-Paths(G, s):
+    Topologically sort vertices of G
+    Initialize-Single-Source(G, s)
+    for each vertex u in topological order:
+        for each vertex v in Adj[u]:
+            Relax(u, v, w)
+\`\`\`
+
+### Why It Works
+
+Topological order ensures that when we process vertex $u$:
+- All predecessors of $u$ have already been processed
+- $d[u]$ already equals $\\delta(s, u)$
+- Relaxing outgoing edges gives correct distances to successors
+
+### Analysis
+
+| Operation | Time |
+|-----------|------|
+| Topological sort | $O(V + E)$ |
+| Initialization | $O(V)$ |
+| Relaxation (each edge once) | $O(E)$ |
+| **Total** | $O(V + E)$ |
+
+### Handling Negative Edges
+
+DAG shortest paths works correctly with **negative edge weights** (as long as there are no cycles, which DAGs don't have by definition).
+
+### Applications
+
+- **Critical path analysis** in project scheduling
+- **Longest path** in DAGs (negate weights)
+- **Dependency resolution**
+
+$$\\boxed{\\text{DAG SSSP: } O(V + E)}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'wsp-1',
+            problem: `**Relaxation Sequence**
+
+Show the order of relaxations needed to find shortest paths in a given DAG.
+
+*Hint: Use topological order to determine relaxation sequence.*`,
+            solution: `**Algorithm:**
+1. Topologically sort: Get order like $[A, B, C, D, E]$
+2. Process each vertex in order:
+   - For $A$: Relax all edges $(A, x)$
+   - For $B$: Relax all edges $(B, x)$
+   - Continue...
+
+**Key insight:** After processing $u$, we have $d[u] = \\delta(s, u)$.
+
+**Why:** All paths to $u$ come from earlier vertices (topological order), which have already been processed.`
+          },
+          {
+            id: 'wsp-2',
+            problem: `**Negative Edge Handling**
+
+Explain why DAG shortest paths works with negative edges but Dijkstra does not.
+
+*Hint: Consider the role of cycles and revisiting vertices.*`,
+            solution: `**DAG works with negative edges because:**
+1. No cycles → no negative cycles
+2. Topological order ensures we process each vertex once
+3. When processing $u$, all predecessors already have final distances
+
+**Dijkstra fails with negative edges because:**
+1. Greedy choice: "closest unvisited vertex has final distance"
+2. Negative edge from later vertex $u$ to earlier vertex $v$ could improve $d[v]$
+3. But $v$ already marked as visited → never updated
+
+**Example:**
+\`\`\`
+A → B (weight 5)
+A → C (weight 2)
+C → B (weight -4)
+\`\`\`
+
+Dijkstra from A:
+- Process A: d[B]=5, d[C]=2
+- Process C (smaller): Can't update B's distance
+- d[B] = 5, but actual shortest = 2 + (-4) = -2`
+          },
+          {
+            id: 'wsp-3',
+            problem: `**Longest Path in DAG**
+
+How would you find the longest path in a DAG?
+
+*Hint: Consider how negating weights affects the problem.*`,
+            solution: `**Solution 1: Negate weights**
+1. Negate all edge weights: $w'(u,v) = -w(u,v)$
+2. Run DAG shortest paths
+3. Negate the result: longest = $-\\delta(s,v)$
+
+**Solution 2: Modify relaxation**
+\`\`\`
+Initialize d[s] = 0, d[v] = -∞ for v ≠ s
+
+Relax-Max(u, v, w):
+    if d[v] < d[u] + w(u, v):
+        d[v] = d[u] + w(u, v)
+\`\`\`
+
+**Application:** Critical path in project scheduling = longest path in task dependency DAG.`
+          }
+        ],
+        visualizations: ['WeightedGraphVisualizer'],
+      },
+      // Unit 12: Bellman-Ford
+      {
+        id: 'bellman-ford',
+        title: 'Bellman-Ford Algorithm',
+        description: 'Single-source shortest paths with negative edges, negative cycle detection.',
+        sections: [
+          {
+            title: 'Bellman-Ford Algorithm',
+            content: `## Bellman-Ford Algorithm
+
+Bellman-Ford solves SSSP with **negative edge weights** and detects **negative cycles**.
+
+### Algorithm
+
+\`\`\`
+Bellman-Ford(G, w, s):
+    Initialize-Single-Source(G, s)
+
+    for i = 1 to |V| - 1:
+        for each edge (u, v) in E:
+            Relax(u, v, w)
+
+    # Negative cycle check
+    for each edge (u, v) in E:
+        if d[v] > d[u] + w(u, v):
+            return FALSE  # Negative cycle exists
+
+    return TRUE
+\`\`\`
+
+### Key Insight
+
+After $i$ iterations, we have correct shortest paths for all vertices reachable via paths of at most $i$ edges.
+
+Since any simple path has at most $|V| - 1$ edges, $|V| - 1$ iterations suffice.
+
+### Complexity
+
+$$\\boxed{\\text{Time: } O(VE) \\qquad \\text{Space: } O(V)}$$
+
+### Comparison with Dijkstra
+
+| Aspect | Bellman-Ford | Dijkstra |
+|--------|--------------|----------|
+| Time | $O(VE)$ | $O(V \\log V + E)$ |
+| Negative edges | ✓ Yes | ✗ No |
+| Negative cycles | Detects | Undefined |
+| Simpler | ✓ | ✗ |`
+          },
+          {
+            title: 'Correctness Proof',
+            content: `## Correctness of Bellman-Ford
+
+### Lemma: Path-Edge Count
+
+Every shortest path has at most $|V| - 1$ edges.
+
+**Proof:** A simple path visits each vertex at most once, so it has at most $|V|$ vertices and $|V| - 1$ edges.
+
+### Main Theorem
+
+If $G$ has no negative-weight cycles reachable from $s$, then after $|V| - 1$ iterations:
+1. $d[v] = \\delta(s, v)$ for all reachable $v$
+2. The predecessor subgraph forms a shortest-paths tree
+
+### Proof by Induction
+
+**Claim:** After $i$ iterations, $d[v] = \\delta(s, v)$ for any $v$ with a shortest path of $\\leq i$ edges.
+
+**Base case:** $i = 0$. Only $d[s] = 0 = \\delta(s, s)$. ✓
+
+**Inductive step:** Assume true for $i-1$.
+
+Let $v$ have shortest path $p = s \\leadsto u \\to v$ with $i$ edges.
+- Path $s \\leadsto u$ has $i-1$ edges
+- By IH: $d[u] = \\delta(s, u)$ after $i-1$ iterations
+- In iteration $i$, we relax $(u, v)$
+- By convergence property: $d[v] = \\delta(s, v)$ ✓
+
+### Negative Cycle Detection
+
+After $|V| - 1$ iterations, if we can still relax any edge, a negative cycle exists.
+
+$$\\boxed{\\text{Extra relaxation possible} \\Leftrightarrow \\text{Negative cycle reachable from } s}$$`
+          },
+          {
+            title: 'Negative Cycle Detection',
+            content: `## Negative Cycle Detection
+
+### Detection Algorithm
+
+After $|V| - 1$ iterations of Bellman-Ford:
+
+\`\`\`
+DetectNegativeCycle(G, w, s):
+    Run Bellman-Ford for |V| - 1 iterations
+
+    for each edge (u, v) in E:
+        if d[v] > d[u] + w(u, v):
+            return "Negative cycle exists"
+
+    return "No negative cycle"
+\`\`\`
+
+### Finding the Cycle
+
+To actually find the negative cycle:
+
+\`\`\`
+FindNegativeCycle(G, w, s):
+    Run Bellman-Ford for |V| - 1 iterations
+
+    for each edge (u, v) in E:
+        if d[v] > d[u] + w(u, v):
+            # v is affected by negative cycle
+            # Walk back |V| times to ensure we're in the cycle
+            x = v
+            for i = 1 to |V|:
+                x = π[x]
+
+            # Now x is in the cycle; trace it
+            cycle = [x]
+            y = π[x]
+            while y ≠ x:
+                cycle.append(y)
+                y = π[y]
+
+            return cycle
+
+    return NIL
+\`\`\`
+
+### Why Walk Back |V| Times?
+
+The vertex $v$ where relaxation still occurs might not be in the cycle itself—it might just be reachable from the cycle. Walking back $|V|$ times guarantees we enter the cycle.
+
+$$\\boxed{\\text{Finding the cycle: } O(V) \\text{ additional time}}$$`
+          },
+          {
+            title: 'Optimizations and Variants',
+            content: `## Bellman-Ford Optimizations
+
+### Early Termination
+
+If no edge is relaxed in an iteration, we can stop early:
+
+\`\`\`
+Bellman-Ford-Optimized(G, w, s):
+    Initialize-Single-Source(G, s)
+
+    for i = 1 to |V| - 1:
+        changed = false
+        for each edge (u, v) in E:
+            if Relax(u, v, w):
+                changed = true
+        if not changed:
+            break  # No more updates possible
+
+    # Negative cycle check
+    for each edge (u, v) in E:
+        if d[v] > d[u] + w(u, v):
+            return FALSE
+    return TRUE
+\`\`\`
+
+### SPFA (Shortest Path Faster Algorithm)
+
+Only relax edges from recently updated vertices:
+
+\`\`\`
+SPFA(G, w, s):
+    Initialize-Single-Source(G, s)
+    Q = queue containing s
+    inQueue[s] = true
+
+    while Q not empty:
+        u = Q.dequeue()
+        inQueue[u] = false
+        for each edge (u, v) in E:
+            if d[v] > d[u] + w(u, v):
+                d[v] = d[u] + w(u, v)
+                π[v] = u
+                if not inQueue[v]:
+                    Q.enqueue(v)
+                    inQueue[v] = true
+\`\`\`
+
+**Average case:** Much faster than $O(VE)$
+**Worst case:** Still $O(VE)$
+
+### Batch Relaxation
+
+Process all edges in parallel (for parallel algorithms):
+- Each iteration can relax edges in any order
+- Enables GPU/parallel implementations
+
+$$\\boxed{\\text{SPFA is faster in practice but not asymptotically}}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'bf-1',
+            problem: `**Iteration Trace**
+
+Trace Bellman-Ford on a small graph, showing d[] after each iteration.
+
+*Hint: Process all edges in each iteration, tracking distance updates.*`,
+            solution: `**Example Graph:**
+\`\`\`
+s → A (3)
+s → B (5)
+A → B (-2)
+B → C (4)
+A → C (6)
+\`\`\`
+
+**Initialization:** d[s]=0, d[A]=∞, d[B]=∞, d[C]=∞
+
+**Iteration 1:**
+- Relax (s,A): d[A] = 0+3 = 3
+- Relax (s,B): d[B] = 0+5 = 5
+- Relax (A,B): d[B] = min(5, 3-2) = 1
+- Relax (B,C): d[C] = 1+4 = 5
+- Relax (A,C): d[C] = min(5, 3+6) = 5
+
+**Iteration 2:** No changes
+
+**Final:** d[s]=0, d[A]=3, d[B]=1, d[C]=5`
+          },
+          {
+            id: 'bf-2',
+            problem: `**Negative Cycle Example**
+
+Construct a graph with a negative cycle and show how Bellman-Ford detects it.
+
+*Hint: Create a cycle where sum of weights is negative.*`,
+            solution: `**Graph with negative cycle:**
+\`\`\`
+s → A (1)
+A → B (2)
+B → C (-4)
+C → A (1)
+\`\`\`
+
+Cycle: A → B → C → A with weight 2 + (-4) + 1 = -1
+
+**After |V|-1 = 3 iterations:**
+Distances keep decreasing each iteration due to the negative cycle.
+
+**Detection (iteration 4):**
+For edge (C,A): d[A] > d[C] + 1?
+- If true, we can still improve → negative cycle exists!
+
+**Key point:** After 3 iterations, we should have optimal paths if no negative cycles. Being able to improve means we can go around the cycle again for a shorter "path."`
+          },
+          {
+            id: 'bf-3',
+            problem: `**Why |V|-1 Iterations?**
+
+Explain why exactly |V|-1 iterations are sufficient.
+
+*Hint: Think about the maximum length of a simple path.*`,
+            solution: `**Answer:**
+
+A shortest path in a graph with $|V|$ vertices can have at most $|V|-1$ edges.
+
+**Why?**
+- A simple path doesn't repeat vertices
+- With $|V|$ vertices, maximum edges = $|V|-1$
+
+**After iteration $i$:**
+- Paths with $\\leq i$ edges have correct distances
+
+**After iteration $|V|-1$:**
+- All shortest simple paths (with $\\leq |V|-1$ edges) have correct distances
+- Any path with $|V|$ or more edges must repeat a vertex
+- If we can still improve → path can be made shorter by going around a negative cycle`
+          }
+        ],
+        visualizations: ['BellmanFordVisualizer'],
+      },
+      // Unit 13: Dijkstra
+      {
+        id: 'dijkstra',
+        title: "Dijkstra's Algorithm",
+        description: 'Single-source shortest paths with non-negative edges using priority queues.',
+        sections: [
+          {
+            title: "Dijkstra's Algorithm",
+            content: `## Dijkstra's Algorithm
+
+Dijkstra's algorithm solves SSSP for graphs with **non-negative edge weights** efficiently using a priority queue.
+
+### Algorithm
+
+\`\`\`
+Dijkstra(G, w, s):
+    Initialize-Single-Source(G, s)
+    S = ∅                    # Set of finalized vertices
+    Q = V                    # Min-priority queue by d[v]
+
+    while Q ≠ ∅:
+        u = Extract-Min(Q)   # Get closest unfinalized vertex
+        S = S ∪ {u}
+        for each v in Adj[u]:
+            Relax(u, v, w)   # May call Decrease-Key(Q, v)
+\`\`\`
+
+### Key Insight
+
+**Greedy choice:** The unvisited vertex with minimum $d[v]$ has found its shortest path.
+
+**Why it works:** All remaining paths to $u$ go through unvisited vertices, which have $d[\\cdot] \\geq d[u]$. With non-negative edges, these paths can only get longer.
+
+### Invariant
+
+At each step, for vertices in $S$: $d[v] = \\delta(s, v)$
+
+$$\\boxed{\\text{Dijkstra is a greedy algorithm}}$$`
+          },
+          {
+            title: 'Priority Queue Implementations',
+            content: `## Priority Queue for Dijkstra
+
+Dijkstra's running time depends on the priority queue implementation.
+
+### Operations Needed
+
+| Operation | Count |
+|-----------|-------|
+| Insert | $O(V)$ |
+| Extract-Min | $O(V)$ |
+| Decrease-Key | $O(E)$ |
+
+### Implementation Options
+
+**Array (unsorted):**
+| Op | Time |
+|-----|------|
+| Insert | $O(1)$ |
+| Extract-Min | $O(V)$ |
+| Decrease-Key | $O(1)$ |
+| **Total** | $O(V^2)$ |
+
+**Binary Heap:**
+| Op | Time |
+|-----|------|
+| Insert | $O(\\log V)$ |
+| Extract-Min | $O(\\log V)$ |
+| Decrease-Key | $O(\\log V)$ |
+| **Total** | $O((V + E) \\log V)$ |
+
+**Fibonacci Heap:**
+| Op | Time (amortized) |
+|-----|------|
+| Insert | $O(1)$ |
+| Extract-Min | $O(\\log V)$ |
+| Decrease-Key | $O(1)$ |
+| **Total** | $O(V \\log V + E)$ |
+
+### Which to Use?
+
+| Graph Type | Best Choice |
+|------------|-------------|
+| Dense ($E = \\Theta(V^2)$) | Array: $O(V^2)$ |
+| Sparse ($E = O(V)$) | Binary heap: $O(V \\log V)$ |
+| Large sparse | Fibonacci heap: $O(V \\log V + E)$ |
+
+$$\\boxed{\\text{Binary heap is usually best in practice}}$$`
+          },
+          {
+            title: 'Correctness Proof',
+            content: `## Correctness of Dijkstra's Algorithm
+
+### Theorem
+
+When vertex $u$ is extracted from $Q$, $d[u] = \\delta(s, u)$.
+
+### Proof (by contradiction)
+
+Suppose $u$ is the first vertex extracted with $d[u] > \\delta(s, u)$.
+
+Let $p$ be a shortest path from $s$ to $u$:
+$$s = x_0 \\to x_1 \\to \\cdots \\to x_k = u$$
+
+Let $y$ be the first vertex on $p$ not in $S$ when $u$ is extracted.
+Let $x$ be the predecessor of $y$ on $p$ (so $x \\in S$).
+
+**Observations:**
+1. $d[x] = \\delta(s, x)$ (x was added to S before u)
+2. Edge $(x, y)$ was relaxed when $x$ was added to $S$
+3. So $d[y] = \\delta(s, y)$ (by path relaxation property)
+
+**Key step:**
+$$d[y] = \\delta(s, y) \\leq \\delta(s, u) < d[u]$$
+
+The first inequality holds because $y$ is on the path to $u$.
+The second is our assumption.
+
+**Contradiction:**
+But then $y$ should have been extracted before $u$ (smaller $d$ value)!
+
+This contradicts $u$ being extracted first with incorrect distance. ∎
+
+$$\\boxed{\\text{Non-negative weights are essential for correctness}}$$`
+          },
+          {
+            title: 'Implementation Details',
+            content: `## Practical Implementation
+
+### Binary Heap Version
+
+\`\`\`
+Dijkstra-BinaryHeap(G, w, s):
+    for each v in V:
+        d[v] = ∞
+        π[v] = NIL
+    d[s] = 0
+
+    H = BuildMinHeap(V, d)  # Heap ordered by d values
+
+    while H not empty:
+        u = H.ExtractMin()
+        for each v in Adj[u]:
+            if d[v] > d[u] + w(u, v):
+                d[v] = d[u] + w(u, v)
+                π[v] = u
+                H.DecreaseKey(v, d[v])
+\`\`\`
+
+### Lazy Deletion Variant
+
+Instead of Decrease-Key, insert duplicates and skip stale entries:
+
+\`\`\`
+Dijkstra-Lazy(G, w, s):
+    d[s] = 0, all others = ∞
+    H = empty min-heap
+    H.Insert((0, s))
+    visited = empty set
+
+    while H not empty:
+        (dist, u) = H.ExtractMin()
+        if u in visited:
+            continue  # Skip stale entry
+        visited.add(u)
+
+        for each v in Adj[u]:
+            if v not in visited and d[v] > d[u] + w(u, v):
+                d[v] = d[u] + w(u, v)
+                π[v] = u
+                H.Insert((d[v], v))  # May create duplicates
+\`\`\`
+
+**Trade-off:** Simpler (no Decrease-Key), but heap may grow to $O(E)$ entries.
+
+### Path Reconstruction
+
+\`\`\`
+GetPath(s, t):
+    path = []
+    current = t
+    while current ≠ NIL:
+        path.prepend(current)
+        current = π[current]
+    return path
+\`\`\`
+
+$$\\boxed{\\text{Lazy deletion often faster in practice}}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dijk-1',
+            problem: `**Dijkstra Trace**
+
+Trace Dijkstra's algorithm on a graph, showing the priority queue state at each step.
+
+*Hint: Always extract the vertex with minimum d value.*`,
+            solution: `**Example Graph:**
+\`\`\`
+s → A (4)
+s → B (2)
+B → A (1)
+A → C (3)
+B → C (5)
+\`\`\`
+
+**Trace:**
+1. **Init:** Q = {s:0, A:∞, B:∞, C:∞}, S = {}
+2. **Extract s:** S = {s}, relax edges
+   Q = {B:2, A:4, C:∞}
+3. **Extract B:** S = {s,B}, relax edges
+   - A: min(4, 2+1) = 3
+   Q = {A:3, C:7}
+4. **Extract A:** S = {s,B,A}, relax edges
+   - C: min(7, 3+3) = 6
+   Q = {C:6}
+5. **Extract C:** S = {s,B,A,C}
+
+**Result:** d[s]=0, d[A]=3, d[B]=2, d[C]=6`
+          },
+          {
+            id: 'dijk-2',
+            problem: `**Why Non-Negative?**
+
+Explain with a counterexample why Dijkstra's algorithm fails with negative edges.
+
+*Hint: Show a case where the greedy choice is wrong.*`,
+            solution: `**Counterexample:**
+\`\`\`
+s → A (1)
+s → B (4)
+A → B (-3)
+\`\`\`
+
+**Dijkstra execution:**
+1. Extract s: d[A]=1, d[B]=4
+2. Extract A (smaller d): **A is finalized with d[A]=1**
+3. Extract B: d[B] = min(4, 1-3) = -2... but wait!
+
+**Problem:** When we extract A, we haven't yet found the best path to B. The edge A→B with weight -3 could have given us d[B] = 1 + (-3) = -2 < 4.
+
+But worse: if there were a path from B back to A, the "finalized" d[A]=1 could be improved!
+
+**True shortest paths:**
+- d[A] = 1 ✓
+- d[B] = 1 + (-3) = -2 (not 4)
+
+**Dijkstra gave d[B] = 4, which is wrong!**`
+          },
+          {
+            id: 'dijk-3',
+            problem: `**Dense vs Sparse**
+
+When should you use an array vs. binary heap implementation?
+
+*Hint: Compare O(V²) vs O((V+E)log V) for different E values.*`,
+            solution: `**Array implementation:** $O(V^2)$
+- Extract-Min: $O(V)$ each, $O(V)$ times = $O(V^2)$
+- Decrease-Key: $O(1)$ each, $O(E)$ times = $O(E)$
+- Total: $O(V^2)$
+
+**Binary heap:** $O((V+E)\\log V)$
+- Extract-Min: $O(\\log V)$ each, $O(V)$ times
+- Decrease-Key: $O(\\log V)$ each, $O(E)$ times
+- Total: $O((V+E)\\log V)$
+
+**Comparison:**
+- Dense graph ($E = V^2$): Heap = $O(V^2 \\log V)$ > Array = $O(V^2)$
+- Sparse graph ($E = V$): Heap = $O(V \\log V)$ < Array = $O(V^2)$
+
+**Rule of thumb:**
+- $E < V^2 / \\log V$: Use binary heap
+- $E > V^2 / \\log V$: Use array`
+          }
+        ],
+        visualizations: ['DijkstraVisualizer'],
+      },
+      // Unit 14: APSP and Johnson
+      {
+        id: 'apsp-johnson',
+        title: "APSP & Johnson's Algorithm",
+        description: 'All-pairs shortest paths, Johnson\'s reweighting technique.',
+        sections: [
+          {
+            title: 'All-Pairs Shortest Paths',
+            content: `## All-Pairs Shortest Paths (APSP)
+
+Find shortest paths between **all pairs** of vertices.
+
+### Output Format
+
+A $|V| \\times |V|$ matrix $D$ where $D[i][j] = \\delta(i, j)$
+
+### Approaches
+
+**Approach 1: Run SSSP from each vertex**
+- Dijkstra $V$ times: $O(V^2 \\log V + VE)$
+- Bellman-Ford $V$ times: $O(V^2 E)$
+
+**Approach 2: Dynamic Programming (Floyd-Warshall)**
+- Works with negative edges
+- Time: $O(V^3)$, Space: $O(V^2)$
+
+**Approach 3: Johnson's Algorithm**
+- Combines Bellman-Ford and Dijkstra
+- Handles negative edges
+- Time: $O(V^2 \\log V + VE)$
+
+### When to Use What?
+
+| Algorithm | Time | Negative edges? | Best for |
+|-----------|------|-----------------|----------|
+| $V$ × Dijkstra | $O(V^2 \\log V + VE)$ | No | Non-negative, sparse |
+| Floyd-Warshall | $O(V^3)$ | Yes | Dense, simple code |
+| Johnson | $O(V^2 \\log V + VE)$ | Yes | Negative edges, sparse |
+
+$$\\boxed{\\text{APSP output is an } O(V^2) \\text{ matrix}}$$`
+          },
+          {
+            title: 'Floyd-Warshall Algorithm',
+            content: `## Floyd-Warshall Algorithm
+
+DP approach considering intermediate vertices one at a time.
+
+### Idea
+
+Let $d^{(k)}[i][j]$ = shortest path from $i$ to $j$ using only vertices $\\{1, 2, \\ldots, k\\}$ as intermediates.
+
+### Recurrence
+
+$$d^{(k)}[i][j] = \\min(d^{(k-1)}[i][j], \\quad d^{(k-1)}[i][k] + d^{(k-1)}[k][j])$$
+
+Either the shortest path:
+1. Doesn't use $k$ as intermediate, or
+2. Goes through $k$
+
+### Algorithm
+
+\`\`\`
+Floyd-Warshall(W):
+    n = |V|
+    D = W  # Initial: direct edges or ∞
+
+    for k = 1 to n:
+        for i = 1 to n:
+            for j = 1 to n:
+                D[i][j] = min(D[i][j], D[i][k] + D[k][j])
+
+    return D
+\`\`\`
+
+### Detecting Negative Cycles
+
+Check diagonal after algorithm completes:
+\`\`\`
+for i = 1 to n:
+    if D[i][i] < 0:
+        return "Negative cycle through vertex i"
+\`\`\`
+
+### Path Reconstruction
+
+Maintain predecessor matrix $\\Pi$ where $\\Pi[i][j]$ = predecessor of $j$ on path from $i$.
+
+$$\\boxed{\\text{Floyd-Warshall: } O(V^3) \\text{ time, } O(V^2) \\text{ space}}$$`
+          },
+          {
+            title: "Johnson's Algorithm",
+            content: `## Johnson's Algorithm
+
+Handles negative edges efficiently for sparse graphs using **reweighting**.
+
+### Key Idea
+
+Transform edge weights to be non-negative while preserving shortest paths, then run Dijkstra from each vertex.
+
+### Reweighting Technique
+
+For vertex weights $h: V \\to \\mathbb{R}$, define new edge weights:
+$$\\hat{w}(u, v) = w(u, v) + h(u) - h(v)$$
+
+### Properties of Reweighting
+
+**Theorem:** For any path $p$ from $u$ to $v$:
+$$\\hat{w}(p) = w(p) + h(u) - h(v)$$
+
+**Proof:**
+$$\\hat{w}(p) = \\sum_{(x,y) \\in p} (w(x,y) + h(x) - h(y)) = w(p) + h(u) - h(v)$$
+
+The $h$ values telescope!
+
+**Corollary:** Shortest paths are preserved.
+- $p$ is shortest under $w$ iff $p$ is shortest under $\\hat{w}$
+- Just adjust final answer: $\\delta(u,v) = \\hat{\\delta}(u,v) - h(u) + h(v)$
+
+### Choosing $h$ Values
+
+Set $h(v) = \\delta(s', v)$ where $s'$ is a new vertex connected to all others with weight 0.
+
+$$\\hat{w}(u,v) = w(u,v) + \\delta(s',u) - \\delta(s',v) \\geq 0$$
+
+by the triangle inequality!
+
+$$\\boxed{\\text{Reweighting makes all edges non-negative}}$$`
+          },
+          {
+            title: "Johnson's Algorithm: Full Algorithm",
+            content: `## Johnson's Algorithm: Complete
+
+### Algorithm
+
+\`\`\`
+Johnson(G, w):
+    # Step 1: Add new vertex s' with zero-weight edges to all vertices
+    G' = G with new vertex s'
+    for each v in V:
+        add edge (s', v) with weight 0
+
+    # Step 2: Run Bellman-Ford from s'
+    if Bellman-Ford(G', w, s') == FALSE:
+        return "Negative cycle exists"
+
+    # Get h values (distances from s')
+    for each v in V:
+        h[v] = d[v]  # From Bellman-Ford
+
+    # Step 3: Reweight all edges
+    for each edge (u, v) in E:
+        ŵ(u, v) = w(u, v) + h[u] - h[v]
+
+    # Step 4: Run Dijkstra from each vertex
+    D = new V × V matrix
+    for each source u in V:
+        Dijkstra(G, ŵ, u)
+        for each v in V:
+            D[u][v] = d̂[v] + h[v] - h[u]  # Undo reweighting
+
+    return D
+\`\`\`
+
+### Complexity Analysis
+
+| Step | Time |
+|------|------|
+| Add edges from $s'$ | $O(V)$ |
+| Bellman-Ford | $O(VE)$ |
+| Reweight edges | $O(E)$ |
+| $V$ × Dijkstra | $O(V(V \\log V + E))$ |
+| **Total** | $O(V^2 \\log V + VE)$ |
+
+### When to Use Johnson
+
+- **Sparse graphs** with negative edges
+- When $E = O(V)$: Johnson is $O(V^2 \\log V)$ vs Floyd-Warshall's $O(V^3)$
+- When $E = \\Theta(V^2)$: Floyd-Warshall is simpler and competitive
+
+$$\\boxed{\\text{Johnson: } O(V^2 \\log V + VE)}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'apsp-1',
+            problem: `**Floyd-Warshall Trace**
+
+Trace Floyd-Warshall on a 4-vertex graph, showing the matrix after each k.
+
+*Hint: Update D[i][j] = min(D[i][j], D[i][k] + D[k][j]) for each k.*`,
+            solution: `**Initial matrix (k=0):** Direct edges
+
+\`\`\`
+     1   2   3   4
+1 [  0   3   ∞   7  ]
+2 [  ∞   0   2   ∞  ]
+3 [  5   ∞   0   1  ]
+4 [  ∞   ∞   ∞   0  ]
+\`\`\`
+
+**k=1:** Can we improve by going through vertex 1?
+- D[3][2] = min(∞, D[3][1]+D[1][2]) = min(∞, 5+3) = 8
+- D[3][4] = min(1, D[3][1]+D[1][4]) = min(1, 5+7) = 1 (no change)
+
+**k=2:** Through vertex 2?
+- D[1][3] = min(∞, 3+2) = 5
+- D[3][3] via 2: no improvement
+
+**Continue for k=3, k=4...**
+
+Final matrix gives all-pairs shortest paths.`
+          },
+          {
+            id: 'apsp-2',
+            problem: `**Reweighting Example**
+
+Show how Johnson's reweighting makes edges non-negative.
+
+*Hint: Compute h[v] = δ(s', v) and then ŵ(u,v) = w(u,v) + h[u] - h[v].*`,
+            solution: `**Original graph:**
+\`\`\`
+A → B (weight -2)
+A → C (weight 3)
+B → C (weight 4)
+\`\`\`
+
+**Step 1:** Add s' with zero edges to A, B, C
+
+**Step 2:** Bellman-Ford from s'
+- δ(s', A) = 0 (direct edge)
+- δ(s', B) = 0 (direct) or -2 (via A) = -2
+- δ(s', C) = 0 (direct) or 3 (via A) or 2 (via A→B→C) = 0
+
+So: h[A]=0, h[B]=-2, h[C]=0
+
+**Step 3:** Reweight
+- ŵ(A,B) = -2 + 0 - (-2) = 0 ≥ 0 ✓
+- ŵ(A,C) = 3 + 0 - 0 = 3 ≥ 0 ✓
+- ŵ(B,C) = 4 + (-2) - 0 = 2 ≥ 0 ✓
+
+All non-negative! Now run Dijkstra.`
+          },
+          {
+            id: 'apsp-3',
+            problem: `**Algorithm Selection**
+
+For a graph with V=1000, E=5000, and negative edges, which APSP algorithm is best?
+
+*Hint: Compare time complexities with actual numbers.*`,
+            solution: `**Given:** V=1000, E=5000 (sparse), negative edges allowed
+
+**Floyd-Warshall:** $O(V^3) = O(10^9)$ operations
+
+**Johnson:** $O(V^2 \\log V + VE)$
+- $V^2 \\log V = 10^6 \\cdot 10 = 10^7$
+- $VE = 10^3 \\cdot 5 \\cdot 10^3 = 5 \\cdot 10^6$
+- Total: $\\approx 1.5 \\cdot 10^7$
+
+**Comparison:**
+- Floyd-Warshall: $10^9$ operations
+- Johnson: $10^7$ operations
+
+**Answer:** Johnson is about **100x faster** for this sparse graph.
+
+**Rule:** For sparse graphs with E = O(V), Johnson wins.
+For dense graphs with E = Θ(V²), Floyd-Warshall is competitive and simpler.`
+          }
+        ],
+        visualizations: ['JohnsonVisualizer'],
+      },
+      // Unit 15: Dynamic Programming, Part 1
+      {
+        id: 'dp-1',
+        title: 'Dynamic Programming, Part 1: SRTBOT',
+        description: 'DP framework: Subproblems, Relate, Topological order, Base, Original, Time.',
+        visualizations: [],
+      },
+      // Unit 16: Dynamic Programming, Part 2
+      {
+        id: 'dp-2',
+        title: 'Dynamic Programming, Part 2: LCS, LIS',
+        description: 'Longest common subsequence, longest increasing subsequence.',
+        visualizations: [],
+      },
+      // Unit 17: Dynamic Programming, Part 3
+      {
+        id: 'dp-3',
+        title: 'Dynamic Programming, Part 3: Parenthesization',
+        description: 'Optimal parenthesization, matrix chain multiplication.',
+        visualizations: [],
+      },
+      // Unit 18: Dynamic Programming, Part 4
+      {
+        id: 'dp-4',
+        title: 'Dynamic Programming, Part 4: Knapsack',
+        description: 'Rod cutting, subset sum, knapsack, and pseudopolynomial algorithms.',
+        visualizations: [],
+      },
+      // Unit 19: Complexity
+      {
+        id: 'complexity',
+        title: 'Computational Complexity',
+        description: 'P, NP, NP-completeness, and polynomial-time reductions.',
+        visualizations: [],
+      },
+      // Unit 20: Course Review
+      {
+        id: 'review',
+        title: 'Course Review',
+        description: 'Summary of key algorithms, data structures, and problem-solving techniques.',
+        visualizations: [],
+      },
     ],
   },
   {
