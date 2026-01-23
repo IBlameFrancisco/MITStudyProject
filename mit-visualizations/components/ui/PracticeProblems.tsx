@@ -17,6 +17,7 @@ import type { PracticeProblem } from '@/lib/data/courses';
 
 interface PracticeProblemsProps {
   problems: PracticeProblem[];
+  courseNumber?: string;
 }
 
 // =============================================================================
@@ -247,7 +248,7 @@ function ProblemCard({ problem, index }: { problem: PracticeProblem; index: numb
 // MAIN COMPONENT
 // =============================================================================
 
-export default function PracticeProblems({ problems }: PracticeProblemsProps) {
+export default function PracticeProblems({ problems, courseNumber }: PracticeProblemsProps) {
   if (!problems || problems.length === 0) return null;
 
   return (
@@ -271,7 +272,7 @@ export default function PracticeProblems({ problems }: PracticeProblemsProps) {
         </div>
         <div>
           <h2 className="text-xl font-bold text-content-primary">Practice Problems</h2>
-          <p className="text-sm text-content-muted">MIT 18.600 Level Exercises</p>
+          <p className="text-sm text-content-muted">MIT {courseNumber || '18.600'} Level Exercises</p>
         </div>
       </div>
 

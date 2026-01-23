@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import type { Course } from '@/lib/data/courses';
 
 interface ClassCardProps {
@@ -39,15 +38,11 @@ const defaultColors = {
   glow: 'group-hover:shadow-gray-500/20',
 };
 
-export default function ClassCard({ course, index }: ClassCardProps) {
+export default function ClassCard({ course }: ClassCardProps) {
   const colors = courseColors[course.id] || defaultColors;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <div>
       <Link href={`/${course.id}`}>
         <div className={`group bg-surface-secondary rounded-2xl border border-edge-primary overflow-hidden cursor-pointer transition-all duration-300 hover:border-edge-secondary hover:shadow-soft-lg ${colors.glow}`}>
           {/* Gradient Header */}
@@ -110,6 +105,6 @@ export default function ClassCard({ course, index }: ClassCardProps) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

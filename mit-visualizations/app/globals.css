@@ -104,13 +104,18 @@ body {
 }
 
 /* =============================================================================
-   SMOOTH TRANSITIONS
+   SMOOTH TRANSITIONS (scoped to avoid conflicts)
    ============================================================================= */
 
-* {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+a, button, input, select, textarea {
+  transition-property: background-color, border-color, color, box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+/* Prevent SVGs from inheriting unwanted transitions */
+svg, svg * {
+  transition: none !important;
 }
 
 /* =============================================================================

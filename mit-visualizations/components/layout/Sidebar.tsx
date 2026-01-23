@@ -2,23 +2,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
 import { courses } from '@/lib/data/courses';
 
 /**
  * Stylized Name Component
- * Renders "Francisco Zapata" with math symbols:
+ * Renders "Francisco Zapata" with math symbols that resemble letters:
  * - F → ∫ (integral)
  * - r → ℝ (real numbers)
  * - a → ∀ (for all)
  * - n → ℕ (natural numbers)
  * - c → ℂ (complex numbers)
  * - i → i (imaginary unit)
- * - s → σ (sigma)
+ * - s → s (kept as is - no good math equivalent)
  * - o → ∅ (empty set)
- * - Z → Σ (summation)
- * - p → π (pi)
- * - t → τ (tau)
+ * - Z → Ƶ (Z with stroke - looks like Z)
+ * - p → ρ (rho - looks like p)
+ * - t → t (kept as is)
  */
 function StylizedName() {
   return (
@@ -30,16 +29,16 @@ function StylizedName() {
         <span className="font-math text-brand-500">ℕ</span>
         <span className="font-math text-brand-500">ℂ</span>
         <span className="font-math text-brand-500">i</span>
-        <span className="font-math text-brand-500">σ</span>
+        <span className="text-brand-500">s</span>
         <span className="font-math text-brand-500">ℂ</span>
         <span className="font-math text-brand-500">∅</span>
       </div>
       <div className="text-base font-semibold tracking-tight text-content-primary -mt-1">
-        <span className="font-math text-brand-500">Σ</span>
+        <span className="font-math text-brand-500">Ƶ</span>
         <span className="font-math text-brand-500">∀</span>
-        <span className="font-math text-brand-500">π</span>
+        <span className="font-math text-brand-500">ρ</span>
         <span className="font-math text-brand-500">∀</span>
-        <span className="font-math text-brand-500">τ</span>
+        <span className="text-brand-500">t</span>
         <span className="font-math text-brand-500">∀</span>
       </div>
     </div>
@@ -52,7 +51,7 @@ function StylizedName() {
 function LogoIcon() {
   return (
     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-soft">
-      <span className="text-white font-math text-lg font-bold">∫Σ</span>
+      <span className="text-white font-math text-lg font-bold">∫Ƶ</span>
     </div>
   );
 }
@@ -65,12 +64,9 @@ export default function Sidebar() {
       {/* Brand Header */}
       <div className="p-5 border-b border-edge-primary">
         <Link href="/" className="flex items-center gap-3 group">
-          <motion.div
-            whileHover={{ scale: 1.05, rotate: 5 }}
-            transition={{ type: 'spring', stiffness: 400 }}
-          >
+          <div className="transition-transform duration-200 group-hover:scale-105">
             <LogoIcon />
-          </motion.div>
+          </div>
           <StylizedName />
         </Link>
       </div>
@@ -102,35 +98,26 @@ export default function Sidebar() {
             Courses
           </p>
           <div className="space-y-1">
-            {courses.map((course, index) => {
+            {courses.map((course) => {
               const isActive = pathname.startsWith(`/${course.id}`);
               return (
-                <motion.div
+                <Link
                   key={course.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+                  href={`/${course.id}`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                    isActive
+                      ? 'bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 shadow-inner-soft'
+                      : 'text-content-secondary hover:bg-surface-tertiary hover:text-content-primary'
+                  }`}
                 >
-                  <Link
-                    href={`/${course.id}`}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                      isActive
-                        ? 'bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 shadow-inner-soft'
-                        : 'text-content-secondary hover:bg-surface-tertiary hover:text-content-primary'
-                    }`}
-                  >
-                    <div className={`w-2 h-2 rounded-full transition-transform duration-200 ${
-                      isActive ? 'bg-brand-500 scale-125' : 'bg-content-muted group-hover:bg-brand-400'
-                    }`} />
-                    <span className="text-sm font-medium">{course.number}</span>
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeIndicator"
-                        className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-500"
-                      />
-                    )}
-                  </Link>
-                </motion.div>
+                  <div className={`w-2 h-2 rounded-full transition-transform duration-200 ${
+                    isActive ? 'bg-brand-500 scale-125' : 'bg-content-muted group-hover:bg-brand-400'
+                  }`} />
+                  <span className="text-sm font-medium">{course.number}</span>
+                  {isActive && (
+                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-brand-500" />
+                  )}
+                </Link>
               );
             })}
           </div>

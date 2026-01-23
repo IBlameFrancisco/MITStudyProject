@@ -17,6 +17,7 @@ import type { TopicSection } from '@/lib/data/courses';
 
 interface TopicSectionsProps {
   sections: TopicSection[];
+  courseNumber?: string;
 }
 
 // =============================================================================
@@ -230,7 +231,7 @@ function SectionCard({ section, index }: { section: TopicSection; index: number 
 // MAIN COMPONENT
 // =============================================================================
 
-export default function TopicSections({ sections }: TopicSectionsProps) {
+export default function TopicSections({ sections, courseNumber }: TopicSectionsProps) {
   if (!sections || sections.length === 0) return null;
 
   return (
@@ -259,7 +260,7 @@ export default function TopicSections({ sections }: TopicSectionsProps) {
         </div>
         <div>
           <h2 className="text-xl font-bold text-content-primary">Topics in This Unit</h2>
-          <p className="text-sm text-content-muted">MIT 18.600 Level Content</p>
+          <p className="text-sm text-content-muted">MIT {courseNumber || '18.600'} Level Content</p>
         </div>
       </div>
 
