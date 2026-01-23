@@ -7137,9 +7137,1014 @@ P(i+1, j-1) + 2 & S[i] = S[j] \\\\
     description: 'ODEs, Laplace transform, and systems.',
     color: 'bg-purple-600',
     units: [
-      { id: 'slope-fields', title: 'Slope Fields', description: 'Direction fields for ODEs.', visualizations: ['SlopeField'] },
-      { id: 'phase-portraits', title: 'Phase Portraits', description: 'Systems analysis.', visualizations: ['PhasePortrait'] },
-      { id: 'function-plots', title: 'Solution Curves', description: 'Plot solutions.', visualizations: ['FunctionPlot'] },
+      // =====================================================================
+      // UNIT 0: CALCULUS PREREQUISITES REVIEW
+      // =====================================================================
+      {
+        id: 'prereq-review',
+        title: 'Calculus Prerequisites',
+        description: 'Essential calculus review for differential equations success.',
+        visualizations: ['CalculusReviewVisualizer'],
+        sections: [
+          {
+            title: 'Why Review Calculus?',
+            content: `Differential equations are fundamentally about **derivatives** and **integrals**. Before diving in, we need to ensure our calculus foundations are solid.
+
+**Prerequisites (18.01 topics you must know):**
+- Derivatives: power rule, product rule, quotient rule, chain rule
+- Integrals: basic antiderivatives, substitution, integration by parts
+- Exponentials and logarithms: derivatives and integrals of $e^x$, $\\ln(x)$
+- Trigonometric functions: derivatives and integrals of sin, cos, tan
+
+**What is a Differential Equation?**
+A differential equation is an equation involving an unknown function and its derivatives. For example:
+
+$$\\frac{dy}{dx} = y$$
+
+This says: "Find a function $y(x)$ whose derivative equals itself."
+
+The answer? $y = Ce^x$ for any constant $C$.`
+          },
+          {
+            title: 'Essential Derivatives',
+            content: `**Power Rule:**
+$$\\frac{d}{dx}[x^n] = nx^{n-1}$$
+
+**Chain Rule (Critical for ODEs!):**
+$$\\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x)$$
+
+Example: $\\frac{d}{dx}[e^{3x}] = e^{3x} \\cdot 3 = 3e^{3x}$
+
+**Product Rule:**
+$$\\frac{d}{dx}[f(x)g(x)] = f'(x)g(x) + f(x)g'(x)$$
+
+This rule will be **essential** for the integrating factor method!
+
+**Key Exponential Facts:**
+- $\\frac{d}{dx}[e^x] = e^x$ (exponential is its own derivative!)
+- $\\frac{d}{dx}[e^{ax}] = ae^{ax}$
+- $\\frac{d}{dx}[\\ln|x|] = \\frac{1}{x}$`
+          },
+          {
+            title: 'Essential Integrals',
+            content: `**Power Rule for Integration:**
+$$\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)$$
+
+**The special case n = -1:**
+$$\\int \\frac{1}{x} \\, dx = \\ln|x| + C$$
+
+**Exponential Integrals (used constantly!):**
+$$\\int e^{ax} \\, dx = \\frac{1}{a}e^{ax} + C$$
+
+**Integration by Parts:**
+$$\\int u \\, dv = uv - \\int v \\, du$$
+
+This is the reverse of the product rule and will be needed for many ODE solutions.
+
+**The Constant of Integration:**
+Never forget the $+C$! In ODEs, this constant represents the **family of solutions**. Initial conditions determine $C$.`
+          },
+          {
+            title: 'Practice: Verify Solutions',
+            content: `**Skill:** Given a proposed solution, verify it satisfies the ODE.
+
+**Example 1:** Verify $y = e^{2x}$ solves $\\frac{dy}{dx} = 2y$
+
+**Solution:**
+- LHS: $\\frac{dy}{dx} = \\frac{d}{dx}[e^{2x}] = 2e^{2x}$
+- RHS: $2y = 2e^{2x}$
+- LHS = RHS ✓
+
+**Example 2:** Verify $y = Ce^{-x} + x - 1$ solves $\\frac{dy}{dx} + y = x$
+
+**Solution:**
+- $\\frac{dy}{dx} = -Ce^{-x} + 1$
+- LHS: $\\frac{dy}{dx} + y = (-Ce^{-x} + 1) + (Ce^{-x} + x - 1) = x$
+- RHS: $x$
+- LHS = RHS ✓
+
+**Key insight:** Verification is often easier than solving!`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'prereq-1',
+            problem: 'Find $\\frac{d}{dx}[x^2 e^{3x}]$ using the product rule.',
+            solution: `Using the product rule with $f(x) = x^2$ and $g(x) = e^{3x}$:
+
+$f'(x) = 2x$
+
+$g'(x) = 3e^{3x}$ (chain rule)
+
+$$\\frac{d}{dx}[x^2 e^{3x}] = 2x \\cdot e^{3x} + x^2 \\cdot 3e^{3x} = e^{3x}(2x + 3x^2) = xe^{3x}(2 + 3x)$$`
+          },
+          {
+            id: 'prereq-2',
+            problem: 'Evaluate $\\int xe^{2x} \\, dx$ using integration by parts.',
+            solution: `Let $u = x$, $dv = e^{2x}dx$
+
+Then $du = dx$, $v = \\frac{1}{2}e^{2x}$
+
+$$\\int xe^{2x} \\, dx = x \\cdot \\frac{1}{2}e^{2x} - \\int \\frac{1}{2}e^{2x} \\, dx$$
+
+$$= \\frac{x}{2}e^{2x} - \\frac{1}{4}e^{2x} + C = \\frac{e^{2x}}{4}(2x - 1) + C$$`
+          },
+          {
+            id: 'prereq-3',
+            problem: 'Verify that $y = \\frac{1}{1+Ce^{-x}}$ is a solution to $\\frac{dy}{dx} = y(1-y)$.',
+            solution: `First, find $\\frac{dy}{dx}$ using the quotient rule:
+
+Let $y = (1+Ce^{-x})^{-1}$
+
+Using chain rule: $\\frac{dy}{dx} = -1 \\cdot (1+Ce^{-x})^{-2} \\cdot (-Ce^{-x}) = \\frac{Ce^{-x}}{(1+Ce^{-x})^2}$
+
+Now compute $y(1-y)$:
+
+$1 - y = 1 - \\frac{1}{1+Ce^{-x}} = \\frac{Ce^{-x}}{1+Ce^{-x}}$
+
+$y(1-y) = \\frac{1}{1+Ce^{-x}} \\cdot \\frac{Ce^{-x}}{1+Ce^{-x}} = \\frac{Ce^{-x}}{(1+Ce^{-x})^2}$
+
+LHS = RHS ✓`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 1: INTRODUCTION TO ODES
+      // =====================================================================
+      {
+        id: 'intro-odes',
+        title: 'Introduction to ODEs',
+        description: 'What are differential equations and how do we visualize solutions?',
+        visualizations: ['SlopeField', 'FunctionPlot'],
+        sections: [
+          {
+            title: 'What is a Differential Equation?',
+            content: `A **differential equation** is an equation that relates a function to its derivatives.
+
+**Ordinary Differential Equation (ODE):** Involves functions of ONE variable.
+$$\\frac{dy}{dx} = f(x, y)$$
+
+**Partial Differential Equation (PDE):** Involves functions of MULTIPLE variables.
+$$\\frac{\\partial u}{\\partial t} = k\\frac{\\partial^2 u}{\\partial x^2}$$
+
+In 18.03, we focus primarily on ODEs.
+
+**Order:** The highest derivative that appears.
+- First order: $\\frac{dy}{dx} = x + y$
+- Second order: $\\frac{d^2y}{dx^2} + 3\\frac{dy}{dx} + 2y = 0$
+
+**Linear vs Nonlinear:**
+- Linear: $y$ and its derivatives appear to the first power, not multiplied together
+- Linear: $\\frac{dy}{dx} + 2y = e^x$
+- Nonlinear: $\\frac{dy}{dx} = y^2$ or $y\\frac{dy}{dx} = 1$`
+          },
+          {
+            title: 'Solutions and Initial Conditions',
+            content: `A **solution** to an ODE is a function that satisfies the equation when substituted in.
+
+**General Solution:** Contains arbitrary constants (one for each order).
+
+For $\\frac{dy}{dx} = 2y$, the general solution is $y = Ce^{2x}$ where $C$ is any constant.
+
+**Particular Solution:** A specific solution with determined constants.
+
+**Initial Value Problem (IVP):** An ODE together with initial conditions.
+
+$$\\frac{dy}{dx} = 2y, \\quad y(0) = 3$$
+
+Solving: $y = Ce^{2x}$, and $y(0) = C = 3$, so $y = 3e^{2x}$.
+
+**Existence and Uniqueness Theorem:**
+If $f(x,y)$ and $\\frac{\\partial f}{\\partial y}$ are continuous near $(x_0, y_0)$, then the IVP
+$$\\frac{dy}{dx} = f(x,y), \\quad y(x_0) = y_0$$
+has a **unique** solution in some interval around $x_0$.`
+          },
+          {
+            title: 'Direction Fields (Slope Fields)',
+            content: `A **direction field** (or slope field) is a visual representation of a first-order ODE.
+
+For $\\frac{dy}{dx} = f(x,y)$:
+- At each point $(x, y)$, draw a small line segment with slope $f(x, y)$
+- Solution curves must be tangent to these segments everywhere
+
+**Why are they useful?**
+1. Visualize solution behavior without solving
+2. Understand qualitative behavior (growth, decay, oscillation)
+3. Identify equilibrium solutions
+4. Check your analytical solutions
+
+**Reading a Direction Field:**
+- Horizontal segments: $\\frac{dy}{dx} = 0$ (critical points or equilibria)
+- Steep segments: rapid change in $y$
+- Solution curves "follow" the arrows
+
+**Example:** For $\\frac{dy}{dx} = y$:
+- When $y > 0$: slopes are positive (solutions increase)
+- When $y < 0$: slopes are negative (solutions decrease)
+- When $y = 0$: slopes are zero (equilibrium solution $y = 0$)`
+          },
+          {
+            title: 'Classification of First-Order ODEs',
+            content: `First-order ODEs can be classified by their form, which determines the solution method:
+
+**1. Separable Equations:**
+$$\\frac{dy}{dx} = f(x) \\cdot g(y)$$
+Variables can be separated to opposite sides.
+
+**2. Linear Equations:**
+$$\\frac{dy}{dx} + P(x)y = Q(x)$$
+Solved using integrating factors.
+
+**3. Exact Equations:**
+$$M(x,y)dx + N(x,y)dy = 0$$
+where $\\frac{\\partial M}{\\partial y} = \\frac{\\partial N}{\\partial x}$
+
+**4. Homogeneous Equations:**
+$$\\frac{dy}{dx} = F\\left(\\frac{y}{x}\\right)$$
+Use substitution $v = y/x$.
+
+**5. Bernoulli Equations:**
+$$\\frac{dy}{dx} + P(x)y = Q(x)y^n$$
+Use substitution $v = y^{1-n}$.
+
+In this course, we'll master the most common types: separable and linear.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'intro-1',
+            problem: 'Classify each ODE as linear/nonlinear and state its order: (a) $y\\prime\\prime + 3y\\prime - y = \\sin x$ (b) $y\\prime = y^2 + x$ (c) $xy\\prime + y = e^x$',
+            solution: `(a) $y'' + 3y' - y = \\sin x$
+- **Order:** 2 (highest derivative is $y''$)
+- **Linear:** Yes ($y$ and its derivatives appear to first power only)
+
+(b) $y' = y^2 + x$
+- **Order:** 1
+- **Nonlinear:** $y^2$ term makes it nonlinear
+
+(c) $xy' + y = e^x$
+- **Order:** 1
+- **Linear:** Yes (can write as $y' + \\frac{1}{x}y = \\frac{e^x}{x}$, standard linear form)`
+          },
+          {
+            id: 'intro-2',
+            problem: 'For the direction field of $\\frac{dy}{dx} = x - y$, describe what happens to solutions starting at: (a) $(0, 2)$ (b) $(0, 0)$ (c) $(0, -1)$',
+            solution: `At any point, the slope is $x - y$.
+
+**(a) Starting at $(0, 2)$:**
+- Initial slope = $0 - 2 = -2$ (steep downward)
+- Solution decreases initially
+- As $y$ decreases toward the line $y = x$, slopes approach 0
+- Solution approaches the line $y = x$ from above
+
+**(b) Starting at $(0, 0)$:**
+- Initial slope = $0 - 0 = 0$
+- At origin, solution is momentarily horizontal
+- Solution follows the line $y = x - 1$ (can verify this is a solution)
+
+**(c) Starting at $(0, -1)$:**
+- Initial slope = $0 - (-1) = 1$
+- Solution increases
+- Approaches the line $y = x$ from below
+
+The line $y = x$ is an "attractor" for all solutions.`
+          },
+          {
+            id: 'intro-3',
+            problem: 'Find all equilibrium solutions of $\\frac{dy}{dx} = y(y-1)(y+2)$.',
+            solution: `Equilibrium solutions occur where $\\frac{dy}{dx} = 0$.
+
+Setting $y(y-1)(y+2) = 0$:
+- $y = 0$
+- $y = 1$
+- $y = -2$
+
+These three constant functions are **equilibrium solutions**.
+
+**Stability analysis:**
+- For $y > 1$: $\\frac{dy}{dx} > 0$ (increasing)
+- For $0 < y < 1$: $\\frac{dy}{dx} < 0$ (decreasing)
+- For $-2 < y < 0$: $\\frac{dy}{dx} > 0$ (increasing)
+- For $y < -2$: $\\frac{dy}{dx} < 0$ (decreasing)
+
+Therefore:
+- $y = 1$ is **unstable** (solutions move away)
+- $y = 0$ is **stable** (solutions approach from both sides)
+- $y = -2$ is **unstable** (solutions move away)`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 2: FIRST-ORDER LINEAR ODES
+      // =====================================================================
+      {
+        id: 'first-order-linear',
+        title: 'First-Order Linear ODEs',
+        description: 'The integrating factor method for solving linear equations.',
+        visualizations: ['IntegratingFactorVisualizer', 'SlopeField'],
+        sections: [
+          {
+            title: 'Standard Form',
+            content: `A **first-order linear ODE** has the form:
+$$\\frac{dy}{dx} + P(x)y = Q(x)$$
+
+This is "linear" because $y$ and $\\frac{dy}{dx}$ appear to the first power and are not multiplied together.
+
+**Examples:**
+1. $\\frac{dy}{dx} + 2y = e^x$ → $P(x) = 2$, $Q(x) = e^x$
+
+2. $x\\frac{dy}{dx} - 3y = x^2$ → Divide by $x$:
+   $\\frac{dy}{dx} - \\frac{3}{x}y = x$ → $P(x) = -\\frac{3}{x}$, $Q(x) = x$
+
+3. $\\frac{dy}{dx} = y + \\sin x$ → Rewrite:
+   $\\frac{dy}{dx} - y = \\sin x$ → $P(x) = -1$, $Q(x) = \\sin x$
+
+**Key insight:** Always put the equation in standard form first!
+
+The coefficient of $\\frac{dy}{dx}$ must be 1.`
+          },
+          {
+            title: 'The Integrating Factor Method',
+            content: `The **integrating factor** method transforms a linear ODE into an exact derivative.
+
+**Step 1:** Put in standard form: $\\frac{dy}{dx} + P(x)y = Q(x)$
+
+**Step 2:** Calculate the integrating factor:
+$$\\mu(x) = e^{\\int P(x)\\,dx}$$
+
+(We don't need the constant of integration here.)
+
+**Step 3:** Multiply both sides by $\\mu(x)$:
+$$\\mu(x)\\frac{dy}{dx} + \\mu(x)P(x)y = \\mu(x)Q(x)$$
+
+**Key insight:** The left side is now exactly $\\frac{d}{dx}[\\mu(x)y]$!
+
+This is because:
+$$\\frac{d}{dx}[\\mu y] = \\mu\\frac{dy}{dx} + \\frac{d\\mu}{dx}y = \\mu\\frac{dy}{dx} + \\mu P y$$
+
+**Step 4:** Integrate both sides:
+$$\\mu(x)y = \\int \\mu(x)Q(x)\\,dx + C$$
+
+**Step 5:** Solve for $y$:
+$$y = \\frac{1}{\\mu(x)}\\left[\\int \\mu(x)Q(x)\\,dx + C\\right]$$`
+          },
+          {
+            title: 'Detailed Example',
+            content: `**Solve:** $\\frac{dy}{dx} + 2y = x$, with $y(0) = 1$
+
+**Step 1:** Already in standard form. $P(x) = 2$, $Q(x) = x$
+
+**Step 2:** Find integrating factor:
+$$\\mu(x) = e^{\\int 2\\,dx} = e^{2x}$$
+
+**Step 3:** Multiply both sides:
+$$e^{2x}\\frac{dy}{dx} + 2e^{2x}y = xe^{2x}$$
+
+Left side is $\\frac{d}{dx}[e^{2x}y]$:
+$$\\frac{d}{dx}[e^{2x}y] = xe^{2x}$$
+
+**Step 4:** Integrate both sides:
+$$e^{2x}y = \\int xe^{2x}\\,dx$$
+
+Using integration by parts (let $u = x$, $dv = e^{2x}dx$):
+$$\\int xe^{2x}\\,dx = \\frac{x}{2}e^{2x} - \\frac{1}{4}e^{2x} + C$$
+
+**Step 5:** Solve for $y$:
+$$y = \\frac{x}{2} - \\frac{1}{4} + Ce^{-2x}$$
+
+**Apply initial condition:** $y(0) = 1$
+$$1 = 0 - \\frac{1}{4} + C \\Rightarrow C = \\frac{5}{4}$$
+
+**Final answer:** $y = \\frac{x}{2} - \\frac{1}{4} + \\frac{5}{4}e^{-2x}$`
+          },
+          {
+            title: 'Why Does It Work?',
+            content: `The integrating factor method works because of the **product rule in reverse**.
+
+**Recall:** $\\frac{d}{dx}[\\mu(x)y] = \\mu(x)\\frac{dy}{dx} + \\frac{d\\mu}{dx}y$
+
+We want: $\\mu\\frac{dy}{dx} + \\mu P y = \\frac{d}{dx}[\\mu y]$
+
+This requires: $\\frac{d\\mu}{dx} = \\mu P$
+
+Solving this separable ODE:
+$$\\frac{d\\mu}{\\mu} = P\\,dx$$
+$$\\ln|\\mu| = \\int P\\,dx$$
+$$\\mu = e^{\\int P\\,dx}$$
+
+**The magic:** By choosing $\\mu$ this way, we guarantee the left side becomes an exact derivative, which we can integrate directly.
+
+**Physical interpretation:** The integrating factor "balances" the equation so both sides have the same "weight" and can be combined.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'linear-1',
+            problem: 'Solve the IVP: $\\frac{dy}{dx} - 3y = e^{2x}$, $y(0) = 1$',
+            solution: `**Step 1:** Standard form: $P(x) = -3$, $Q(x) = e^{2x}$
+
+**Step 2:** Integrating factor:
+$$\\mu(x) = e^{\\int -3\\,dx} = e^{-3x}$$
+
+**Step 3:** Multiply and recognize derivative:
+$$\\frac{d}{dx}[e^{-3x}y] = e^{-3x} \\cdot e^{2x} = e^{-x}$$
+
+**Step 4:** Integrate:
+$$e^{-3x}y = -e^{-x} + C$$
+
+**Step 5:** Solve for $y$:
+$$y = -e^{2x} + Ce^{3x}$$
+
+**Apply IC:** $y(0) = -1 + C = 1 \\Rightarrow C = 2$
+
+**Answer:** $y = -e^{2x} + 2e^{3x} = e^{2x}(2e^x - 1)$`
+          },
+          {
+            id: 'linear-2',
+            problem: 'Solve: $x\\frac{dy}{dx} + 2y = x^3$, for $x > 0$',
+            solution: `**Step 1:** Divide by $x$ to get standard form:
+$$\\frac{dy}{dx} + \\frac{2}{x}y = x^2$$
+
+$P(x) = \\frac{2}{x}$, $Q(x) = x^2$
+
+**Step 2:** Integrating factor:
+$$\\mu(x) = e^{\\int \\frac{2}{x}dx} = e^{2\\ln x} = x^2$$
+
+**Step 3:** Multiply:
+$$x^2\\frac{dy}{dx} + 2xy = x^4$$
+
+This is $\\frac{d}{dx}[x^2 y] = x^4$
+
+**Step 4:** Integrate:
+$$x^2 y = \\frac{x^5}{5} + C$$
+
+**Step 5:** Solve:
+$$y = \\frac{x^3}{5} + \\frac{C}{x^2}$$`
+          },
+          {
+            id: 'linear-3',
+            problem: 'A tank initially contains 100 L of pure water. Brine with 3 kg/L of salt flows in at 5 L/min. The well-mixed solution flows out at 5 L/min. Find the amount of salt at time $t$.',
+            solution: `Let $S(t)$ = amount of salt (kg) at time $t$.
+
+**Rate in:** $3 \\cdot 5 = 15$ kg/min
+
+**Rate out:** $\\frac{S}{100} \\cdot 5 = \\frac{S}{20}$ kg/min (concentration × flow rate)
+
+**ODE:** $\\frac{dS}{dt} = 15 - \\frac{S}{20}$
+
+**Standard form:** $\\frac{dS}{dt} + \\frac{1}{20}S = 15$
+
+**Integrating factor:** $\\mu = e^{t/20}$
+
+$$\\frac{d}{dt}[e^{t/20}S] = 15e^{t/20}$$
+
+$$e^{t/20}S = 300e^{t/20} + C$$
+
+$$S = 300 + Ce^{-t/20}$$
+
+**IC:** $S(0) = 0$ (pure water), so $C = -300$
+
+**Answer:** $S(t) = 300(1 - e^{-t/20})$ kg
+
+As $t \\to \\infty$, $S \\to 300$ kg (equilibrium).`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 3: SEPARABLE EQUATIONS
+      // =====================================================================
+      {
+        id: 'separable',
+        title: 'Separable Equations',
+        description: 'Separation of variables technique for solving ODEs.',
+        visualizations: ['SeparableEquationVisualizer', 'SlopeField'],
+        sections: [
+          {
+            title: 'What Are Separable Equations?',
+            content: `A first-order ODE is **separable** if it can be written as:
+$$\\frac{dy}{dx} = f(x) \\cdot g(y)$$
+
+The right side is a **product** of a function of $x$ only and a function of $y$ only.
+
+**Examples of separable equations:**
+- $\\frac{dy}{dx} = xy$ → $f(x) = x$, $g(y) = y$
+- $\\frac{dy}{dx} = e^{x+y} = e^x \\cdot e^y$ → separable!
+- $\\frac{dy}{dx} = \\frac{y^2}{1+x^2}$ → $f(x) = \\frac{1}{1+x^2}$, $g(y) = y^2$
+
+**NOT separable:**
+- $\\frac{dy}{dx} = x + y$ (sum, not product)
+- $\\frac{dy}{dx} = xy + 1$ (cannot factor)
+
+**Why "separable"?** We can separate all $y$'s to one side and all $x$'s to the other.`
+          },
+          {
+            title: 'The Separation Method',
+            content: `**Step 1:** Write in the form $\\frac{dy}{dx} = f(x) \\cdot g(y)$
+
+**Step 2:** Separate variables (move all $y$'s left, all $x$'s right):
+$$\\frac{dy}{g(y)} = f(x)\\,dx$$
+
+**Step 3:** Integrate both sides:
+$$\\int \\frac{1}{g(y)}\\,dy = \\int f(x)\\,dx$$
+
+**Step 4:** Solve for $y$ if possible (sometimes you get an implicit solution)
+
+**Step 5:** Apply initial conditions to find the constant
+
+**Important caution:** When dividing by $g(y)$, we might lose solutions where $g(y) = 0$. Always check for these **singular solutions**.
+
+**Example:** For $\\frac{dy}{dx} = y^2$, dividing by $y^2$ loses the solution $y = 0$.`
+          },
+          {
+            title: 'Detailed Example: Exponential Growth',
+            content: `**Solve:** $\\frac{dy}{dx} = ky$, $y(0) = y_0$
+
+This models exponential growth (population, radioactive decay, compound interest).
+
+**Step 1:** Already in form $f(x) \\cdot g(y)$ where $f(x) = k$, $g(y) = y$
+
+**Step 2:** Separate:
+$$\\frac{dy}{y} = k\\,dx$$
+
+**Step 3:** Integrate:
+$$\\int \\frac{1}{y}\\,dy = \\int k\\,dx$$
+$$\\ln|y| = kx + C_1$$
+
+**Step 4:** Solve for $y$:
+$$|y| = e^{kx + C_1} = e^{C_1} \\cdot e^{kx}$$
+$$y = \\pm e^{C_1} \\cdot e^{kx} = Ce^{kx}$$
+
+where $C = \\pm e^{C_1}$ can be any nonzero constant.
+
+**Step 5:** Apply $y(0) = y_0$:
+$$y_0 = Ce^0 = C$$
+
+**Answer:** $y = y_0 e^{kx}$
+
+**Note:** $y = 0$ is also a solution (when $y_0 = 0$), consistent with $C = 0$.`
+          },
+          {
+            title: 'Logistic Equation',
+            content: `The **logistic equation** models population with limited resources:
+$$\\frac{dP}{dt} = rP\\left(1 - \\frac{P}{K}\\right)$$
+
+where $r$ = growth rate, $K$ = carrying capacity.
+
+**Separation:**
+$$\\frac{dP}{P(1-P/K)} = r\\,dt$$
+
+**Partial fractions:**
+$$\\frac{1}{P(1-P/K)} = \\frac{1}{P} + \\frac{1/K}{1-P/K} = \\frac{1}{P} + \\frac{1}{K-P}$$
+
+**Integrate:**
+$$\\ln|P| - \\ln|K-P| = rt + C$$
+$$\\ln\\left|\\frac{P}{K-P}\\right| = rt + C$$
+
+**Solve:**
+$$\\frac{P}{K-P} = Ae^{rt}$$
+$$P = \\frac{KAe^{rt}}{1 + Ae^{rt}} = \\frac{K}{1 + Be^{-rt}}$$
+
+**With** $P(0) = P_0$:
+$$P(t) = \\frac{K}{1 + \\left(\\frac{K-P_0}{P_0}\\right)e^{-rt}}$$
+
+As $t \\to \\infty$, $P \\to K$ (approaches carrying capacity).`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'sep-1',
+            problem: 'Solve: $\\frac{dy}{dx} = \\frac{x}{y}$, $y(0) = 2$',
+            solution: `**Separate:** $y\\,dy = x\\,dx$
+
+**Integrate:**
+$$\\int y\\,dy = \\int x\\,dx$$
+$$\\frac{y^2}{2} = \\frac{x^2}{2} + C$$
+$$y^2 = x^2 + 2C$$
+
+**Apply IC:** $y(0) = 2$
+$$4 = 0 + 2C \\Rightarrow C = 2$$
+
+**Answer:** $y^2 = x^2 + 4$, or $y = \\sqrt{x^2 + 4}$ (taking positive root since $y(0) = 2 > 0$)`
+          },
+          {
+            id: 'sep-2',
+            problem: 'Solve: $\\frac{dy}{dx} = e^{x-y}$',
+            solution: `**Rewrite:** $\\frac{dy}{dx} = \\frac{e^x}{e^y}$
+
+**Separate:** $e^y\\,dy = e^x\\,dx$
+
+**Integrate:**
+$$\\int e^y\\,dy = \\int e^x\\,dx$$
+$$e^y = e^x + C$$
+
+**Solve for $y$:**
+$$y = \\ln(e^x + C)$$
+
+**Check:** The solution is valid when $e^x + C > 0$, i.e., when $C > -e^x$.`
+          },
+          {
+            id: 'sep-3',
+            problem: 'A population of bacteria doubles every 3 hours. If there are initially 1000 bacteria, find the population after 10 hours.',
+            solution: `**Model:** $\\frac{dP}{dt} = kP$ with solution $P = P_0 e^{kt}$
+
+**Find k:** Population doubles in 3 hours:
+$$2P_0 = P_0 e^{3k}$$
+$$2 = e^{3k}$$
+$$k = \\frac{\\ln 2}{3}$$
+
+**Solution:** $P = 1000 \\cdot e^{(\\ln 2/3)t} = 1000 \\cdot 2^{t/3}$
+
+**At $t = 10$:**
+$$P(10) = 1000 \\cdot 2^{10/3} = 1000 \\cdot 2^{3.33...}$$
+$$= 1000 \\cdot 10.079... \\approx 10,079 \\text{ bacteria}$$`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 4: NUMERICAL METHODS
+      // =====================================================================
+      {
+        id: 'numerical-methods',
+        title: 'Numerical Methods',
+        description: "Euler's method and numerical approximations of solutions.",
+        visualizations: ['EulerMethodVisualizer', 'SlopeField'],
+        sections: [
+          {
+            title: 'Why Numerical Methods?',
+            content: `Many differential equations **cannot be solved analytically**. Consider:
+$$\\frac{dy}{dx} = x^2 + y^2$$
+
+This is neither linear nor separable. No elementary formula exists for the solution!
+
+**Numerical methods** approximate solutions by computing values at discrete points.
+
+**Key idea:** Use the slope field! If we know $y(x_n)$, we can estimate $y(x_{n+1})$ by following the tangent line.
+
+**Applications:**
+- Weather prediction (Navier-Stokes equations)
+- Orbital mechanics (three-body problem)
+- Chemical kinetics (reaction networks)
+- Neural networks (gradient descent dynamics)
+
+**Trade-offs:**
+- Numerical methods always have some error
+- Smaller steps = better accuracy but more computation
+- Different methods have different stability properties`
+          },
+          {
+            title: "Euler's Method",
+            content: `**Euler's method** is the simplest numerical method for ODEs.
+
+Given: $\\frac{dy}{dx} = f(x, y)$, $y(x_0) = y_0$
+
+**Algorithm:**
+$$y_{n+1} = y_n + h \\cdot f(x_n, y_n)$$
+
+where $h$ = step size (the spacing between $x$ values).
+
+**Geometric interpretation:**
+- At $(x_n, y_n)$, the slope is $f(x_n, y_n)$
+- Follow the tangent line for a step of size $h$
+- The change in $y$ is approximately $h \\cdot \\text{slope}$
+
+**In words:** New value = Old value + Step size × Slope
+
+**Example:** Solve $\\frac{dy}{dx} = y$, $y(0) = 1$ with $h = 0.5$
+
+| $n$ | $x_n$ | $y_n$ | $f(x_n, y_n) = y_n$ | $y_{n+1} = y_n + 0.5 y_n$ |
+|-----|-------|-------|---------------------|---------------------------|
+| 0 | 0 | 1 | 1 | 1.5 |
+| 1 | 0.5 | 1.5 | 1.5 | 2.25 |
+| 2 | 1.0 | 2.25 | 2.25 | 3.375 |
+
+Exact: $y(1) = e^1 \\approx 2.718$. Euler gives $2.25$ (error ≈ 17%)`
+          },
+          {
+            title: 'Error Analysis',
+            content: `**Two types of error in Euler's method:**
+
+**1. Local Truncation Error (LTE):**
+Error from a single step. For Euler's method: $O(h^2)$
+
+This comes from the Taylor series:
+$$y(x+h) = y(x) + hy'(x) + \\frac{h^2}{2}y''(\\xi)$$
+
+Euler uses only the first two terms, so error is proportional to $h^2$.
+
+**2. Global Error:**
+Total accumulated error. For Euler's method: $O(h)$
+
+After $N = \\frac{x_{final} - x_0}{h}$ steps, errors accumulate to $O(h)$.
+
+**Halving the step size:**
+- Local error decreases by factor of 4
+- But number of steps doubles
+- Global error decreases by factor of 2
+
+**Rule of thumb:** To get one more decimal place of accuracy, divide step size by 10.
+
+**Stability:** Euler's method can become unstable for stiff equations or large step sizes. The solution may oscillate wildly or blow up!`
+          },
+          {
+            title: 'Improved Methods',
+            content: `**Improved Euler (Heun's method):**
+Take the average of slopes at the beginning and end of the step.
+
+$$k_1 = f(x_n, y_n)$$
+$$k_2 = f(x_n + h, y_n + h k_1)$$
+$$y_{n+1} = y_n + \\frac{h}{2}(k_1 + k_2)$$
+
+Global error: $O(h^2)$ - much better than standard Euler!
+
+**Runge-Kutta 4th Order (RK4):**
+The workhorse of numerical ODE solvers.
+
+$$k_1 = f(x_n, y_n)$$
+$$k_2 = f(x_n + h/2, y_n + hk_1/2)$$
+$$k_3 = f(x_n + h/2, y_n + hk_2/2)$$
+$$k_4 = f(x_n + h, y_n + hk_3)$$
+$$y_{n+1} = y_n + \\frac{h}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+
+Global error: $O(h^4)$ - extremely accurate!
+
+**Comparison for $\\frac{dy}{dx} = y$, $y(0) = 1$, computing $y(1)$:**
+| Method | $h = 0.1$ error | $h = 0.01$ error |
+|--------|-----------------|------------------|
+| Euler | 0.052 | 0.0051 |
+| Heun | 0.00060 | 0.0000057 |
+| RK4 | 0.0000019 | $1.9 \\times 10^{-10}$ |`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'num-1',
+            problem: "Use Euler's method with $h = 0.2$ to approximate $y(1)$ for $\\frac{dy}{dx} = x + y$, $y(0) = 1$.",
+            solution: `**Setup:** $f(x,y) = x + y$, $h = 0.2$, starting at $(0, 1)$
+
+| Step | $x_n$ | $y_n$ | $f(x_n, y_n)$ | $y_{n+1} = y_n + 0.2f$ |
+|------|-------|-------|---------------|------------------------|
+| 0 | 0 | 1 | 1 | 1.2 |
+| 1 | 0.2 | 1.2 | 1.4 | 1.48 |
+| 2 | 0.4 | 1.48 | 1.88 | 1.856 |
+| 3 | 0.6 | 1.856 | 2.456 | 2.3472 |
+| 4 | 0.8 | 2.3472 | 3.1472 | 2.97664 |
+| 5 | 1.0 | **2.97664** | - | - |
+
+**Answer:** $y(1) \\approx 2.977$
+
+(Exact solution: $y = 2e^x - x - 1$, so $y(1) = 2e - 2 \\approx 3.437$)
+Error is about 13%.`
+          },
+          {
+            id: 'num-2',
+            problem: 'If Euler\'s method with $h = 0.1$ gives a global error of about 0.05, approximately what error would you expect with $h = 0.025$?',
+            solution: `**Euler's global error is $O(h)$.**
+
+If error at $h_1 = 0.1$ is $E_1 \\approx 0.05$,
+
+then error at $h_2 = 0.025$ is approximately:
+$$E_2 \\approx E_1 \\cdot \\frac{h_2}{h_1} = 0.05 \\cdot \\frac{0.025}{0.1} = 0.05 \\cdot 0.25 = 0.0125$$
+
+**Answer:** Expected error is approximately **0.0125** (about 4 times smaller since step size is 4 times smaller).`
+          },
+          {
+            id: 'num-3',
+            problem: 'Apply one step of Improved Euler (Heun) with $h = 0.5$ to $\\frac{dy}{dx} = y$, $y(0) = 1$. Compare with exact.',
+            solution: `**Improved Euler formulas:**
+$$k_1 = f(x_0, y_0) = 1$$
+$$k_2 = f(x_0 + h, y_0 + hk_1) = f(0.5, 1.5) = 1.5$$
+$$y_1 = y_0 + \\frac{h}{2}(k_1 + k_2) = 1 + \\frac{0.5}{2}(1 + 1.5) = 1 + 0.625 = 1.625$$
+
+**Comparison:**
+- Exact: $y(0.5) = e^{0.5} \\approx 1.6487$
+- Standard Euler: $y_1 = 1 + 0.5(1) = 1.5$
+- Improved Euler: $y_1 = 1.625$
+
+**Errors:**
+- Euler error: $|1.6487 - 1.5| = 0.1487$ (9.0%)
+- Heun error: $|1.6487 - 1.625| = 0.0237$ (1.4%)
+
+Improved Euler is about 6× more accurate!`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 5: AUTONOMOUS EQUATIONS & PHASE LINES
+      // =====================================================================
+      {
+        id: 'autonomous-phase',
+        title: 'Autonomous Equations',
+        description: 'Phase line analysis and stability of equilibrium solutions.',
+        visualizations: ['PhaseLineVisualizer', 'SlopeField'],
+        sections: [
+          {
+            title: 'What Are Autonomous Equations?',
+            content: `An **autonomous** ODE has the form:
+$$\\frac{dy}{dt} = f(y)$$
+
+The right side depends **only on $y$**, not on the independent variable $t$.
+
+**Key property:** The slope at a point depends only on the $y$-coordinate, not on $t$.
+
+**Examples:**
+- $\\frac{dy}{dt} = y$ (exponential growth) - autonomous
+- $\\frac{dy}{dt} = y(1-y)$ (logistic) - autonomous
+- $\\frac{dy}{dt} = \\sin(t) + y$ - NOT autonomous (depends on $t$)
+
+**Consequence:** If $y(t)$ is a solution, so is $y(t + c)$ for any constant $c$. Solutions are just shifted horizontally!
+
+**Equilibrium solutions:** Constant solutions where $f(y^*) = 0$.
+
+For $\\frac{dy}{dt} = y(1-y)$:
+- $y^* = 0$ and $y^* = 1$ are equilibria`
+          },
+          {
+            title: 'The Phase Line',
+            content: `A **phase line** is a 1-dimensional diagram showing the dynamics of an autonomous ODE.
+
+**How to construct:**
+1. Draw a vertical line representing $y$-values
+2. Mark equilibrium points ($f(y^*) = 0$) with dots
+3. Between equilibria, draw arrows:
+   - ↑ if $f(y) > 0$ (solution increasing)
+   - ↓ if $f(y) < 0$ (solution decreasing)
+
+**Example:** $\\frac{dy}{dt} = y(2-y)$
+
+Equilibria: $y = 0$ and $y = 2$
+
+Sign analysis of $f(y) = y(2-y)$:
+- $y < 0$: $f(y) = (neg)(pos) < 0$ → ↓
+- $0 < y < 2$: $f(y) = (pos)(pos) > 0$ → ↑
+- $y > 2$: $f(y) = (pos)(neg) < 0$ → ↓
+
+Phase line:
+\`\`\`
+    ↓
+---[0]---
+    ↑
+---[2]---
+    ↓
+\`\`\`
+
+**Interpretation:** All solutions with $0 < y_0 < 2$ approach $y = 2$. Solutions starting above $y = 2$ also approach $y = 2$.`
+          },
+          {
+            title: 'Stability Classification',
+            content: `**Equilibrium stability** describes what happens to nearby solutions.
+
+**Stable (attractor):** Nearby solutions approach the equilibrium as $t \\to \\infty$.
+- Arrows point TOWARD the equilibrium
+- $f(y)$ changes from positive to negative at $y^*$
+- $f'(y^*) < 0$
+
+**Unstable (repeller):** Nearby solutions move away from the equilibrium.
+- Arrows point AWAY from the equilibrium
+- $f(y)$ changes from negative to positive at $y^*$
+- $f'(y^*) > 0$
+
+**Semi-stable:** Stable on one side, unstable on the other.
+- Arrows point toward from one side, away on the other
+- $f'(y^*) = 0$ and $f''(y^*) \\neq 0$
+
+**Example:** $\\frac{dy}{dt} = -y^2$
+
+$f(y) = -y^2$, equilibrium at $y^* = 0$
+- For $y > 0$: $f(y) < 0$ → ↓
+- For $y < 0$: $f(y) < 0$ → ↓
+
+Arrows point toward from above, away from below → **semi-stable**`
+          },
+          {
+            title: 'Bifurcations',
+            content: `A **bifurcation** occurs when a small change in a parameter causes a qualitative change in the dynamics (number or stability of equilibria).
+
+**Example: Logistic harvesting**
+$$\\frac{dP}{dt} = rP\\left(1 - \\frac{P}{K}\\right) - H$$
+
+where $H$ = constant harvest rate.
+
+Equilibria solve: $rP(1 - P/K) = H$
+
+This is a downward parabola intersected by horizontal line at height $H$.
+
+**Three cases:**
+1. **$H < H_c$:** Two equilibria (one stable, one unstable)
+2. **$H = H_c$:** One equilibrium (semi-stable) - bifurcation point!
+3. **$H > H_c$:** No equilibria - population crashes to zero
+
+where $H_c = \\frac{rK}{4}$ (maximum of the parabola).
+
+**Bifurcation diagram:** Plot equilibria vs parameter $H$.
+
+This models **sustainable harvesting**: If you harvest too much ($H > H_c$), the population collapses regardless of initial size!`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'auto-1',
+            problem: 'Draw the phase line and classify stability for $\\frac{dy}{dt} = y^2 - 4$.',
+            solution: `**Find equilibria:** $y^2 - 4 = 0 \\Rightarrow y = \\pm 2$
+
+**Sign analysis of $f(y) = y^2 - 4 = (y-2)(y+2)$:**
+- $y < -2$: $(neg)(neg) > 0$ → ↑
+- $-2 < y < 2$: $(neg)(pos) < 0$ → ↓
+- $y > 2$: $(pos)(pos) > 0$ → ↑
+
+**Phase line:**
+\`\`\`
+    ↑
+---[-2]---  ← unstable
+    ↓
+---[2]---   ← stable (from below only!)
+    ↑
+\`\`\`
+
+Wait - let's reconsider using $f'(y) = 2y$:
+- At $y = -2$: $f'(-2) = -4 < 0$ → **stable**
+- At $y = 2$: $f'(2) = 4 > 0$ → **unstable**
+
+**Corrected phase line:**
+\`\`\`
+    ↑        (y > 2: solutions increase, go to ∞)
+---[2]---   ← unstable
+    ↓
+---[-2]---  ← stable
+    ↑        (y < -2: solutions increase toward -2)
+\`\`\`
+
+$y = -2$ is **stable**, $y = 2$ is **unstable**.`
+          },
+          {
+            id: 'auto-2',
+            problem: 'For $\\frac{dy}{dt} = y(1-y)(2-y)$, find equilibria, draw phase line, and describe long-term behavior for each region.',
+            solution: `**Equilibria:** $y = 0, 1, 2$
+
+**Sign analysis:**
+- $y < 0$: $(neg)(pos)(pos) < 0$ → ↓
+- $0 < y < 1$: $(pos)(pos)(pos) > 0$ → ↑
+- $1 < y < 2$: $(pos)(neg)(pos) < 0$ → ↓
+- $y > 2$: $(pos)(neg)(neg) > 0$ → ↑
+
+**Phase line and stability:**
+\`\`\`
+    ↑ (to ∞)
+---[2]---  unstable
+    ↓
+---[1]---  stable
+    ↑
+---[0]---  unstable
+    ↓ (to -∞)
+\`\`\`
+
+**Long-term behavior:**
+- $y_0 < 0$: $y \\to -\\infty$
+- $0 < y_0 < 1$: $y \\to 1$
+- $1 < y_0 < 2$: $y \\to 1$
+- $y_0 > 2$: $y \\to +\\infty$
+
+Basin of attraction for $y = 1$ is $(0, 2)$.`
+          },
+          {
+            id: 'auto-3',
+            problem: 'For $\\frac{dy}{dt} = ry - y^2$ where $r$ is a parameter, analyze how equilibria and stability change as $r$ varies.',
+            solution: `**Factor:** $\\frac{dy}{dt} = y(r - y)$
+
+**Equilibria:** $y = 0$ and $y = r$
+
+**Stability via $f'(y) = r - 2y$:**
+- At $y = 0$: $f'(0) = r$
+  - $r > 0$: unstable
+  - $r < 0$: stable
+
+- At $y = r$: $f'(r) = r - 2r = -r$
+  - $r > 0$: stable
+  - $r < 0$: unstable
+
+**Bifurcation at $r = 0$:**
+- $r < 0$: Equilibrium at 0 (stable), equilibrium at $r < 0$ (unstable)
+- $r = 0$: Only one equilibrium at 0 (semi-stable)
+- $r > 0$: Equilibrium at 0 (unstable), equilibrium at $r > 0$ (stable)
+
+This is a **transcritical bifurcation**: two equilibria exchange stability as they pass through each other at $r = 0$.`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // REMAINING UNITS (placeholders for later development)
+      // =====================================================================
+      { id: 'second-order', title: 'Second-Order Linear ODEs', description: 'Homogeneous equations with constant coefficients.', visualizations: ['FunctionPlot'] },
+      { id: 'undetermined-coeff', title: 'Undetermined Coefficients', description: 'Finding particular solutions.', visualizations: ['FunctionPlot'] },
+      { id: 'variation-params', title: 'Variation of Parameters', description: 'General method for particular solutions.', visualizations: ['FunctionPlot'] },
+      { id: 'fourier-series', title: 'Fourier Series', description: 'Representing periodic functions.', visualizations: ['FunctionPlot'] },
+      { id: 'laplace-transform', title: 'Laplace Transform', description: 'Transform methods for ODEs.', visualizations: ['FunctionPlot'] },
+      { id: 'systems', title: 'Systems of ODEs', description: 'Matrix methods and phase portraits.', visualizations: ['PhasePortrait'] },
     ],
   },
   {

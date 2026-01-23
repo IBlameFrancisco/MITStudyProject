@@ -55,6 +55,11 @@ export const visualizationRegistry = {
   SlopeField: () => import('@/components/visualizations/diffeq/SlopeField'),
   PhasePortrait: () => import('@/components/visualizations/diffeq/PhasePortrait'),
   FunctionPlot: () => import('@/components/visualizations/diffeq/FunctionPlot'),
+  EulerMethodVisualizer: () => import('@/components/visualizations/diffeq/EulerMethodVisualizer'),
+  IntegratingFactorVisualizer: () => import('@/components/visualizations/diffeq/IntegratingFactorVisualizer'),
+  SeparableEquationVisualizer: () => import('@/components/visualizations/diffeq/SeparableEquationVisualizer'),
+  PhaseLineVisualizer: () => import('@/components/visualizations/diffeq/PhaseLineVisualizer'),
+  CalculusReviewVisualizer: () => import('@/components/visualizations/diffeq/CalculusReviewVisualizer'),
 
   // Complexity/Data Science Visualizations (6-100b)
   ComplexityChart: () => import('@/components/visualizations/complexity/ComplexityChart'),
@@ -119,7 +124,11 @@ export function getVisualizationsByCategory(category: 'probability' | 'algorithm
       'BFSVisualizer', 'DFSVisualizer', 'WeightedGraphVisualizer',
       'BellmanFordVisualizer', 'DijkstraVisualizer', 'JohnsonVisualizer', 'DPVisualizer'
     ],
-    diffeq: ['SlopeField', 'PhasePortrait', 'FunctionPlot'],
+    diffeq: [
+      'SlopeField', 'PhasePortrait', 'FunctionPlot', 'EulerMethodVisualizer',
+      'IntegratingFactorVisualizer', 'SeparableEquationVisualizer',
+      'PhaseLineVisualizer', 'CalculusReviewVisualizer'
+    ],
     complexity: ['ComplexityChart', 'OptimizationPlot'],
   };
 
