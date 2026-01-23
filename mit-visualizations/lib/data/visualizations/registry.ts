@@ -49,6 +49,7 @@ export const visualizationRegistry = {
   BellmanFordVisualizer: () => import('@/components/visualizations/algorithms/BellmanFordVisualizer'),
   DijkstraVisualizer: () => import('@/components/visualizations/algorithms/DijkstraVisualizer'),
   JohnsonVisualizer: () => import('@/components/visualizations/algorithms/JohnsonVisualizer'),
+  DPVisualizer: () => import('@/components/visualizations/algorithms/DPVisualizer'),
 
   // Differential Equations Visualizations (18-03)
   SlopeField: () => import('@/components/visualizations/diffeq/SlopeField'),
@@ -116,7 +117,7 @@ export function getVisualizationsByCategory(category: 'probability' | 'algorithm
       'SequenceDataStructures', 'MergeSortVisualizer', 'HashTableVisualizer',
       'LinearSortingVisualizer', 'BSTVisualizer', 'AVLTreeVisualizer', 'HeapVisualizer',
       'BFSVisualizer', 'DFSVisualizer', 'WeightedGraphVisualizer',
-      'BellmanFordVisualizer', 'DijkstraVisualizer', 'JohnsonVisualizer'
+      'BellmanFordVisualizer', 'DijkstraVisualizer', 'JohnsonVisualizer', 'DPVisualizer'
     ],
     diffeq: ['SlopeField', 'PhasePortrait', 'FunctionPlot'],
     complexity: ['ComplexityChart', 'OptimizationPlot'],

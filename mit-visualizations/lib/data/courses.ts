@@ -6278,34 +6278,709 @@ For dense graphs with E = Θ(V²), Floyd-Warshall is competitive and simpler.`
         id: 'dp-1',
         title: 'Dynamic Programming, Part 1: SRTBOT',
         description: 'DP framework: Subproblems, Relate, Topological order, Base, Original, Time.',
-        visualizations: [],
+        sections: [
+          {
+            title: 'What is Dynamic Programming?',
+            content: `**Dynamic Programming (DP)** is an algorithmic paradigm that solves complex problems by breaking them into simpler **overlapping subproblems** and storing their solutions to avoid redundant computation.
+
+**Key Characteristics:**
+1. **Optimal Substructure:** The optimal solution contains optimal solutions to subproblems
+2. **Overlapping Subproblems:** The same subproblems are solved multiple times
+
+**DP vs Divide and Conquer:**
+- **Divide and Conquer:** Subproblems are independent (e.g., Merge Sort)
+- **Dynamic Programming:** Subproblems overlap (e.g., Fibonacci)
+
+**Example - Fibonacci:**
+$$F(n) = F(n-1) + F(n-2)$$
+
+Naive recursion: $O(2^n)$ time (exponential)
+With DP (memoization): $O(n)$ time (polynomial)
+
+**Two Approaches:**
+1. **Top-Down (Memoization):** Recursive with caching
+2. **Bottom-Up (Tabulation):** Iterative, fill table from base cases`
+          },
+          {
+            title: 'The SRTBOT Framework',
+            content: `**SRTBOT** is a systematic framework for solving DP problems:
+
+**S - Subproblems**
+Define the subproblems in words. Common patterns:
+- Prefixes: $x[:i]$ for $i \\in \\{0, 1, \\ldots, n\\}$
+- Suffixes: $x[i:]$ for $i \\in \\{0, 1, \\ldots, n\\}$
+- Substrings: $x[i:j]$ for $i \\leq j$
+
+**R - Relate**
+Write a recurrence relating the solution to smaller subproblems:
+$$x(i) = f(x(j_1), x(j_2), \\ldots)$$
+
+**T - Topological Order**
+Determine the order to solve subproblems so dependencies are satisfied.
+
+**B - Base Cases**
+Identify smallest subproblems solvable without recursion.
+
+**O - Original Problem**
+Express the answer in terms of subproblems.
+
+**T - Time Analysis**
+$$\\text{Time} = (\\text{# subproblems}) \\times (\\text{time per subproblem})$$`
+          },
+          {
+            title: 'Example: Fibonacci with SRTBOT',
+            content: `**Problem:** Compute $F(n)$, the $n$-th Fibonacci number.
+
+**S - Subproblems:** $F(i)$ for $i \\in \\{0, 1, \\ldots, n\\}$. Count: $n + 1$
+
+**R - Relate:** $F(i) = F(i-1) + F(i-2)$ for $i \\geq 2$
+
+**T - Topological Order:** Increasing: $F(0), F(1), \\ldots, F(n)$
+
+**B - Base Cases:** $F(0) = 0$, $F(1) = 1$
+
+**O - Original:** Return $F(n)$
+
+**T - Time:** $O(n)$ subproblems $\\times$ $O(1)$ = $\\boxed{O(n)}$`
+          },
+          {
+            title: 'DAG Shortest Paths',
+            content: `**Problem:** Shortest path from $s$ to $v$ in a weighted DAG.
+
+**S - Subproblems:** $\\delta(s, v)$ = shortest path weight from $s$ to $v$
+
+**R - Relate:** $\\delta(s, v) = \\min_{u \\to v} \\{\\delta(s, u) + w(u, v)\\}$
+
+**T - Topological Order:** Process vertices in topological sort order
+
+**B - Base Cases:** $\\delta(s, s) = 0$
+
+**T - Time:** $O(V + E)$
+
+The subproblem dependency graph forms a DAG!`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dp1-1',
+            problem: `Use SRTBOT to solve **Climbing Stairs**: You climb a staircase with $n$ steps. Each time you can climb 1 or 2 steps. How many distinct ways can you reach the top?`,
+            solution: `**S:** $C(i)$ = ways to reach step $i$, for $i \\in \\{0, \\ldots, n\\}$
+
+**R:** $C(i) = C(i-1) + C(i-2)$
+
+**T:** Increasing order
+
+**B:** $C(0) = 1$, $C(1) = 1$
+
+**O:** Return $C(n)$
+
+**T:** $O(n)$ subproblems $\\times$ $O(1)$ = $\\boxed{O(n)}$
+
+This is the Fibonacci sequence! $C(n) = F(n+1)$`
+          },
+          {
+            id: 'dp1-2',
+            problem: `**Minimum Cost Path:** Given an $m \\times n$ grid with costs $c[i][j]$, find minimum cost from $(0,0)$ to $(m-1,n-1)$. Only move right or down.`,
+            solution: `**S:** $M(i,j)$ = min cost to reach $(i,j)$. Count: $mn$
+
+**R:** $M(i,j) = c[i][j] + \\min(M(i-1,j), M(i,j-1))$
+
+**T:** Row by row, left to right
+
+**B:** $M(0,0) = c[0][0]$, first row/column cumulative sums
+
+**O:** Return $M(m-1,n-1)$
+
+**T:** $O(mn)$`
+          },
+          {
+            id: 'dp1-3',
+            problem: `**Coin Change:** Given coin denominations $d_1, \\ldots, d_k$ and target $n$, find minimum coins to make $n$ (unlimited supply).`,
+            solution: `**S:** $C(v)$ = min coins for amount $v$, $v \\in \\{0, \\ldots, n\\}$
+
+**R:** $C(v) = 1 + \\min_{d_i \\leq v} C(v - d_i)$
+
+**T:** Increasing order
+
+**B:** $C(0) = 0$
+
+**O:** Return $C(n)$
+
+**T:** $O(n)$ subproblems $\\times$ $O(k)$ = $\\boxed{O(nk)}$`
+          }
+        ],
+        visualizations: ['DPVisualizer'],
       },
       // Unit 16: Dynamic Programming, Part 2
       {
         id: 'dp-2',
         title: 'Dynamic Programming, Part 2: LCS, LIS',
         description: 'Longest common subsequence, longest increasing subsequence.',
-        visualizations: [],
+        sections: [
+          {
+            title: 'Longest Common Subsequence (LCS)',
+            content: `**Problem:** Given two strings $X = x_1 \\ldots x_m$ and $Y = y_1 \\ldots y_n$, find the longest subsequence common to both.
+
+A **subsequence** is obtained by deleting some (possibly zero) characters without changing order.
+
+**Example:**
+- $X = $ "ABCDGH", $Y = $ "AEDFHR"
+- LCS = "ADH" (length 3)
+
+**S - Subproblems:**
+$L(i, j)$ = LCS length of $X[1..i]$ and $Y[1..j]$
+- Count: $(m+1)(n+1)$ subproblems
+
+**R - Relate:**
+$$L(i, j) = \\begin{cases}
+L(i-1, j-1) + 1 & \\text{if } x_i = y_j \\\\
+\\max(L(i-1, j), L(i, j-1)) & \\text{otherwise}
+\\end{cases}$$
+
+**B - Base:** $L(0, j) = L(i, 0) = 0$
+
+**T - Time:** $O(mn)$`
+          },
+          {
+            title: 'LCS Implementation',
+            content: `\`\`\`python
+def lcs(X, Y):
+    m, n = len(X), len(Y)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if X[i-1] == Y[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+
+    return dp[m][n]
+\`\`\`
+
+**Reconstructing the LCS:**
+Backtrack from $dp[m][n]$:
+- If $x_i = y_j$: include character, go to $(i-1, j-1)$
+- Else: go to larger of $(i-1, j)$ or $(i, j-1)$`
+          },
+          {
+            title: 'Longest Increasing Subsequence (LIS)',
+            content: `**Problem:** Given array $A[1..n]$, find the longest strictly increasing subsequence.
+
+**Example:**
+- $A = [10, 22, 9, 33, 21, 50, 41, 60]$
+- LIS = $[10, 22, 33, 50, 60]$ (length 5)
+
+**S - Subproblems:**
+$L(i)$ = length of LIS ending at index $i$
+
+**R - Relate:**
+$$L(i) = 1 + \\max_{j < i, A[j] < A[i]} L(j)$$
+
+**B - Base:** $L(i) = 1$ (single element)
+
+**O - Original:** $\\max_i L(i)$
+
+**T - Time:** $O(n^2)$
+
+**Optimized:** Using binary search, $O(n \\log n)$`
+          },
+          {
+            title: 'LIS with Binary Search',
+            content: `**Key Idea:** Maintain array $T$ where $T[k]$ = smallest ending element of any LIS of length $k$.
+
+\`\`\`python
+import bisect
+
+def lis_fast(A):
+    T = []
+    for x in A:
+        pos = bisect.bisect_left(T, x)
+        if pos == len(T):
+            T.append(x)
+        else:
+            T[pos] = x
+    return len(T)
+\`\`\`
+
+**Invariant:** $T$ is always sorted.
+
+**Time:** $O(n \\log n)$ - $n$ elements, binary search for each.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dp2-1',
+            problem: `Find the LCS of "AGGTAB" and "GXTXAYB".`,
+            solution: `Build the DP table:
+
+\`\`\`
+    ""  G  X  T  X  A  Y  B
+""   0  0  0  0  0  0  0  0
+A    0  0  0  0  0  1  1  1
+G    0  1  1  1  1  1  1  1
+G    0  1  1  1  1  1  1  1
+T    0  1  1  2  2  2  2  2
+A    0  1  1  2  2  3  3  3
+B    0  1  1  2  2  3  3  4
+\`\`\`
+
+**LCS = "GTAB"** (length 4)
+
+Backtrack: B(6,7) → A(5,5) → T(4,3) → G(2,1)`
+          },
+          {
+            id: 'dp2-2',
+            problem: `Find the LIS of $[3, 10, 2, 1, 20]$ using both $O(n^2)$ and $O(n \\log n)$ methods.`,
+            solution: `**$O(n^2)$ Method:**
+- $L[0] = 1$ (just 3)
+- $L[1] = 2$ (3, 10)
+- $L[2] = 1$ (just 2)
+- $L[3] = 1$ (just 1)
+- $L[4] = 3$ (3, 10, 20) or (2, 10, 20) or (1, 10, 20)
+
+LIS length = $\\max(L) = 3$
+
+**$O(n \\log n)$ Method:**
+- Process 3: $T = [3]$
+- Process 10: $T = [3, 10]$
+- Process 2: $T = [2, 10]$ (replace 3)
+- Process 1: $T = [1, 10]$ (replace 2)
+- Process 20: $T = [1, 10, 20]$
+
+**LIS length = 3**`
+          },
+          {
+            id: 'dp2-3',
+            problem: `**Edit Distance:** Find minimum operations (insert, delete, replace) to convert "SUNDAY" to "SATURDAY".`,
+            solution: `**Subproblem:** $E(i,j)$ = edit distance of first $i$ chars of S1, first $j$ chars of S2
+
+**Recurrence:**
+$$E(i,j) = \\begin{cases}
+E(i-1,j-1) & \\text{if } s1_i = s2_j \\\\
+1 + \\min(E(i-1,j), E(i,j-1), E(i-1,j-1)) & \\text{otherwise}
+\\end{cases}$$
+
+Table for "SUNDAY" → "SATURDAY":
+\`\`\`
+      ""  S  A  T  U  R  D  A  Y
+""     0  1  2  3  4  5  6  7  8
+S      1  0  1  2  3  4  5  6  7
+U      2  1  1  2  2  3  4  5  6
+N      3  2  2  2  3  3  4  5  6
+D      4  3  3  3  3  4  3  4  5
+A      5  4  3  4  4  4  4  3  4
+Y      6  5  4  4  5  5  5  4  3
+\`\`\`
+
+**Edit Distance = 3** (insert A, T, R)`
+          }
+        ],
+        visualizations: ['DPVisualizer'],
       },
       // Unit 17: Dynamic Programming, Part 3
       {
         id: 'dp-3',
         title: 'Dynamic Programming, Part 3: Parenthesization',
         description: 'Optimal parenthesization, matrix chain multiplication.',
-        visualizations: [],
+        sections: [
+          {
+            title: 'Matrix Chain Multiplication',
+            content: `**Problem:** Given matrices $A_1, A_2, \\ldots, A_n$ with dimensions $p_0 \\times p_1, p_1 \\times p_2, \\ldots, p_{n-1} \\times p_n$, find the optimal way to parenthesize the product to minimize scalar multiplications.
+
+**Key Insight:** Multiplying $A$ ($p \\times q$) by $B$ ($q \\times r$) costs $pqr$ operations.
+
+**Example:**
+- $A_1$: $10 \\times 30$, $A_2$: $30 \\times 5$, $A_3$: $5 \\times 60$
+- $(A_1 A_2) A_3$: $10 \\cdot 30 \\cdot 5 + 10 \\cdot 5 \\cdot 60 = 4500$
+- $A_1 (A_2 A_3)$: $30 \\cdot 5 \\cdot 60 + 10 \\cdot 30 \\cdot 60 = 27000$
+
+Optimal: $(A_1 A_2) A_3$ with 4500 operations!`
+          },
+          {
+            title: 'MCM with SRTBOT',
+            content: `**S - Subproblems:**
+$M(i, j)$ = min cost to compute $A_i \\cdot A_{i+1} \\cdots A_j$
+- Count: $O(n^2)$ subproblems (all pairs $i \\leq j$)
+
+**R - Relate:**
+Split at position $k$: compute $A_i \\cdots A_k$ and $A_{k+1} \\cdots A_j$, then multiply results.
+$$M(i, j) = \\min_{i \\leq k < j} \\{M(i, k) + M(k+1, j) + p_{i-1} \\cdot p_k \\cdot p_j\\}$$
+
+**T - Topological Order:**
+By increasing chain length: length 1, then 2, then 3, etc.
+
+**B - Base Cases:**
+$M(i, i) = 0$ (single matrix, no multiplication)
+
+**T - Time:**
+$O(n^2)$ subproblems $\\times$ $O(n)$ choices for $k$ = $\\boxed{O(n^3)}$`
+          },
+          {
+            title: 'MCM Implementation',
+            content: `\`\`\`python
+def matrix_chain(p):
+    n = len(p) - 1  # number of matrices
+    # dp[i][j] = min cost for A_i...A_j
+    dp = [[0] * n for _ in range(n)]
+    split = [[0] * n for _ in range(n)]
+
+    # length = chain length
+    for length in range(2, n + 1):
+        for i in range(n - length + 1):
+            j = i + length - 1
+            dp[i][j] = float('inf')
+            for k in range(i, j):
+                cost = dp[i][k] + dp[k+1][j] + p[i]*p[k+1]*p[j+1]
+                if cost < dp[i][j]:
+                    dp[i][j] = cost
+                    split[i][j] = k
+
+    return dp[0][n-1], split
+\`\`\`
+
+The **split** table allows reconstructing the optimal parenthesization.`
+          },
+          {
+            title: 'Optimal BST',
+            content: `**Problem:** Given keys $k_1 < k_2 < \\cdots < k_n$ with search probabilities $p_1, \\ldots, p_n$, construct a BST minimizing expected search cost.
+
+**S - Subproblems:**
+$C(i, j)$ = min expected cost for keys $k_i, \\ldots, k_j$
+
+**R - Relate:**
+Choose root $k_r$ where $i \\leq r \\leq j$:
+$$C(i, j) = \\min_{i \\leq r \\leq j} \\{C(i, r-1) + C(r+1, j) + \\sum_{m=i}^{j} p_m\\}$$
+
+The sum accounts for all keys going one level deeper.
+
+**T - Time:** $O(n^3)$ (can be optimized to $O(n^2)$ with Knuth's optimization)`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dp3-1',
+            problem: `Find the optimal parenthesization for matrices with dimensions: $p = [5, 10, 3, 12, 5, 50, 6]$ (6 matrices).`,
+            solution: `Matrices: $A_1(5 \\times 10)$, $A_2(10 \\times 3)$, $A_3(3 \\times 12)$, $A_4(12 \\times 5)$, $A_5(5 \\times 50)$, $A_6(50 \\times 6)$
+
+Build DP table for lengths 2, 3, 4, 5, 6:
+
+After computation:
+- $M(1,6) = 2010$
+- Optimal split: $((A_1(A_2 A_3))((A_4 A_5)A_6))$
+
+**Minimum cost = 2010 scalar multiplications**`
+          },
+          {
+            id: 'dp3-2',
+            problem: `**Palindrome Partitioning:** Find minimum cuts to partition string $s$ into palindromes.`,
+            solution: `**Subproblems:**
+- $P(i,j)$ = true if $s[i..j]$ is palindrome
+- $C(i)$ = min cuts for $s[0..i]$
+
+**Recurrence:**
+$$C(i) = \\begin{cases}
+0 & \\text{if } P(0,i) \\\\
+\\min_{j < i, P(j+1,i)} \\{C(j) + 1\\} & \\text{otherwise}
+\\end{cases}$$
+
+**Time:** $O(n^2)$ for palindrome table + $O(n^2)$ for cuts = $O(n^2)$`
+          }
+        ],
+        visualizations: ['DPVisualizer'],
       },
       // Unit 18: Dynamic Programming, Part 4
       {
         id: 'dp-4',
         title: 'Dynamic Programming, Part 4: Knapsack',
         description: 'Rod cutting, subset sum, knapsack, and pseudopolynomial algorithms.',
-        visualizations: [],
+        sections: [
+          {
+            title: '0/1 Knapsack Problem',
+            content: `**Problem:** Given $n$ items with weights $w_1, \\ldots, w_n$ and values $v_1, \\ldots, v_n$, and a knapsack capacity $W$, maximize total value without exceeding capacity. Each item can be taken at most once.
+
+**S - Subproblems:**
+$K(i, w)$ = max value using items $1, \\ldots, i$ with capacity $w$
+- Count: $O(nW)$
+
+**R - Relate:**
+$$K(i, w) = \\max\\begin{cases}
+K(i-1, w) & \\text{(don't take item } i\\text{)} \\\\
+K(i-1, w-w_i) + v_i & \\text{(take item } i\\text{, if } w_i \\leq w\\text{)}
+\\end{cases}$$
+
+**B - Base:** $K(0, w) = 0$ for all $w$
+
+**T - Time:** $O(nW)$ — **pseudopolynomial**!`
+          },
+          {
+            title: 'Knapsack Implementation',
+            content: `\`\`\`python
+def knapsack(weights, values, W):
+    n = len(weights)
+    dp = [[0] * (W + 1) for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for w in range(W + 1):
+            dp[i][w] = dp[i-1][w]  # don't take
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i][w],
+                    dp[i-1][w-weights[i-1]] + values[i-1])
+
+    return dp[n][W]
+\`\`\`
+
+**Space Optimization:** Use 1D array since we only need previous row:
+\`\`\`python
+def knapsack_opt(weights, values, W):
+    dp = [0] * (W + 1)
+    for i in range(len(weights)):
+        for w in range(W, weights[i]-1, -1):  # reverse!
+            dp[w] = max(dp[w], dp[w-weights[i]] + values[i])
+    return dp[W]
+\`\`\``
+          },
+          {
+            title: 'Subset Sum',
+            content: `**Problem:** Given set $S = \\{s_1, \\ldots, s_n\\}$ and target $T$, is there a subset summing to exactly $T$?
+
+This is the decision version of knapsack (values = weights).
+
+**S - Subproblems:**
+$P(i, t)$ = true if subset of $\\{s_1, \\ldots, s_i\\}$ sums to $t$
+
+**R - Relate:**
+$$P(i, t) = P(i-1, t) \\lor P(i-1, t-s_i)$$
+
+**B - Base:** $P(0, 0) = \\text{true}$, $P(0, t) = \\text{false}$ for $t > 0$
+
+**T - Time:** $O(nT)$ — pseudopolynomial
+
+**Note:** Subset Sum is NP-complete, so no known polynomial-time algorithm!`
+          },
+          {
+            title: 'Rod Cutting',
+            content: `**Problem:** Given a rod of length $n$ and prices $p[1..n]$ where $p[i]$ is the price of rod of length $i$, find maximum revenue from cutting the rod.
+
+**S - Subproblems:**
+$R(i)$ = max revenue for rod of length $i$
+
+**R - Relate:**
+$$R(i) = \\max_{1 \\leq j \\leq i} \\{p[j] + R(i-j)\\}$$
+
+Cut off piece of length $j$, recursively solve for remaining $i-j$.
+
+**B - Base:** $R(0) = 0$
+
+**T - Time:** $O(n^2)$
+
+\`\`\`python
+def rod_cutting(prices, n):
+    dp = [0] * (n + 1)
+    for i in range(1, n + 1):
+        for j in range(1, i + 1):
+            dp[i] = max(dp[i], prices[j-1] + dp[i-j])
+    return dp[n]
+\`\`\``
+          },
+          {
+            title: 'Pseudopolynomial Time',
+            content: `**Definition:** An algorithm runs in **pseudopolynomial time** if its running time is polynomial in the *numeric value* of the input, but exponential in the *length* of the input.
+
+**Example:** Knapsack with capacity $W$
+- Input size: $O(n + \\log W)$ bits
+- Running time: $O(nW)$
+- $W$ can be exponential in $\\log W$!
+
+If $W = 2^{100}$, input has ~100 bits but algorithm takes $2^{100}$ steps.
+
+**Weakly vs Strongly NP-hard:**
+- **Weakly NP-hard:** Has pseudopolynomial algorithm (e.g., Knapsack, Subset Sum)
+- **Strongly NP-hard:** No pseudopolynomial algorithm unless P=NP (e.g., 3-SAT, TSP)`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'dp4-1',
+            problem: `Solve 0/1 Knapsack: items with (weight, value) = [(2,3), (3,4), (4,5), (5,6)], capacity W=8.`,
+            solution: `Build DP table:
+\`\`\`
+       0  1  2  3  4  5  6  7  8
+i=0    0  0  0  0  0  0  0  0  0
+i=1    0  0  3  3  3  3  3  3  3
+i=2    0  0  3  4  4  7  7  7  7
+i=3    0  0  3  4  5  7  8  9  9
+i=4    0  0  3  4  5  7  8  9  10
+\`\`\`
+
+**Maximum value = 10** (items 2 and 4, weights 3+5=8, values 4+6=10)`
+          },
+          {
+            id: 'dp4-2',
+            problem: `**Subset Sum:** Can $\\{3, 7, 1, 8, 4\\}$ form a subset summing to 11?`,
+            solution: `Build boolean DP table:
+\`\`\`
+       0  1  2  3  4  5  6  7  8  9 10 11
+{}     T  F  F  F  F  F  F  F  F  F  F  F
+{3}    T  F  F  T  F  F  F  F  F  F  F  F
+{3,7}  T  F  F  T  F  F  F  T  F  F  T  F
+{3,7,1}T  T  F  T  T  F  F  T  T  F  T  T
+\`\`\`
+
+**Yes!** $P(3, 11) = $ true. Subset: $\\{3, 7, 1\\}$ or $\\{3, 8\\}$ or $\\{7, 4\\}$`
+          },
+          {
+            id: 'dp4-3',
+            problem: `**Rod Cutting:** prices $p = [1, 5, 8, 9, 10, 17, 17, 20]$ for lengths 1-8. Find max revenue for rod of length 8.`,
+            solution: `Compute $R(i)$:
+- $R(1) = 1$
+- $R(2) = \\max(p[1]+R(1), p[2]) = \\max(2, 5) = 5$
+- $R(3) = \\max(1+5, 5+1, 8) = 8$
+- $R(4) = \\max(1+8, 5+5, 8+1, 9) = 10$
+- $R(5) = \\max(1+10, 5+8, 8+5, 9+1, 10) = 13$
+- $R(6) = \\max(1+13, 5+10, 8+8, 9+5, 10+1, 17) = 17$
+- $R(7) = \\max(1+17, 5+13, 8+10, 9+8, 10+5, 17+1, 17) = 18$
+- $R(8) = \\max(1+18, 5+17, 8+13, 9+10, 10+8, 17+5, 17+1, 20) = 22$
+
+**Maximum revenue = 22** (cut into lengths 2+6 for $5+17=22$)`
+          }
+        ],
+        visualizations: ['DPVisualizer'],
       },
       // Unit 19: Complexity
       {
         id: 'complexity',
         title: 'Computational Complexity',
         description: 'P, NP, NP-completeness, and polynomial-time reductions.',
+        sections: [
+          {
+            title: 'Complexity Classes P and NP',
+            content: `**Class P (Polynomial Time):**
+Problems solvable in $O(n^k)$ time for some constant $k$.
+- Examples: Sorting, Shortest Path, MST, Maximum Flow
+
+**Class NP (Nondeterministic Polynomial Time):**
+Problems where a solution can be *verified* in polynomial time.
+- Given a "certificate" (proposed solution), we can check correctness in polynomial time.
+
+**Examples in NP:**
+- **SAT:** Given a boolean formula, is there a satisfying assignment?
+- **Hamiltonian Path:** Does graph have a path visiting each vertex exactly once?
+- **Subset Sum:** Is there a subset summing to target?
+
+**Key Insight:** $P \\subseteq NP$ (if we can solve in poly-time, we can verify in poly-time)
+
+**The P vs NP Question:** Is $P = NP$? Can every problem with efficiently verifiable solutions also be efficiently solved? **Unknown!**`
+          },
+          {
+            title: 'NP-Completeness',
+            content: `**Definition:** A problem $L$ is **NP-complete** if:
+1. $L \\in NP$ (solutions verifiable in polynomial time)
+2. Every problem in NP reduces to $L$ in polynomial time ($L$ is **NP-hard**)
+
+**Significance:** If *any* NP-complete problem has a polynomial algorithm, then $P = NP$ and *all* NP problems become easy!
+
+**Cook-Levin Theorem (1971):**
+SAT (Boolean Satisfiability) is NP-complete.
+
+**Proving NP-Completeness:**
+1. Show problem is in NP
+2. Reduce a known NP-complete problem to it
+
+**Classic NP-Complete Problems:**
+- SAT, 3-SAT
+- Clique, Independent Set, Vertex Cover
+- Hamiltonian Path/Cycle, TSP
+- Subset Sum, Knapsack
+- Graph Coloring`
+          },
+          {
+            title: 'Polynomial-Time Reductions',
+            content: `**Definition:** $A \\leq_p B$ (A reduces to B) if there exists a polynomial-time function $f$ such that:
+$$x \\in A \\iff f(x) \\in B$$
+
+**Intuition:** If we can solve $B$, we can solve $A$ by:
+1. Transform input $x$ to $f(x)$
+2. Solve $B$ on $f(x)$
+3. Return the answer
+
+**Properties:**
+- If $A \\leq_p B$ and $B \\in P$, then $A \\in P$
+- If $A \\leq_p B$ and $A$ is NP-hard, then $B$ is NP-hard
+
+**Example Reduction: 3-SAT $\\leq_p$ Clique**
+Given 3-SAT formula with $k$ clauses, construct graph:
+- Node for each literal in each clause
+- Edge between nodes if: different clauses AND not contradictory
+- Formula satisfiable $\\iff$ graph has $k$-clique`
+          },
+          {
+            title: 'Dealing with NP-Hard Problems',
+            content: `When facing an NP-hard problem in practice:
+
+**1. Approximation Algorithms**
+Find solution within guaranteed factor of optimal.
+- Vertex Cover: 2-approximation
+- TSP (metric): 1.5-approximation (Christofides)
+
+**2. Special Cases**
+Some NP-hard problems have polynomial algorithms for restricted inputs.
+- 2-SAT is in P (only 3-SAT is NP-complete)
+- Planar graph coloring is easier
+
+**3. Parameterized Complexity**
+Algorithm exponential only in a small parameter.
+- Vertex Cover in $O(2^k \\cdot n)$ where $k$ = cover size
+
+**4. Heuristics**
+No guarantees but often work well in practice.
+- Local search, simulated annealing, genetic algorithms
+
+**5. Accept Exponential Time**
+For small inputs, exponential algorithms may be acceptable.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'comp-1',
+            problem: `Prove that Independent Set is NP-complete by reducing from Clique.`,
+            solution: `**Step 1: Independent Set $\\in$ NP**
+Given a set $S$ and graph $G$, verify in $O(|S|^2)$ that no two vertices in $S$ are adjacent.
+
+**Step 2: Clique $\\leq_p$ Independent Set**
+
+**Reduction:** Given graph $G = (V, E)$ and integer $k$:
+- Construct complement graph $\\bar{G} = (V, \\bar{E})$ where $\\bar{E} = \\{(u,v) : (u,v) \\notin E\\}$
+- $G$ has $k$-clique $\\iff$ $\\bar{G}$ has $k$-independent set
+
+**Proof:**
+- $S$ is a clique in $G$ $\\Rightarrow$ all pairs in $S$ have edges in $G$
+- $\\Rightarrow$ no pairs in $S$ have edges in $\\bar{G}$
+- $\\Rightarrow$ $S$ is independent set in $\\bar{G}$
+
+**Time:** $O(|V|^2)$ to construct $\\bar{G}$ — polynomial!
+
+Therefore, Independent Set is NP-complete.`
+          },
+          {
+            id: 'comp-2',
+            problem: `Is the following problem in P, NP, or NP-complete? "Given a graph $G$, does it have an Eulerian path?"`,
+            solution: `**Answer: P (polynomial time)**
+
+An Eulerian path exists if and only if:
+- The graph is connected (ignoring isolated vertices)
+- Has exactly 0 or 2 vertices of odd degree
+
+**Algorithm:**
+1. Count degree of each vertex: $O(|E|)$
+2. Check connectivity via BFS/DFS: $O(|V| + |E|)$
+3. Count odd-degree vertices: $O(|V|)$
+
+**Total: $O(|V| + |E|)$** — polynomial!
+
+This is fundamentally different from Hamiltonian Path (NP-complete) because Eulerian path visits every *edge* once, while Hamiltonian visits every *vertex* once.`
+          }
+        ],
         visualizations: [],
       },
       // Unit 20: Course Review
@@ -6313,6 +6988,144 @@ For dense graphs with E = Θ(V²), Floyd-Warshall is competitive and simpler.`
         id: 'review',
         title: 'Course Review',
         description: 'Summary of key algorithms, data structures, and problem-solving techniques.',
+        sections: [
+          {
+            title: 'Data Structures Summary',
+            content: `| Data Structure | Insert | Delete | Search | Notes |
+|---------------|--------|--------|--------|-------|
+| Array | $O(n)$ | $O(n)$ | $O(n)$ | $O(1)$ access by index |
+| Dynamic Array | $O(1)$* | $O(n)$ | $O(n)$ | *amortized |
+| Linked List | $O(1)$ | $O(1)$ | $O(n)$ | Given pointer to location |
+| Hash Table | $O(1)$* | $O(1)$* | $O(1)$* | *expected, with good hash |
+| BST | $O(h)$ | $O(h)$ | $O(h)$ | $h$ can be $O(n)$ |
+| AVL Tree | $O(\\log n)$ | $O(\\log n)$ | $O(\\log n)$ | Balanced |
+| Heap | $O(\\log n)$ | $O(\\log n)$ | $O(n)$ | $O(1)$ find-min |`
+          },
+          {
+            title: 'Sorting Algorithms',
+            content: `| Algorithm | Time (Best) | Time (Avg) | Time (Worst) | Space | Stable |
+|-----------|-------------|------------|--------------|-------|--------|
+| Insertion Sort | $O(n)$ | $O(n^2)$ | $O(n^2)$ | $O(1)$ | Yes |
+| Merge Sort | $O(n\\log n)$ | $O(n\\log n)$ | $O(n\\log n)$ | $O(n)$ | Yes |
+| Heap Sort | $O(n\\log n)$ | $O(n\\log n)$ | $O(n\\log n)$ | $O(1)$ | No |
+| Quick Sort | $O(n\\log n)$ | $O(n\\log n)$ | $O(n^2)$ | $O(\\log n)$ | No |
+| Counting Sort | $O(n+k)$ | $O(n+k)$ | $O(n+k)$ | $O(k)$ | Yes |
+| Radix Sort | $O(d(n+k))$ | $O(d(n+k))$ | $O(d(n+k))$ | $O(n+k)$ | Yes |
+
+**Lower bound for comparison sorting:** $\\Omega(n \\log n)$`
+          },
+          {
+            title: 'Graph Algorithms',
+            content: `| Algorithm | Problem | Time | Notes |
+|-----------|---------|------|-------|
+| BFS | Shortest path (unweighted) | $O(V+E)$ | Level-by-level |
+| DFS | Connectivity, cycles | $O(V+E)$ | Stack-based |
+| Topological Sort | DAG ordering | $O(V+E)$ | DFS or Kahn's |
+| Dijkstra | SSSP (non-negative) | $O((V+E)\\log V)$ | Priority queue |
+| Bellman-Ford | SSSP (any weights) | $O(VE)$ | Detects negative cycles |
+| Floyd-Warshall | APSP | $O(V^3)$ | DP approach |
+| Johnson | APSP (sparse) | $O(V^2\\log V + VE)$ | Reweighting |
+| Prim/Kruskal | MST | $O(E\\log V)$ | Greedy |`
+          },
+          {
+            title: 'Dynamic Programming Patterns',
+            content: `**SRTBOT Framework:**
+1. **S**ubproblems: Define precisely
+2. **R**elate: Write recurrence
+3. **T**opological order: Dependency order
+4. **B**ase cases: Smallest subproblems
+5. **O**riginal: Express answer
+6. **T**ime: Analyze complexity
+
+**Common Patterns:**
+- **1D DP:** Fibonacci, climbing stairs, rod cutting
+- **2D DP:** LCS, edit distance, knapsack
+- **Interval DP:** Matrix chain, optimal BST
+- **DAG DP:** Shortest paths, topological problems
+
+**Key Problems:**
+| Problem | Subproblems | Time |
+|---------|-------------|------|
+| Fibonacci | $F(i)$ | $O(n)$ |
+| LCS | $L(i,j)$ | $O(mn)$ |
+| LIS | $L(i)$ | $O(n^2)$ or $O(n\\log n)$ |
+| Knapsack | $K(i,w)$ | $O(nW)$ |
+| Matrix Chain | $M(i,j)$ | $O(n^3)$ |`
+          },
+          {
+            title: 'Problem-Solving Strategies',
+            content: `**1. Understand the Problem**
+- What is the input/output?
+- What are the constraints?
+- Work through small examples
+
+**2. Choose the Right Approach**
+- Brute force (establish baseline)
+- Greedy (local optimal → global optimal?)
+- Divide and conquer (independent subproblems?)
+- Dynamic programming (overlapping subproblems?)
+- Graph algorithms (model as graph?)
+
+**3. Analyze Complexity**
+- Time: How does runtime scale?
+- Space: How much memory needed?
+- Is the bound tight?
+
+**4. Implement Carefully**
+- Handle edge cases
+- Test on examples
+- Consider numerical issues
+
+**5. Optimize if Needed**
+- Better data structures
+- Pruning search space
+- Space-time tradeoffs`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'review-1',
+            problem: `Given an unsorted array, describe the most efficient algorithm for each task: (a) Find the median, (b) Find the $k$-th smallest element, (c) Sort the array.`,
+            solution: `**(a) Find the median:**
+Use QuickSelect (selection algorithm):
+- Expected: $O(n)$
+- Worst case: $O(n^2)$
+- With median-of-medians: $O(n)$ guaranteed
+
+**(b) Find $k$-th smallest:**
+Same as (a) — QuickSelect with parameter $k$: $O(n)$ expected
+
+**(c) Sort the array:**
+- Comparison sort: Merge Sort or Heap Sort for $O(n \\log n)$ guaranteed
+- If elements are integers in range $[0, k]$: Counting Sort for $O(n + k)$
+- If elements are strings or have digits: Radix Sort for $O(d(n + k))$`
+          },
+          {
+            id: 'review-2',
+            problem: `Design an algorithm to find the longest palindromic subsequence in a string $S$.`,
+            solution: `**Key insight:** LPS of $S$ = LCS of $S$ and reverse($S$)!
+
+Alternatively, direct DP:
+
+**Subproblems:** $P(i,j)$ = LPS length of $S[i..j]$
+
+**Recurrence:**
+$$P(i,j) = \\begin{cases}
+1 & i = j \\\\
+2 & i+1 = j \\text{ and } S[i] = S[j] \\\\
+P(i+1, j-1) + 2 & S[i] = S[j] \\\\
+\\max(P(i+1,j), P(i,j-1)) & S[i] \\neq S[j]
+\\end{cases}$$
+
+**Base:** $P(i,i) = 1$
+
+**Order:** By increasing length $j - i$
+
+**Time:** $O(n^2)$
+
+**Example:** "BBABCBCAB" → LPS = "BABCBAB" (length 7)`
+          }
+        ],
         visualizations: [],
       },
     ],
