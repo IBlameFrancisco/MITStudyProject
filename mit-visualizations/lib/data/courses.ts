@@ -8786,10 +8786,466 @@ The integration of $u_2'$ requires special functions (exponential integral).`
       },
 
       // =====================================================================
-      // REMAINING UNITS (placeholders for later development)
+      // UNIT 10: FOURIER SERIES
       // =====================================================================
-      { id: 'fourier-series', title: 'Fourier Series', description: 'Representing periodic functions.', visualizations: ['FunctionPlot'] },
-      { id: 'laplace-transform', title: 'Laplace Transform', description: 'Transform methods for ODEs.', visualizations: ['FunctionPlot'] },
+      {
+        id: 'fourier-series',
+        title: 'Fourier Series',
+        description: 'Representing periodic functions as sums of sines and cosines.',
+        visualizations: ['FourierSeriesVisualizer', 'FunctionPlot'],
+        sections: [
+          {
+            title: 'Periodic Functions and Fourier\'s Idea',
+            content: `**Joseph Fourier's Revolutionary Insight (1807):**
+Any periodic function can be written as a sum of sines and cosines!
+
+A function $f(x)$ is **periodic with period $L$** if:
+$$f(x + L) = f(x) \\text{ for all } x$$
+
+**The Fourier Series:**
+$$f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty} \\left[ a_n \\cos\\left(\\frac{2\\pi nx}{L}\\right) + b_n \\sin\\left(\\frac{2\\pi nx}{L}\\right) \\right]$$
+
+For period $L = 2\\pi$:
+$$f(x) = \\frac{a_0}{2} + \\sum_{n=1}^{\\infty} (a_n \\cos nx + b_n \\sin nx)$$
+
+**Why is this useful?**
+- Sines and cosines are eigenfunctions of differentiation
+- Transforms complicated functions into simple components
+- Each component has a physical interpretation (frequency)`
+          },
+          {
+            title: 'Computing Fourier Coefficients',
+            content: `**The Orthogonality Relations:**
+
+Over $[-\\pi, \\pi]$:
+$$\\int_{-\\pi}^{\\pi} \\cos(mx)\\cos(nx)\\,dx = \\begin{cases} 0 & m \\neq n \\\\ \\pi & m = n \\neq 0 \\\\ 2\\pi & m = n = 0 \\end{cases}$$
+
+$$\\int_{-\\pi}^{\\pi} \\sin(mx)\\sin(nx)\\,dx = \\begin{cases} 0 & m \\neq n \\\\ \\pi & m = n \\neq 0 \\end{cases}$$
+
+$$\\int_{-\\pi}^{\\pi} \\sin(mx)\\cos(nx)\\,dx = 0 \\text{ for all } m, n$$
+
+**Euler Formulas for Coefficients:**
+$$a_0 = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\,dx$$
+
+$$a_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\cos(nx)\\,dx$$
+
+$$b_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\sin(nx)\\,dx$$
+
+**Key trick:** Multiply both sides by $\\cos(mx)$ or $\\sin(mx)$, integrate, and use orthogonality!`
+          },
+          {
+            title: 'Example: Square Wave',
+            content: `Find the Fourier series for the **square wave**:
+$$f(x) = \\begin{cases} 1 & 0 < x < \\pi \\\\ -1 & -\\pi < x < 0 \\end{cases}$$
+
+**Observe:** $f(x)$ is **odd** (symmetric about origin), so all $a_n = 0$.
+
+**Calculate $b_n$:**
+$$b_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} f(x)\\sin(nx)\\,dx = \\frac{2}{\\pi}\\int_0^{\\pi} \\sin(nx)\\,dx$$
+
+$$= \\frac{2}{\\pi}\\left[-\\frac{\\cos(nx)}{n}\\right]_0^{\\pi} = \\frac{2}{n\\pi}(1 - \\cos(n\\pi))$$
+
+$$= \\begin{cases} \\frac{4}{n\\pi} & n \\text{ odd} \\\\ 0 & n \\text{ even} \\end{cases}$$
+
+**Fourier Series:**
+$$f(x) = \\frac{4}{\\pi}\\left(\\sin x + \\frac{\\sin 3x}{3} + \\frac{\\sin 5x}{5} + \\cdots\\right)$$
+
+Only odd harmonics appear! The series converges slowly (like $1/n$).`
+          },
+          {
+            title: 'Convergence and Gibbs Phenomenon',
+            content: `**Convergence Theorem:**
+If $f(x)$ is piecewise smooth, the Fourier series converges to:
+- $f(x)$ where $f$ is continuous
+- $\\frac{1}{2}[f(x^+) + f(x^-)]$ at discontinuities (average of limits)
+
+**Rate of Convergence:**
+- Smooth function: Coefficients decay rapidly (exponentially)
+- $k$ continuous derivatives: Coefficients decay like $1/n^{k+1}$
+- Discontinuous function: Coefficients decay like $1/n$
+
+**Gibbs Phenomenon:**
+At discontinuities, the partial sums overshoot by about **9%** of the jump!
+
+This overshoot persists no matter how many terms you take—it just gets narrower.
+
+**Parseval's Theorem:**
+$$\\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} |f(x)|^2\\,dx = \\frac{a_0^2}{2} + \\sum_{n=1}^{\\infty}(a_n^2 + b_n^2)$$
+
+Energy in time domain = Energy in frequency domain!`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'fourier-1',
+            problem: 'Find the Fourier series for $f(x) = x$ on $[-\\pi, \\pi]$, extended periodically.',
+            solution: `**$f(x) = x$ is odd**, so $a_n = 0$ for all $n$.
+
+**Calculate $b_n$:**
+$$b_n = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} x\\sin(nx)\\,dx = \\frac{2}{\\pi}\\int_0^{\\pi} x\\sin(nx)\\,dx$$
+
+Using integration by parts with $u = x$, $dv = \\sin(nx)dx$:
+
+$$= \\frac{2}{\\pi}\\left[-\\frac{x\\cos(nx)}{n} + \\frac{\\sin(nx)}{n^2}\\right]_0^{\\pi}$$
+
+$$= \\frac{2}{\\pi}\\left(-\\frac{\\pi\\cos(n\\pi)}{n}\\right) = -\\frac{2\\cos(n\\pi)}{n} = \\frac{2(-1)^{n+1}}{n}$$
+
+**Fourier Series:**
+$$x = 2\\left(\\sin x - \\frac{\\sin 2x}{2} + \\frac{\\sin 3x}{3} - \\cdots\\right)$$`
+          },
+          {
+            id: 'fourier-2',
+            problem: 'Find $a_0$, $a_1$, and $b_1$ for $f(x) = |x|$ on $[-\\pi, \\pi]$.',
+            solution: `**$f(x) = |x|$ is even**, so $b_n = 0$ for all $n$.
+
+**$a_0$:**
+$$a_0 = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} |x|\\,dx = \\frac{2}{\\pi}\\int_0^{\\pi} x\\,dx = \\frac{2}{\\pi}\\cdot\\frac{\\pi^2}{2} = \\pi$$
+
+**$a_1$:**
+$$a_1 = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} |x|\\cos x\\,dx = \\frac{2}{\\pi}\\int_0^{\\pi} x\\cos x\\,dx$$
+
+By parts: $= \\frac{2}{\\pi}[x\\sin x + \\cos x]_0^{\\pi} = \\frac{2}{\\pi}(-1 - 1) = -\\frac{4}{\\pi}$
+
+**$b_1 = 0$** (function is even)
+
+**Series begins:** $|x| = \\frac{\\pi}{2} - \\frac{4}{\\pi}\\cos x - \\cdots$`
+          },
+          {
+            id: 'fourier-3',
+            problem: 'Use Parseval\'s theorem with the square wave to prove $\\frac{\\pi^2}{8} = 1 + \\frac{1}{9} + \\frac{1}{25} + \\cdots$',
+            solution: `For the square wave, $f(x) = \\pm 1$ and:
+$$b_n = \\frac{4}{n\\pi} \\text{ for odd } n$$
+
+**Left side of Parseval:**
+$$\\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} |f(x)|^2\\,dx = \\frac{1}{\\pi}\\int_{-\\pi}^{\\pi} 1\\,dx = 2$$
+
+**Right side of Parseval:**
+$$\\sum_{n=1,3,5,...}^{\\infty} b_n^2 = \\sum_{n \\text{ odd}} \\frac{16}{n^2\\pi^2}$$
+
+$$= \\frac{16}{\\pi^2}\\left(1 + \\frac{1}{9} + \\frac{1}{25} + \\cdots\\right)$$
+
+**Equating:**
+$$2 = \\frac{16}{\\pi^2}\\left(1 + \\frac{1}{9} + \\frac{1}{25} + \\cdots\\right)$$
+
+$$\\boxed{\\frac{\\pi^2}{8} = 1 + \\frac{1}{9} + \\frac{1}{25} + \\frac{1}{49} + \\cdots}$$`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 11: LAPLACE TRANSFORM
+      // =====================================================================
+      {
+        id: 'laplace-transform',
+        title: 'Laplace Transform',
+        description: 'Transform methods for solving ODEs with discontinuous forcing.',
+        visualizations: ['LaplaceTransformVisualizer', 'FunctionPlot'],
+        sections: [
+          {
+            title: 'Definition and Basic Transforms',
+            content: `The **Laplace Transform** converts a function of time into a function of complex frequency:
+
+$$\\mathcal{L}\\{f(t)\\} = F(s) = \\int_0^{\\infty} e^{-st}f(t)\\,dt$$
+
+**Why use Laplace transforms?**
+1. Converts ODEs into algebraic equations
+2. Automatically incorporates initial conditions
+3. Handles discontinuous forcing (step functions, impulses)
+4. Useful for systems and control theory
+
+**Basic Transform Pairs:**
+
+| $f(t)$ | $F(s)$ | Condition |
+|--------|--------|-----------|
+| $1$ | $\\frac{1}{s}$ | $s > 0$ |
+| $t^n$ | $\\frac{n!}{s^{n+1}}$ | $s > 0$ |
+| $e^{at}$ | $\\frac{1}{s-a}$ | $s > a$ |
+| $\\sin(\\omega t)$ | $\\frac{\\omega}{s^2+\\omega^2}$ | $s > 0$ |
+| $\\cos(\\omega t)$ | $\\frac{s}{s^2+\\omega^2}$ | $s > 0$ |`
+          },
+          {
+            title: 'Key Properties',
+            content: `**Linearity:**
+$$\\mathcal{L}\\{af + bg\\} = aF(s) + bG(s)$$
+
+**Derivative Property (KEY!):**
+$$\\mathcal{L}\\{f'(t)\\} = sF(s) - f(0)$$
+$$\\mathcal{L}\\{f''(t)\\} = s^2F(s) - sf(0) - f'(0)$$
+
+This is why Laplace transforms are perfect for IVPs—initial conditions appear automatically!
+
+**Shifting in s (First Shifting Theorem):**
+$$\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)$$
+
+**Shifting in t (Second Shifting Theorem):**
+$$\\mathcal{L}\\{u(t-a)f(t-a)\\} = e^{-as}F(s)$$
+
+where $u(t-a)$ is the unit step function.
+
+**Convolution:**
+$$\\mathcal{L}\\{f * g\\} = F(s) \\cdot G(s)$$
+
+where $(f * g)(t) = \\int_0^t f(\\tau)g(t-\\tau)\\,d\\tau$`
+          },
+          {
+            title: 'Solving ODEs with Laplace',
+            content: `**The Method:**
+1. Take Laplace transform of entire ODE
+2. Use derivative properties (ICs appear!)
+3. Solve algebraically for $Y(s)$
+4. Find $y(t) = \\mathcal{L}^{-1}\\{Y(s)\\}$
+
+**Example:** Solve $y'' + 3y' + 2y = 0$, $y(0) = 1$, $y'(0) = 0$
+
+**Step 1:** Transform
+$$s^2Y - s(1) - 0 + 3(sY - 1) + 2Y = 0$$
+
+**Step 2:** Solve for Y
+$$(s^2 + 3s + 2)Y = s + 3$$
+$$Y(s) = \\frac{s+3}{s^2+3s+2} = \\frac{s+3}{(s+1)(s+2)}$$
+
+**Step 3:** Partial fractions
+$$Y(s) = \\frac{2}{s+1} - \\frac{1}{s+2}$$
+
+**Step 4:** Inverse transform
+$$y(t) = 2e^{-t} - e^{-2t}$$`
+          },
+          {
+            title: 'Step Functions and Discontinuous Forcing',
+            content: `**Unit Step Function:**
+$$u(t-a) = \\begin{cases} 0 & t < a \\\\ 1 & t \\geq a \\end{cases}$$
+
+$$\\mathcal{L}\\{u(t-a)\\} = \\frac{e^{-as}}{s}$$
+
+**Example: Turn on at t = 2**
+The function $f(t) = \\sin(t) \\cdot u(t-2)$ is zero until $t = 2$, then equals $\\sin(t)$.
+
+To find its transform, write:
+$$f(t) = u(t-2)\\sin(t) = u(t-2)\\sin((t-2)+2)$$
+
+Using the shift theorem and trig addition.
+
+**Dirac Delta Function:**
+$$\\delta(t-a) = \\lim_{\\epsilon \\to 0} \\text{(spike at } t=a \\text{)}$$
+
+Properties:
+$$\\int_{-\\infty}^{\\infty} f(t)\\delta(t-a)\\,dt = f(a)$$
+$$\\mathcal{L}\\{\\delta(t-a)\\} = e^{-as}$$
+
+**Physical meaning:** An instantaneous impulse (hammer blow, sudden voltage spike).`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'laplace-1',
+            problem: 'Find $\\mathcal{L}\\{t^2 e^{3t}\\}$.',
+            solution: `Use the **first shifting theorem**: $\\mathcal{L}\\{e^{at}f(t)\\} = F(s-a)$
+
+We know: $\\mathcal{L}\\{t^2\\} = \\frac{2!}{s^3} = \\frac{2}{s^3}$
+
+Therefore:
+$$\\mathcal{L}\\{t^2 e^{3t}\\} = \\frac{2}{(s-3)^3}$$
+
+Valid for $s > 3$.`
+          },
+          {
+            id: 'laplace-2',
+            problem: 'Solve using Laplace transforms: $y\' + 2y = e^{-t}$, $y(0) = 1$.',
+            solution: `**Transform the ODE:**
+$$sY - 1 + 2Y = \\frac{1}{s+1}$$
+
+**Solve for Y:**
+$$(s+2)Y = 1 + \\frac{1}{s+1} = \\frac{s+2}{s+1}$$
+$$Y(s) = \\frac{1}{s+1}$$
+
+**Inverse transform:**
+$$y(t) = e^{-t}$$
+
+**Verify:** $y' + 2y = -e^{-t} + 2e^{-t} = e^{-t}$ ✓
+$y(0) = 1$ ✓`
+          },
+          {
+            id: 'laplace-3',
+            problem: 'Find the inverse Laplace transform of $F(s) = \\frac{s+5}{s^2+4s+13}$.',
+            solution: `**Complete the square in denominator:**
+$$s^2 + 4s + 13 = (s+2)^2 + 9 = (s+2)^2 + 3^2$$
+
+**Rewrite numerator:**
+$$s + 5 = (s+2) + 3$$
+
+**Split:**
+$$F(s) = \\frac{s+2}{(s+2)^2+9} + \\frac{3}{(s+2)^2+9}$$
+
+**Use shifting theorem:** With $a = -2$, $\\omega = 3$:
+$$\\mathcal{L}^{-1}\\left\\{\\frac{s+2}{(s+2)^2+9}\\right\\} = e^{-2t}\\cos(3t)$$
+$$\\mathcal{L}^{-1}\\left\\{\\frac{3}{(s+2)^2+9}\\right\\} = e^{-2t}\\sin(3t)$$
+
+**Answer:**
+$$f(t) = e^{-2t}(\\cos 3t + \\sin 3t)$$`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 12: CONVOLUTION AND TRANSFER FUNCTIONS
+      // =====================================================================
+      {
+        id: 'convolution',
+        title: 'Convolution & Transfer Functions',
+        description: 'System response, impulse response, and frequency analysis.',
+        visualizations: ['LaplaceTransformVisualizer', 'ResonanceVisualizer'],
+        sections: [
+          {
+            title: 'The Convolution Integral',
+            content: `**Definition:** The convolution of $f$ and $g$ is:
+$$(f * g)(t) = \\int_0^t f(\\tau)g(t-\\tau)\\,d\\tau$$
+
+**The Convolution Theorem:**
+$$\\mathcal{L}\\{f * g\\} = F(s) \\cdot G(s)$$
+
+This is incredibly useful: multiplication in the s-domain = convolution in the t-domain!
+
+**Properties:**
+- Commutative: $f * g = g * f$
+- Associative: $(f * g) * h = f * (g * h)$
+- Distributive: $f * (g + h) = f * g + f * h$
+- Identity: $f * \\delta = f$
+
+**Physical Interpretation:**
+If $h(t)$ is a system's impulse response and $f(t)$ is the input, then:
+$$\\text{Output} = f * h = \\int_0^t f(\\tau)h(t-\\tau)\\,d\\tau$$
+
+The output is the "weighted average" of the input, where the weights are the impulse response.`
+          },
+          {
+            title: 'Impulse and Step Response',
+            content: `**Impulse Response $h(t)$:**
+The system's output when the input is $\\delta(t)$.
+
+For $y'' + by' + cy = f(t)$:
+- Apply input $f(t) = \\delta(t)$
+- The output $y(t) = h(t)$ with zero ICs
+
+**Step Response $s(t)$:**
+The system's output when the input is $u(t)$ (unit step).
+
+**Relationship:**
+$$s(t) = \\int_0^t h(\\tau)\\,d\\tau$$
+$$h(t) = s'(t)$$
+
+**Why these matter:**
+1. Impulse response completely characterizes a linear system
+2. Any output can be computed via convolution
+3. Step response shows how system approaches steady state
+
+**Example:** For $y' + 2y = f(t)$:
+- Impulse response: $h(t) = e^{-2t}$
+- Step response: $s(t) = \\frac{1}{2}(1 - e^{-2t})$`
+          },
+          {
+            title: 'Transfer Functions',
+            content: `**Definition:** The transfer function is:
+$$H(s) = \\frac{Y(s)}{F(s)} = \\mathcal{L}\\{h(t)\\}$$
+
+(assuming zero initial conditions)
+
+For $y'' + by' + cy = f(t)$:
+$$H(s) = \\frac{1}{s^2 + bs + c}$$
+
+**Poles and Zeros:**
+- **Poles:** Values where $H(s) \\to \\infty$ (roots of denominator)
+- **Zeros:** Values where $H(s) = 0$ (roots of numerator)
+
+**Stability from Poles:**
+- All poles in left half-plane ($\\text{Re}(s) < 0$) → **stable**
+- Any pole in right half-plane → **unstable**
+- Poles on imaginary axis → **marginally stable**
+
+**Example:** $H(s) = \\frac{1}{s^2 + 2s + 5}$
+Poles: $s = -1 \\pm 2i$ (left half-plane)
+→ System is stable (decaying oscillations)`
+          },
+          {
+            title: 'Frequency Response',
+            content: `**Key Insight:** For sinusoidal input, evaluate $H(s)$ at $s = i\\omega$:
+
+$$H(i\\omega) = |H(i\\omega)|e^{i\\phi(\\omega)}$$
+
+where:
+- $|H(i\\omega)|$ = gain at frequency $\\omega$
+- $\\phi(\\omega)$ = phase shift at frequency $\\omega$
+
+**For input $f(t) = \\cos(\\omega t)$:**
+$$y_{ss}(t) = |H(i\\omega)|\\cos(\\omega t + \\phi(\\omega))$$
+
+**Bode Plots:**
+Two graphs showing:
+1. $20\\log_{10}|H(i\\omega)|$ vs $\\log\\omega$ (gain in dB)
+2. $\\phi(\\omega)$ vs $\\log\\omega$ (phase in degrees)
+
+**Resonance from $H(i\\omega)$:**
+Peak of $|H(i\\omega)|$ occurs near poles closest to imaginary axis.
+
+**Example:** $H(s) = \\frac{1}{s^2+0.2s+1}$
+
+At $\\omega = 1$: $H(i) = \\frac{1}{-1+0.2i+1} = \\frac{1}{0.2i} = -5i$
+
+Gain = 5, Phase = $-90°$ (resonance!)`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'conv-1',
+            problem: 'Compute $(e^{-t}) * (e^{-2t})$ using the convolution theorem.',
+            solution: `**Laplace transforms:**
+$$\\mathcal{L}\\{e^{-t}\\} = \\frac{1}{s+1}, \\quad \\mathcal{L}\\{e^{-2t}\\} = \\frac{1}{s+2}$$
+
+**Product:**
+$$F(s) \\cdot G(s) = \\frac{1}{(s+1)(s+2)}$$
+
+**Partial fractions:**
+$$= \\frac{1}{s+1} - \\frac{1}{s+2}$$
+
+**Inverse transform:**
+$$(e^{-t}) * (e^{-2t}) = e^{-t} - e^{-2t}$$
+
+**Verify directly:** The integral $\\int_0^t e^{-\\tau}e^{-2(t-\\tau)}d\\tau = e^{-t} - e^{-2t}$ ✓`
+          },
+          {
+            id: 'conv-2',
+            problem: 'Find the transfer function for the system $y\'\' + 4y\' + 3y = f(t)$. Locate the poles and determine stability.',
+            solution: `**Transfer function:**
+$$H(s) = \\frac{1}{s^2 + 4s + 3} = \\frac{1}{(s+1)(s+3)}$$
+
+**Poles:** $s = -1$ and $s = -3$
+
+**Location:** Both poles are in the **left half-plane** (negative real parts)
+
+**Conclusion:** The system is **stable**.
+
+Physical interpretation: Both modes $e^{-t}$ and $e^{-3t}$ decay, so any disturbance dies out.`
+          },
+          {
+            id: 'conv-3',
+            problem: 'For $H(s) = \\frac{1}{s^2+1}$, find the steady-state response to $f(t) = \\cos(2t)$.',
+            solution: `**Evaluate $H(i\\omega)$ at $\\omega = 2$:**
+$$H(2i) = \\frac{1}{(2i)^2 + 1} = \\frac{1}{-4+1} = \\frac{1}{-3} = -\\frac{1}{3}$$
+
+**Magnitude and phase:**
+$$|H(2i)| = \\frac{1}{3}$$
+$$\\phi = \\pi \\text{ (since } H(2i) \\text{ is negative real)}$$
+
+**Steady-state response:**
+$$y_{ss}(t) = \\frac{1}{3}\\cos(2t + \\pi) = -\\frac{1}{3}\\cos(2t)$$
+
+The output is attenuated by factor of 3 and inverted (180° phase shift).`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // REMAINING UNIT (placeholder for fourth quarter)
+      // =====================================================================
       { id: 'systems', title: 'Systems of ODEs', description: 'Matrix methods and phase portraits.', visualizations: ['PhasePortrait'] },
     ],
   },

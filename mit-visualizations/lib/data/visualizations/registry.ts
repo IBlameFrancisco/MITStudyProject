@@ -63,6 +63,8 @@ export const visualizationRegistry = {
   SecondOrderVisualizer: () => import('@/components/visualizations/diffeq/SecondOrderVisualizer'),
   ResonanceVisualizer: () => import('@/components/visualizations/diffeq/ResonanceVisualizer'),
   UndeterminedCoefficientsVisualizer: () => import('@/components/visualizations/diffeq/UndeterminedCoefficientsVisualizer'),
+  FourierSeriesVisualizer: () => import('@/components/visualizations/diffeq/FourierSeriesVisualizer'),
+  LaplaceTransformVisualizer: () => import('@/components/visualizations/diffeq/LaplaceTransformVisualizer'),
 
   // Complexity/Data Science Visualizations (6-100b)
   ComplexityChart: () => import('@/components/visualizations/complexity/ComplexityChart'),
@@ -131,7 +133,8 @@ export function getVisualizationsByCategory(category: 'probability' | 'algorithm
       'SlopeField', 'PhasePortrait', 'FunctionPlot', 'EulerMethodVisualizer',
       'IntegratingFactorVisualizer', 'SeparableEquationVisualizer',
       'PhaseLineVisualizer', 'CalculusReviewVisualizer', 'SecondOrderVisualizer',
-      'ResonanceVisualizer', 'UndeterminedCoefficientsVisualizer'
+      'ResonanceVisualizer', 'UndeterminedCoefficientsVisualizer',
+      'FourierSeriesVisualizer', 'LaplaceTransformVisualizer'
     ],
     complexity: ['ComplexityChart', 'OptimizationPlot'],
   };
