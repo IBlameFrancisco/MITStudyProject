@@ -8137,11 +8137,657 @@ This is a **transcritical bifurcation**: two equilibria exchange stability as th
       },
 
       // =====================================================================
+      // UNIT 6: SECOND-ORDER LINEAR ODES
+      // =====================================================================
+      {
+        id: 'second-order',
+        title: 'Second-Order Linear ODEs',
+        description: 'Homogeneous equations with constant coefficients.',
+        visualizations: ['SecondOrderVisualizer', 'FunctionPlot'],
+        sections: [
+          {
+            title: 'Introduction to Second-Order ODEs',
+            content: `A **second-order linear ODE with constant coefficients** has the form:
+$$ay'' + by' + cy = g(x)$$
+
+where $a$, $b$, $c$ are constants and $g(x)$ is the forcing function.
+
+**Homogeneous case:** $g(x) = 0$
+$$ay'' + by' + cy = 0$$
+
+**Why are these important?**
+- Model oscillations: springs, pendulums, circuits
+- Fundamental in physics and engineering
+- Have explicit solution formulas!
+
+**The General Solution:**
+$$y = y_h + y_p$$
+where:
+- $y_h$ = homogeneous solution (complementary)
+- $y_p$ = particular solution
+
+**Today's focus:** Finding $y_h$ for the homogeneous case.`
+          },
+          {
+            title: 'The Characteristic Equation',
+            content: `**Key Idea:** Try $y = e^{rx}$ as a solution.
+
+If $y = e^{rx}$, then:
+- $y' = re^{rx}$
+- $y'' = r^2e^{rx}$
+
+Substituting into $ay'' + by' + cy = 0$:
+$$ar^2e^{rx} + bre^{rx} + ce^{rx} = 0$$
+$$e^{rx}(ar^2 + br + c) = 0$$
+
+Since $e^{rx} \\neq 0$, we need:
+$$ar^2 + br + c = 0$$
+
+This is the **characteristic equation** (or auxiliary equation).
+
+**Roots:** Using the quadratic formula:
+$$r = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
+
+The **discriminant** $\\Delta = b^2 - 4ac$ determines the nature of solutions:
+- $\\Delta > 0$: Two distinct real roots
+- $\\Delta = 0$: One repeated real root
+- $\\Delta < 0$: Complex conjugate roots`
+          },
+          {
+            title: 'Case 1: Distinct Real Roots',
+            content: `When $\\Delta = b^2 - 4ac > 0$, we get two distinct real roots $r_1$ and $r_2$.
+
+**General Solution:**
+$$y_h = C_1 e^{r_1 x} + C_2 e^{r_2 x}$$
+
+**Example:** Solve $y'' + 5y' + 6y = 0$
+
+**Step 1:** Characteristic equation: $r^2 + 5r + 6 = 0$
+
+**Step 2:** Factor: $(r + 2)(r + 3) = 0$
+
+**Step 3:** Roots: $r_1 = -2$, $r_2 = -3$
+
+**Step 4:** General solution:
+$$y = C_1 e^{-2x} + C_2 e^{-3x}$$
+
+**Physical interpretation:** Both solutions decay (since roots are negative).
+This models an **overdamped** system - returns to equilibrium without oscillating.`
+          },
+          {
+            title: 'Case 2: Repeated Real Root',
+            content: `When $\\Delta = 0$, we get one repeated root $r = -\\frac{b}{2a}$.
+
+**Problem:** $e^{rx}$ gives only ONE solution. We need TWO linearly independent solutions!
+
+**Solution:** The second solution is $xe^{rx}$.
+
+**General Solution:**
+$$y_h = C_1 e^{rx} + C_2 xe^{rx} = (C_1 + C_2 x)e^{rx}$$
+
+**Example:** Solve $y'' + 4y' + 4y = 0$
+
+**Step 1:** Characteristic equation: $r^2 + 4r + 4 = 0$
+
+**Step 2:** Factor: $(r + 2)^2 = 0$
+
+**Step 3:** Root: $r = -2$ (repeated)
+
+**Step 4:** General solution:
+$$y = (C_1 + C_2 x)e^{-2x}$$
+
+**Physical interpretation:** This is **critically damped** - the fastest return to equilibrium without oscillation. Used in car shock absorbers!`
+          },
+          {
+            title: 'Case 3: Complex Conjugate Roots',
+            content: `When $\\Delta < 0$, we get complex roots $r = \\alpha \\pm \\beta i$ where:
+- $\\alpha = -\\frac{b}{2a}$ (real part)
+- $\\beta = \\frac{\\sqrt{|\\Delta|}}{2a}$ (imaginary part)
+
+**Using Euler's formula:** $e^{i\\theta} = \\cos\\theta + i\\sin\\theta$
+
+$$e^{(\\alpha + \\beta i)x} = e^{\\alpha x}(\\cos\\beta x + i\\sin\\beta x)$$
+
+**General Solution (real form):**
+$$y_h = e^{\\alpha x}(C_1 \\cos\\beta x + C_2 \\sin\\beta x)$$
+
+**Example:** Solve $y'' + 2y' + 5y = 0$
+
+**Characteristic equation:** $r^2 + 2r + 5 = 0$
+$$r = \\frac{-2 \\pm \\sqrt{4-20}}{2} = \\frac{-2 \\pm 4i}{2} = -1 \\pm 2i$$
+
+So $\\alpha = -1$, $\\beta = 2$.
+
+**Solution:** $y = e^{-x}(C_1\\cos 2x + C_2\\sin 2x)$
+
+**Physical interpretation:** **Underdamped** oscillation - oscillates while amplitude decays.`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'second-1',
+            problem: 'Solve the IVP: $y\'\' - 4y = 0$, $y(0) = 2$, $y\'(0) = 4$',
+            solution: `**Characteristic equation:** $r^2 - 4 = 0$
+$(r-2)(r+2) = 0$
+$r = 2, -2$ (distinct real roots)
+
+**General solution:** $y = C_1 e^{2x} + C_2 e^{-2x}$
+
+**Apply ICs:**
+$y(0) = C_1 + C_2 = 2$
+$y'(0) = 2C_1 - 2C_2 = 4 \\Rightarrow C_1 - C_2 = 2$
+
+Solving: $C_1 = 2$, $C_2 = 0$
+
+**Answer:** $y = 2e^{2x}$`
+          },
+          {
+            id: 'second-2',
+            problem: 'Solve: $y\'\' + 6y\' + 9y = 0$',
+            solution: `**Characteristic equation:** $r^2 + 6r + 9 = 0$
+$(r + 3)^2 = 0$
+$r = -3$ (repeated root)
+
+**General solution:**
+$$y = (C_1 + C_2 x)e^{-3x}$$
+
+This is a critically damped system.`
+          },
+          {
+            id: 'second-3',
+            problem: 'Find the general solution to $y\'\' + 4y\' + 13y = 0$. Identify the damping type.',
+            solution: `**Characteristic equation:** $r^2 + 4r + 13 = 0$
+
+$r = \\frac{-4 \\pm \\sqrt{16 - 52}}{2} = \\frac{-4 \\pm \\sqrt{-36}}{2} = \\frac{-4 \\pm 6i}{2} = -2 \\pm 3i$
+
+$\\alpha = -2$, $\\beta = 3$
+
+**General solution:**
+$$y = e^{-2x}(C_1\\cos 3x + C_2\\sin 3x)$$
+
+**Damping type:** Underdamped (complex roots with negative real part)
+
+The solution oscillates with frequency $\\omega = 3$ while the amplitude decays like $e^{-2x}$.`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 7: UNDETERMINED COEFFICIENTS
+      // =====================================================================
+      {
+        id: 'undetermined-coeff',
+        title: 'Undetermined Coefficients',
+        description: 'Finding particular solutions for nonhomogeneous equations.',
+        visualizations: ['UndeterminedCoefficientsVisualizer', 'ResonanceVisualizer'],
+        sections: [
+          {
+            title: 'The Method Overview',
+            content: `For $ay'' + by' + cy = g(x)$, the general solution is:
+$$y = y_h + y_p$$
+
+We know how to find $y_h$. Now we need $y_p$.
+
+**Method of Undetermined Coefficients:**
+1. Look at the form of $g(x)$
+2. Guess a $y_p$ with the same form
+3. Substitute and solve for coefficients
+
+**When does it work?**
+Only when $g(x)$ involves:
+- Polynomials: $x^n$
+- Exponentials: $e^{\\alpha x}$
+- Sines and cosines: $\\sin(\\omega x)$, $\\cos(\\omega x)$
+- Products of the above
+
+**Why these?** These functions form a finite-dimensional space under differentiation - derivatives stay in the same family.`
+          },
+          {
+            title: 'Guess Rules',
+            content: `**Rule 1: Polynomial $g(x) = a_n x^n + ... + a_0$**
+Guess: $y_p = A_n x^n + A_{n-1}x^{n-1} + ... + A_0$
+
+**Rule 2: Exponential $g(x) = e^{\\alpha x}$**
+Guess: $y_p = Ae^{\\alpha x}$
+
+**Rule 3: Trigonometric $g(x) = \\cos(\\omega x)$ or $\\sin(\\omega x)$**
+Guess: $y_p = A\\cos(\\omega x) + B\\sin(\\omega x)$
+(Always include BOTH sine and cosine!)
+
+**Rule 4: Products**
+For $g(x) = x^n e^{\\alpha x}$, guess polynomial times exponential.
+For $g(x) = e^{\\alpha x}\\cos(\\omega x)$, guess $e^{\\alpha x}(A\\cos\\omega x + B\\sin\\omega x)$
+
+**Rule 5: Sums**
+For $g(x) = g_1(x) + g_2(x)$, use **superposition**: find $y_{p1}$ and $y_{p2}$ separately, then add.`
+          },
+          {
+            title: 'The Modification Rule',
+            content: `**Critical Rule:** If your guess duplicates any part of $y_h$, multiply by $x$!
+
+**Why?** A duplicate would be annihilated by the homogeneous equation, giving 0 = g(x).
+
+**Example:** $y'' + y = \\cos x$
+
+Homogeneous: $r^2 + 1 = 0 \\Rightarrow r = \\pm i$
+$y_h = C_1\\cos x + C_2\\sin x$
+
+Normal guess for $\\cos x$: $A\\cos x + B\\sin x$
+**Problem:** This duplicates $y_h$!
+
+**Modified guess:** $y_p = x(A\\cos x + B\\sin x)$
+
+**General Modification:**
+- If $e^{\\alpha x}$ is in $y_h$: multiply guess by $x$
+- If $xe^{\\alpha x}$ is also in $y_h$: multiply by $x^2$
+- Keep multiplying by $x$ until no duplication`
+          },
+          {
+            title: 'Complete Example',
+            content: `**Solve:** $y'' - 3y' - 4y = 3e^{2x}$
+
+**Step 1: Find $y_h$**
+$r^2 - 3r - 4 = 0 \\Rightarrow (r-4)(r+1) = 0$
+$r = 4, -1$
+$y_h = C_1 e^{4x} + C_2 e^{-x}$
+
+**Step 2: Guess $y_p$**
+$g(x) = 3e^{2x}$, and 2 is not a root, so guess:
+$y_p = Ae^{2x}$
+
+**Step 3: Substitute**
+$y_p' = 2Ae^{2x}$, $y_p'' = 4Ae^{2x}$
+
+$4Ae^{2x} - 3(2Ae^{2x}) - 4(Ae^{2x}) = 3e^{2x}$
+$4A - 6A - 4A = 3$
+$-6A = 3 \\Rightarrow A = -\\frac{1}{2}$
+
+**Step 4: General solution**
+$$y = C_1 e^{4x} + C_2 e^{-x} - \\frac{1}{2}e^{2x}$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'undetermined-1',
+            problem: 'Find a particular solution to $y\'\' + 4y = 8x^2 + 2$.',
+            solution: `**Guess:** For polynomial, try $y_p = Ax^2 + Bx + C$
+
+**Derivatives:** $y_p' = 2Ax + B$, $y_p'' = 2A$
+
+**Substitute:**
+$2A + 4(Ax^2 + Bx + C) = 8x^2 + 2$
+$4Ax^2 + 4Bx + (2A + 4C) = 8x^2 + 0x + 2$
+
+**Match coefficients:**
+- $x^2$: $4A = 8 \\Rightarrow A = 2$
+- $x^1$: $4B = 0 \\Rightarrow B = 0$
+- $x^0$: $2A + 4C = 2 \\Rightarrow 4 + 4C = 2 \\Rightarrow C = -\\frac{1}{2}$
+
+**Answer:** $y_p = 2x^2 - \\frac{1}{2}$`
+          },
+          {
+            id: 'undetermined-2',
+            problem: 'Find a particular solution to $y\'\' - y = e^x$.',
+            solution: `**First check:** Characteristic equation $r^2 - 1 = 0$ gives $r = \\pm 1$.
+So $y_h = C_1 e^x + C_2 e^{-x}$.
+
+**Problem:** $e^x$ is already in $y_h$!
+
+**Modified guess:** $y_p = Axe^x$
+
+**Derivatives:**
+$y_p' = Ae^x + Axe^x = A(1+x)e^x$
+$y_p'' = Ae^x + A(1+x)e^x = A(2+x)e^x$
+
+**Substitute:**
+$A(2+x)e^x - Axe^x = e^x$
+$A(2+x-x)e^x = e^x$
+$2Ae^x = e^x$
+$A = \\frac{1}{2}$
+
+**Answer:** $y_p = \\frac{1}{2}xe^x$`
+          },
+          {
+            id: 'undetermined-3',
+            problem: 'Set up (but do not solve) the guess for $y\'\' + 9y = 2\\cos 3x$.',
+            solution: `**Homogeneous:** $r^2 + 9 = 0 \\Rightarrow r = \\pm 3i$
+$y_h = C_1\\cos 3x + C_2\\sin 3x$
+
+**Forcing:** $g(x) = 2\\cos 3x$
+
+**Normal guess:** $A\\cos 3x + B\\sin 3x$
+
+**Problem:** This duplicates $y_h$ completely!
+
+**Modified guess:**
+$$y_p = x(A\\cos 3x + B\\sin 3x)$$
+
+This is a **resonance case** - the forcing frequency matches the natural frequency, leading to growing oscillations.`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 8: FORCED OSCILLATIONS AND RESONANCE
+      // =====================================================================
+      {
+        id: 'forced-oscillations',
+        title: 'Forced Oscillations & Resonance',
+        description: 'Response to periodic forcing and the resonance phenomenon.',
+        visualizations: ['ResonanceVisualizer', 'SecondOrderVisualizer'],
+        sections: [
+          {
+            title: 'The Forced Oscillator Equation',
+            content: `The fundamental model for forced oscillations:
+$$my'' + by' + ky = F_0\\cos(\\omega t)$$
+
+**Physical interpretation:**
+- $m$ = mass
+- $b$ = damping coefficient
+- $k$ = spring constant
+- $F_0\\cos(\\omega t)$ = external forcing
+
+**Standard form:** Dividing by $m$:
+$$y'' + 2\\zeta\\omega_0 y' + \\omega_0^2 y = \\frac{F_0}{m}\\cos(\\omega t)$$
+
+where:
+- $\\omega_0 = \\sqrt{k/m}$ is the **natural frequency**
+- $\\zeta = \\frac{b}{2\\sqrt{km}}$ is the **damping ratio**
+
+**The solution has two parts:**
+1. **Transient** (homogeneous): Dies out due to damping
+2. **Steady-state** (particular): Persists forever`
+          },
+          {
+            title: 'The Steady-State Solution',
+            content: `For the forcing $F_0\\cos(\\omega t)$, the steady-state response is:
+
+$$y_p(t) = A\\cos(\\omega t - \\phi)$$
+
+where the **amplitude** is:
+$$A = \\frac{F_0/m}{\\sqrt{(\\omega_0^2 - \\omega^2)^2 + (2\\zeta\\omega_0\\omega)^2}}$$
+
+and the **phase lag** is:
+$$\\phi = \\arctan\\left(\\frac{2\\zeta\\omega_0\\omega}{\\omega_0^2 - \\omega^2}\\right)$$
+
+**Key observations:**
+1. Response is at the SAME frequency as forcing
+2. Amplitude depends on how close $\\omega$ is to $\\omega_0$
+3. There's a phase lag between forcing and response
+
+**Gain (amplification factor):**
+$$G(\\omega) = \\frac{A}{F_0/k} = \\frac{1}{\\sqrt{(1-r^2)^2 + (2\\zeta r)^2}}$$
+
+where $r = \\omega/\\omega_0$ is the frequency ratio.`
+          },
+          {
+            title: 'Resonance',
+            content: `**Resonance** occurs when the forcing frequency is near the natural frequency.
+
+**For undamped systems ($\\zeta = 0$):**
+When $\\omega = \\omega_0$, amplitude → ∞!
+
+The particular solution becomes:
+$$y_p = \\frac{F_0 t}{2m\\omega_0}\\sin(\\omega_0 t)$$
+
+This grows **linearly** in time - unbounded oscillations!
+
+**For damped systems ($\\zeta > 0$):**
+Maximum amplitude occurs at:
+$$\\omega_r = \\omega_0\\sqrt{1 - 2\\zeta^2}$$
+
+(slightly below $\\omega_0$ for light damping)
+
+Maximum gain:
+$$G_{max} = \\frac{1}{2\\zeta\\sqrt{1-\\zeta^2}} \\approx \\frac{1}{2\\zeta}$$
+
+**Q factor (quality factor):**
+$$Q = \\frac{1}{2\\zeta}$$
+
+Higher Q = sharper resonance peak = less damping
+
+**Real-world examples:**
+- Tacoma Narrows Bridge collapse (1940)
+- Tuning a radio to a frequency
+- Wine glass shattering from sound`
+          },
+          {
+            title: 'Frequency Response',
+            content: `The **frequency response** shows how amplitude varies with forcing frequency.
+
+**Low frequency ($\\omega \\ll \\omega_0$):**
+- System follows the forcing
+- Amplitude ≈ $F_0/k$ (static deflection)
+- Phase lag ≈ 0°
+
+**At resonance ($\\omega \\approx \\omega_0$):**
+- Maximum amplitude
+- Phase lag = 90°
+- Velocity is in phase with force (maximum power transfer)
+
+**High frequency ($\\omega \\gg \\omega_0$):**
+- System cannot keep up with forcing
+- Amplitude → 0 as $\\omega$ → ∞
+- Phase lag → 180° (response opposes forcing)
+
+**Bandwidth:**
+The range of frequencies where $G > G_{max}/\\sqrt{2}$
+
+$$\\Delta\\omega \\approx 2\\zeta\\omega_0 = \\frac{\\omega_0}{Q}$$
+
+Higher Q = narrower bandwidth = more selective`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'forced-1',
+            problem: 'A spring-mass system with $m = 1$ kg, $k = 4$ N/m, and $b = 1$ Ns/m is driven by $F(t) = 2\\cos(2t)$. Find the steady-state amplitude and phase.',
+            solution: `**Parameters:**
+$\\omega_0 = \\sqrt{k/m} = 2$ rad/s
+$\\zeta = b/(2\\sqrt{km}) = 1/(2\\cdot 2) = 0.25$
+$\\omega = 2$ rad/s (forcing frequency)
+
+**Note:** $\\omega = \\omega_0$ — this is resonance!
+
+**Amplitude:**
+$A = \\frac{F_0/m}{\\sqrt{(\\omega_0^2-\\omega^2)^2 + (2\\zeta\\omega_0\\omega)^2}}$
+$= \\frac{2/1}{\\sqrt{0 + (2\\cdot 0.25\\cdot 2\\cdot 2)^2}}$
+$= \\frac{2}{2} = 1$ m
+
+**Phase:**
+$\\phi = \\arctan\\left(\\frac{2\\zeta\\omega_0\\omega}{\\omega_0^2-\\omega^2}\\right) = \\arctan(\\infty) = 90°$
+
+**Steady-state:** $y_p = \\cos(2t - \\pi/2) = \\sin(2t)$`
+          },
+          {
+            id: 'forced-2',
+            problem: 'For the system $y\'\' + 0.2y\' + 4y = \\cos(\\omega t)$, find the forcing frequency that produces maximum amplitude.',
+            solution: `**Identify parameters:**
+$\\omega_0^2 = 4 \\Rightarrow \\omega_0 = 2$
+$2\\zeta\\omega_0 = 0.2 \\Rightarrow \\zeta = 0.05$
+
+**Resonant frequency:**
+$\\omega_r = \\omega_0\\sqrt{1 - 2\\zeta^2}$
+$= 2\\sqrt{1 - 2(0.05)^2}$
+$= 2\\sqrt{1 - 0.005}$
+$= 2\\sqrt{0.995}$
+$\\approx 1.995$ rad/s
+
+**Maximum gain:**
+$G_{max} = \\frac{1}{2\\zeta\\sqrt{1-\\zeta^2}} \\approx \\frac{1}{2(0.05)} = 10$
+
+The system amplifies the input by a factor of 10 at resonance!`
+          },
+          {
+            id: 'forced-3',
+            problem: 'Solve $y\'\' + 4y = \\cos(2t)$ with $y(0) = 0$, $y\'(0) = 0$. (Pure resonance case)',
+            solution: `**Homogeneous:** $r^2 + 4 = 0 \\Rightarrow r = \\pm 2i$
+$y_h = C_1\\cos 2t + C_2\\sin 2t$
+
+**Particular:** Since $\\cos 2t$ duplicates $y_h$, use:
+$y_p = t(A\\cos 2t + B\\sin 2t)$
+
+After substitution (detailed work):
+$y_p = \\frac{t}{4}\\sin 2t$
+
+**General:** $y = C_1\\cos 2t + C_2\\sin 2t + \\frac{t}{4}\\sin 2t$
+
+**Apply ICs:**
+$y(0) = C_1 = 0$
+$y'(0) = 2C_2 + 0 = 0 \\Rightarrow C_2 = 0$
+
+**Solution:** $y = \\frac{t}{4}\\sin 2t$
+
+The amplitude grows linearly with $t$ — **unbounded resonance!**`
+          }
+        ]
+      },
+
+      // =====================================================================
+      // UNIT 9: VARIATION OF PARAMETERS
+      // =====================================================================
+      {
+        id: 'variation-params',
+        title: 'Variation of Parameters',
+        description: 'General method for particular solutions.',
+        visualizations: ['FunctionPlot', 'SecondOrderVisualizer'],
+        sections: [
+          {
+            title: 'Why Another Method?',
+            content: `**Undetermined coefficients** only works for special $g(x)$:
+- Polynomials, exponentials, sines, cosines, and products
+
+**What about:** $y'' + y = \\tan x$? or $y'' + y = \\sec x$?
+
+These don't fit the patterns, so we need a more general method.
+
+**Variation of Parameters** works for ANY continuous $g(x)$!
+
+The trade-off: It always involves integration, which may be difficult.
+
+**The key idea:** Start with the homogeneous solutions $y_1$ and $y_2$, then let the "constants" vary:
+$$y_p = u_1(x)y_1(x) + u_2(x)y_2(x)$$
+
+We'll find formulas for $u_1$ and $u_2$.`
+          },
+          {
+            title: 'Derivation of the Formulas',
+            content: `Given $y'' + p(x)y' + q(x)y = g(x)$ with homogeneous solutions $y_1$, $y_2$.
+
+**Guess:** $y_p = u_1 y_1 + u_2 y_2$
+
+**First derivative:**
+$y_p' = u_1'y_1 + u_1y_1' + u_2'y_2 + u_2y_2'$
+
+**Simplifying assumption:** Set $u_1'y_1 + u_2'y_2 = 0$
+
+Then: $y_p' = u_1y_1' + u_2y_2'$
+
+**Second derivative:**
+$y_p'' = u_1'y_1' + u_1y_1'' + u_2'y_2' + u_2y_2''$
+
+**Substitute into ODE:** After using the fact that $y_1$, $y_2$ solve homogeneous:
+$$u_1'y_1' + u_2'y_2' = g(x)$$
+
+**Two equations, two unknowns:**
+$$u_1'y_1 + u_2'y_2 = 0$$
+$$u_1'y_1' + u_2'y_2' = g(x)$$
+
+Solving by Cramer's rule gives the formulas!`
+          },
+          {
+            title: 'The Variation of Parameters Formulas',
+            content: `**The Wronskian:**
+$$W = \\begin{vmatrix} y_1 & y_2 \\\\ y_1' & y_2' \\end{vmatrix} = y_1y_2' - y_1'y_2$$
+
+**Formulas for $u_1'$ and $u_2'$:**
+$$u_1' = -\\frac{y_2 g(x)}{W}, \\quad u_2' = \\frac{y_1 g(x)}{W}$$
+
+**Integrate to get $u_1$ and $u_2$:**
+$$u_1 = -\\int \\frac{y_2 g(x)}{W}dx, \\quad u_2 = \\int \\frac{y_1 g(x)}{W}dx$$
+
+**Particular solution:**
+$$y_p = u_1 y_1 + u_2 y_2$$
+
+**Note:** We don't need constants of integration since we only need ONE particular solution.`
+          },
+          {
+            title: 'Complete Example',
+            content: `**Solve:** $y'' + y = \\sec x$
+
+**Step 1: Homogeneous solutions**
+$r^2 + 1 = 0 \\Rightarrow r = \\pm i$
+$y_1 = \\cos x$, $y_2 = \\sin x$
+
+**Step 2: Wronskian**
+$W = \\cos x \\cdot \\cos x - (-\\sin x) \\cdot \\sin x = \\cos^2 x + \\sin^2 x = 1$
+
+**Step 3: Find $u_1'$ and $u_2'$**
+$u_1' = -\\frac{\\sin x \\cdot \\sec x}{1} = -\\tan x$
+$u_2' = \\frac{\\cos x \\cdot \\sec x}{1} = 1$
+
+**Step 4: Integrate**
+$u_1 = -\\int \\tan x \\, dx = \\ln|\\cos x|$
+$u_2 = \\int 1 \\, dx = x$
+
+**Step 5: Particular solution**
+$y_p = \\ln|\\cos x| \\cdot \\cos x + x \\cdot \\sin x$
+$= \\cos x \\ln|\\cos x| + x\\sin x$
+
+**General solution:**
+$$y = C_1\\cos x + C_2\\sin x + \\cos x \\ln|\\cos x| + x\\sin x$$`
+          }
+        ],
+        practiceProblems: [
+          {
+            id: 'vop-1',
+            problem: 'Use variation of parameters to find a particular solution to $y\'\' + y = \\csc x$.',
+            solution: `**Homogeneous:** $y_1 = \\cos x$, $y_2 = \\sin x$, $W = 1$
+
+**Find $u_1'$ and $u_2'$:**
+$u_1' = -\\sin x \\cdot \\csc x = -1$
+$u_2' = \\cos x \\cdot \\csc x = \\cot x$
+
+**Integrate:**
+$u_1 = -x$
+$u_2 = \\int \\cot x \\, dx = \\ln|\\sin x|$
+
+**Particular solution:**
+$y_p = -x\\cos x + \\sin x \\ln|\\sin x|$`
+          },
+          {
+            id: 'vop-2',
+            problem: 'Find the Wronskian of $y_1 = e^{2x}$ and $y_2 = e^{-3x}$.',
+            solution: `$W = \\begin{vmatrix} e^{2x} & e^{-3x} \\\\ 2e^{2x} & -3e^{-3x} \\end{vmatrix}$
+
+$= e^{2x}(-3e^{-3x}) - e^{-3x}(2e^{2x})$
+$= -3e^{-x} - 2e^{-x}$
+$= -5e^{-x}$
+
+**Note:** $W \\neq 0$ confirms $y_1$, $y_2$ are linearly independent.`
+          },
+          {
+            id: 'vop-3',
+            problem: 'Set up variation of parameters for $y\'\' - 4y = e^{2x}/x$ (do not integrate).',
+            solution: `**Homogeneous:** $r^2 - 4 = 0 \\Rightarrow r = \\pm 2$
+$y_1 = e^{2x}$, $y_2 = e^{-2x}$
+
+**Wronskian:**
+$W = e^{2x}(-2e^{-2x}) - 2e^{2x}(e^{-2x}) = -2 - 2 = -4$
+
+**Setup:**
+$u_1' = -\\frac{e^{-2x} \\cdot (e^{2x}/x)}{-4} = \\frac{1}{4x}$
+
+$u_2' = \\frac{e^{2x} \\cdot (e^{2x}/x)}{-4} = -\\frac{e^{4x}}{4x}$
+
+The integration of $u_2'$ requires special functions (exponential integral).`
+          }
+        ]
+      },
+
+      // =====================================================================
       // REMAINING UNITS (placeholders for later development)
       // =====================================================================
-      { id: 'second-order', title: 'Second-Order Linear ODEs', description: 'Homogeneous equations with constant coefficients.', visualizations: ['FunctionPlot'] },
-      { id: 'undetermined-coeff', title: 'Undetermined Coefficients', description: 'Finding particular solutions.', visualizations: ['FunctionPlot'] },
-      { id: 'variation-params', title: 'Variation of Parameters', description: 'General method for particular solutions.', visualizations: ['FunctionPlot'] },
       { id: 'fourier-series', title: 'Fourier Series', description: 'Representing periodic functions.', visualizations: ['FunctionPlot'] },
       { id: 'laplace-transform', title: 'Laplace Transform', description: 'Transform methods for ODEs.', visualizations: ['FunctionPlot'] },
       { id: 'systems', title: 'Systems of ODEs', description: 'Matrix methods and phase portraits.', visualizations: ['PhasePortrait'] },
