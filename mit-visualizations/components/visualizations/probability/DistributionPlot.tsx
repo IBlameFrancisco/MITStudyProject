@@ -188,19 +188,19 @@ export default function DistributionPlot() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Probability Distribution Plotter
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4">
+          <div className="bg-surface-tertiary rounded-lg p-4">
             <svg
               ref={svgRef}
               width="100%"
               height="300"
               viewBox="0 0 600 300"
-              className="text-gray-600 dark:text-gray-300"
+              className="text-content-secondary"
             />
           </div>
 
@@ -225,7 +225,7 @@ export default function DistributionPlot() {
             <select
               value={distribution}
               onChange={(e) => setDistribution(e.target.value as Distribution)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
             >
               <option value="normal">Normal</option>
               <option value="binomial">Binomial</option>
@@ -290,16 +290,16 @@ export default function DistributionPlot() {
           <ControlPanel title="Statistics">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Mean:</span>
-                <span className="font-medium text-gray-900 dark:text-white">{stats.mean}</span>
+                <span className="text-content-tertiary">Mean:</span>
+                <span className="font-medium text-content-primary">{stats.mean}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Variance:</span>
-                <span className="font-medium text-gray-900 dark:text-white">{stats.variance}</span>
+                <span className="text-content-tertiary">Variance:</span>
+                <span className="font-medium text-content-primary">{stats.variance}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Std Dev:</span>
-                <span className="font-medium text-gray-900 dark:text-white">{stats.stdDev}</span>
+                <span className="text-content-tertiary">Std Dev:</span>
+                <span className="font-medium text-content-primary">{stats.stdDev}</span>
               </div>
             </div>
           </ControlPanel>

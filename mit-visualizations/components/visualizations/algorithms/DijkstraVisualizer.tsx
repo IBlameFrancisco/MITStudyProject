@@ -366,7 +366,7 @@ export default function DijkstraVisualizer() {
             {/* Legend */}
             <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-400 rounded-full" />
+                <div className="w-4 h-4 bg-content-muted rounded-full" />
                 <span className="text-content-muted">Unvisited</span>
               </div>
               <div className="flex items-center gap-2">

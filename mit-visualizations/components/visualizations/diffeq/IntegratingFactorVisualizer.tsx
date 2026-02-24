@@ -288,7 +288,7 @@ export default function IntegratingFactorVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Integrating Factor Method
       </h2>
 
@@ -345,7 +345,7 @@ export default function IntegratingFactorVisualizer() {
                   </p>
                 </div>
 
-                <p className="text-gray-300">
+                <p className="text-content-muted">
                   {ex.steps[currentStep].explanation}
                 </p>
               </motion.div>
@@ -361,7 +361,7 @@ export default function IntegratingFactorVisualizer() {
                 Previous
               </Button>
 
-              <span className="text-gray-400">
+              <span className="text-content-muted">
                 Step {currentStep + 1} of {ex.steps.length}
               </span>
 
@@ -410,7 +410,7 @@ export default function IntegratingFactorVisualizer() {
           {currentStep === ex.steps.length - 1 && (
             <ControlPanel title="Solution Parameter">
               <div className="space-y-3">
-                <label className="block text-sm text-gray-300">
+                <label className="block text-sm text-content-muted">
                   Constant C: {C.toFixed(1)}
                 </label>
                 <input
@@ -429,7 +429,7 @@ export default function IntegratingFactorVisualizer() {
                     checked={showSolutionFamily}
                     onChange={(e) => setShowSolutionFamily(e.target.checked)}
                   />
-                  <label htmlFor="showFamily" className="text-sm text-gray-300">
+                  <label htmlFor="showFamily" className="text-sm text-content-muted">
                     Show solution family
                   </label>
                 </div>
@@ -438,7 +438,7 @@ export default function IntegratingFactorVisualizer() {
           )}
 
           <ControlPanel title="Method Summary">
-            <div className="text-sm text-gray-400 space-y-2">
+            <div className="text-sm text-content-muted space-y-2">
               <p><strong className="text-white">Standard Form:</strong></p>
               <p className="font-mono text-blue-300 text-center">dy/dx + P(x)y = Q(x)</p>
               <p className="mt-2"><strong className="text-white">Integrating Factor:</strong></p>

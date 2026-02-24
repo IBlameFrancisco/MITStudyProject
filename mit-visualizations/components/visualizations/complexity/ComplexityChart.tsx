@@ -175,19 +175,19 @@ export default function ComplexityChart() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Big-O Complexity Comparison
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4">
+          <div className="bg-surface-tertiary rounded-lg p-4">
             <svg
               ref={svgRef}
               width="100%"
               height="400"
               viewBox="0 0 600 400"
-              className="text-gray-600 dark:text-gray-300"
+              className="text-content-secondary"
             />
           </div>
 
@@ -195,7 +195,7 @@ export default function ComplexityChart() {
             {examples.map((ex) => (
               <div
                 key={ex.complexity}
-                className="p-3 bg-white dark:bg-slate-800 rounded-lg shadow-sm"
+                className="p-3 bg-surface-secondary rounded-lg shadow-sm"
               >
                 <span
                   className="font-mono font-bold"
@@ -205,7 +205,7 @@ export default function ComplexityChart() {
                 >
                   {ex.complexity}
                 </span>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-xs text-content-tertiary mt-1">
                   {ex.example}
                 </p>
               </div>
@@ -229,9 +229,9 @@ export default function ComplexityChart() {
                 id="logScale"
                 checked={logScale}
                 onChange={(e) => setLogScale(e.target.checked)}
-                className="rounded border-gray-300"
+                className="rounded border-edge-secondary"
               />
-              <label htmlFor="logScale" className="text-sm text-gray-700 dark:text-gray-300">
+              <label htmlFor="logScale" className="text-sm text-content-secondary">
                 Logarithmic Y-axis
               </label>
             </div>
@@ -246,7 +246,7 @@ export default function ComplexityChart() {
                     id={`complexity-${i}`}
                     checked={c.enabled}
                     onChange={() => toggleComplexity(i)}
-                    className="rounded border-gray-300"
+                    className="rounded border-edge-secondary"
                   />
                   <div
                     className="w-4 h-1 rounded"
@@ -254,7 +254,7 @@ export default function ComplexityChart() {
                   />
                   <label
                     htmlFor={`complexity-${i}`}
-                    className="text-sm text-gray-700 dark:text-gray-300"
+                    className="text-sm text-content-secondary"
                   >
                     {c.name}
                   </label>
@@ -264,7 +264,7 @@ export default function ComplexityChart() {
           </ControlPanel>
 
           <ControlPanel title="What This Shows">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-content-tertiary">
               Big-O notation describes how an algorithm&apos;s runtime grows as input
               size increases. Lower curves are more efficient for large inputs.
             </p>

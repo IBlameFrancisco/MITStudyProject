@@ -164,7 +164,7 @@ export default function LinearSortingVisualizer() {
               disabled={sorting}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 algorithm === 'counting'
-                  ? 'bg-purple-500 text-white shadow-lg'
+                  ? 'bg-purple-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >
@@ -175,7 +175,7 @@ export default function LinearSortingVisualizer() {
               disabled={sorting}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 algorithm === 'radix'
-                  ? 'bg-purple-500 text-white shadow-lg'
+                  ? 'bg-purple-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >

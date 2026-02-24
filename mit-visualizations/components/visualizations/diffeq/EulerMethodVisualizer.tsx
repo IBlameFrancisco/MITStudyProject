@@ -302,7 +302,7 @@ export default function EulerMethodVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Euler's Method Visualizer
       </h2>
 
@@ -443,14 +443,14 @@ export default function EulerMethodVisualizer() {
                 onChange={(e) => setShowExact(e.target.checked)}
                 className="w-4 h-4"
               />
-              <label htmlFor="showExact" className="text-sm text-gray-300">
+              <label htmlFor="showExact" className="text-sm text-content-muted">
                 Show exact solution
               </label>
             </div>
           </ControlPanel>
 
           <ControlPanel title="Key Insight">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-content-muted">
               Euler's method approximates the solution by following the tangent line
               at each point. Smaller step sizes give better accuracy but require
               more computation.

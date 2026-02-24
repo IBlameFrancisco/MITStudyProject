@@ -378,7 +378,7 @@ export default function EntropyVisualizer() {
       .attr('x', width / 2)
       .attr('y', cy + r + 50)
       .attr('text-anchor', 'middle')
-      .attr('class', 'text-sm font-semibold fill-current text-gray-600')
+      .attr('class', 'text-sm font-semibold fill-current text-content-tertiary')
       .text('H(X,Y)');
 
   }, [jointEntropyCalcs, mode]);
@@ -504,7 +504,7 @@ export default function EntropyVisualizer() {
               <>
                 <div className="bg-surface-secondary rounded-xl p-3 border border-edge-primary text-center">
                   <div className="text-xs text-content-muted"><LaTeX math="H(X,Y)" /></div>
-                  <div className="text-lg font-bold text-gray-600">{jointEntropyCalcs.HXY.toFixed(4)}</div>
+                  <div className="text-lg font-bold text-content-tertiary">{jointEntropyCalcs.HXY.toFixed(4)}</div>
                 </div>
                 <div className="bg-surface-secondary rounded-xl p-3 border border-edge-primary text-center">
                   <div className="text-xs text-content-muted"><LaTeX math="H(X|Y)" /></div>

@@ -307,7 +307,7 @@ export default function DFSVisualizer() {
               disabled={isAnimating}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 isDirected
-                  ? 'bg-brand-500 text-white shadow-lg'
+                  ? 'bg-brand-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >
@@ -318,7 +318,7 @@ export default function DFSVisualizer() {
               disabled={isAnimating}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 !isDirected
-                  ? 'bg-brand-500 text-white shadow-lg'
+                  ? 'bg-brand-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >
@@ -388,7 +388,7 @@ export default function DFSVisualizer() {
             {/* Legend */}
             <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-400 rounded-full" />
+                <div className="w-4 h-4 bg-content-muted rounded-full" />
                 <span className="text-content-muted">White (Undiscovered)</span>
               </div>
               <div className="flex items-center gap-2">

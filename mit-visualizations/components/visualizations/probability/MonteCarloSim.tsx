@@ -124,13 +124,13 @@ export default function MonteCarloSim() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Monte Carlo Pi Estimation
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 flex justify-center">
+          <div className="bg-surface-tertiary rounded-lg p-4 flex justify-center">
             <svg ref={svgRef} width="400" height="400" viewBox="0 0 400 400" />
           </div>
 
@@ -185,32 +185,32 @@ export default function MonteCarloSim() {
           <ControlPanel title="Results">
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Points:</span>
-                <span className="font-medium text-gray-900 dark:text-white">{points.length}</span>
+                <span className="text-content-tertiary">Points:</span>
+                <span className="font-medium text-content-primary">{points.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Inside circle:</span>
+                <span className="text-content-tertiary">Inside circle:</span>
                 <span className="font-medium text-green-600">{insideCount}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Outside circle:</span>
+                <span className="text-content-tertiary">Outside circle:</span>
                 <span className="font-medium text-red-600">{points.length - insideCount}</span>
               </div>
-              <hr className="border-gray-200 dark:border-slate-600" />
+              <hr className="border-edge-primary" />
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">π estimate:</span>
+                <span className="text-content-tertiary">π estimate:</span>
                 <span className="font-bold text-blue-600 text-lg">
                   {piEstimate.toFixed(6)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Actual π:</span>
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="text-content-tertiary">Actual π:</span>
+                <span className="font-medium text-content-primary">
                   {Math.PI.toFixed(6)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Error:</span>
+                <span className="text-content-tertiary">Error:</span>
                 <span className="font-medium text-orange-600">{errorPercent}%</span>
               </div>
             </div>
@@ -220,11 +220,11 @@ export default function MonteCarloSim() {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-green-500 rounded-full" />
-                <span className="text-gray-600 dark:text-gray-300">Inside</span>
+                <span className="text-content-secondary">Inside</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-3 h-3 bg-red-500 rounded-full" />
-                <span className="text-gray-600 dark:text-gray-300">Outside</span>
+                <span className="text-content-secondary">Outside</span>
               </div>
             </div>
           </ControlPanel>

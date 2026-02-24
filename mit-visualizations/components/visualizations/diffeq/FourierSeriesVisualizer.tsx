@@ -333,7 +333,7 @@ export default function FourierSeriesVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Fourier Series Visualizer
       </h2>
 
@@ -342,7 +342,7 @@ export default function FourierSeriesVisualizer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Main waveform */}
             <div className="md:col-span-2 bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Fourier Approximation
               </div>
               <canvas ref={mainCanvasRef} width={500} height={300} className="w-full" />
@@ -350,7 +350,7 @@ export default function FourierSeriesVisualizer() {
 
             {/* Rotating circles */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Epicycles
               </div>
               <canvas ref={circleCanvasRef} width={250} height={300} className="w-full" />
@@ -362,13 +362,13 @@ export default function FourierSeriesVisualizer() {
             <div className="bg-slate-800 p-4 rounded-lg">
               <h4 className="text-blue-300 font-semibold mb-2">Fourier Series Formula</h4>
               <p className="text-blue-200 font-mono text-sm">{wave.formula}</p>
-              <p className="text-gray-400 text-xs mt-2">{wave.description}</p>
+              <p className="text-content-muted text-xs mt-2">{wave.description}</p>
             </div>
 
             <div className="bg-slate-800 p-4 rounded-lg">
               <h4 className="text-green-300 font-semibold mb-2">Coefficients</h4>
               <div className="overflow-x-auto">
-                <table className="text-xs text-gray-300 w-full">
+                <table className="text-xs text-content-muted w-full">
                   <thead>
                     <tr className="border-b border-slate-700">
                       <th className="px-2 py-1">n</th>
@@ -431,7 +431,7 @@ export default function FourierSeriesVisualizer() {
                   checked={showComponents}
                   onChange={(e) => setShowComponents(e.target.checked)}
                 />
-                <span className="text-sm text-gray-300">Show harmonics</span>
+                <span className="text-sm text-content-muted">Show harmonics</span>
               </label>
               <button
                 onClick={() => setIsAnimating(!isAnimating)}
@@ -445,7 +445,7 @@ export default function FourierSeriesVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Key Concepts">
-            <div className="text-xs text-gray-400 space-y-1">
+            <div className="text-xs text-content-muted space-y-1">
               <p>• Any periodic function = sum of sines & cosines</p>
               <p>• More terms = better approximation</p>
               <p>• Gibbs phenomenon at discontinuities</p>

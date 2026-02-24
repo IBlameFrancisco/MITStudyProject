@@ -94,13 +94,13 @@ export default function SlopeField() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Slope Field Visualizer
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700">
+          <div className="bg-surface-secondary rounded-lg overflow-hidden border border-edge-primary">
             <Mafs viewBox={{ x: [-5, 5], y: [-5, 5] }} height={400}>
               <Coordinates.Cartesian />
 
@@ -159,7 +159,7 @@ export default function SlopeField() {
             <select
               value={equationType}
               onChange={(e) => setEquationType(e.target.value as EquationType)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
             >
               <option value="linear">Linear: dy/dx = ay + bx</option>
               <option value="separable">Separable: dy/dx = axy</option>
@@ -198,19 +198,19 @@ export default function SlopeField() {
           <ControlPanel title="Initial Condition">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">x₀:</span>
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="text-content-tertiary">x₀:</span>
+                <span className="font-medium text-content-primary">
                   {initialPoint.point[0].toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">y₀:</span>
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="text-content-tertiary">y₀:</span>
+                <span className="font-medium text-content-primary">
                   {initialPoint.point[1].toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">dy/dx at (x₀,y₀):</span>
+                <span className="text-content-tertiary">dy/dx at (x₀,y₀):</span>
                 <span className="font-medium text-blue-600">
                   {getDyDx(initialPoint.point[0], initialPoint.point[1]).toFixed(3)}
                 </span>
@@ -219,7 +219,7 @@ export default function SlopeField() {
           </ControlPanel>
 
           <ControlPanel title="About">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-content-tertiary">
               A slope field shows the direction of solution curves at each point.
               The blue curve is a numerical approximation of the solution through
               the selected initial condition.

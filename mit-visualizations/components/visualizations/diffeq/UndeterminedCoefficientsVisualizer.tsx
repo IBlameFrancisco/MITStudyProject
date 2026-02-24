@@ -137,7 +137,7 @@ export default function UndeterminedCoefficientsVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Method of Undetermined Coefficients
       </h2>
 
@@ -146,7 +146,7 @@ export default function UndeterminedCoefficientsVisualizer() {
           {/* Equation Display */}
           <div className="bg-slate-900 p-6 rounded-lg mb-4">
             <div className="text-center">
-              <p className="text-gray-400 text-sm mb-2">Solve the differential equation:</p>
+              <p className="text-content-muted text-sm mb-2">Solve the differential equation:</p>
               <p className="text-2xl font-mono text-blue-300">{ex.equation}</p>
             </div>
           </div>
@@ -155,15 +155,15 @@ export default function UndeterminedCoefficientsVisualizer() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div className="bg-slate-800 p-4 rounded-lg">
               <h4 className="text-purple-300 font-semibold mb-2">Homogeneous Solution</h4>
-              <p className="text-gray-400 text-sm mb-1">{ex.homogeneous}</p>
-              <p className="text-gray-400 text-sm mb-2">{ex.roots}</p>
+              <p className="text-content-muted text-sm mb-1">{ex.homogeneous}</p>
+              <p className="text-content-muted text-sm mb-2">{ex.roots}</p>
               <p className="text-purple-200 font-mono">{ex.yh}</p>
             </div>
             <div className="bg-slate-800 p-4 rounded-lg">
               <h4 className="text-amber-300 font-semibold mb-2">Forcing Term Analysis</h4>
-              <p className="text-gray-300 text-sm mb-2">g(x) = {ex.forcing}</p>
+              <p className="text-content-muted text-sm mb-2">g(x) = {ex.forcing}</p>
               <p className="text-amber-200 font-mono">Guess: {ex.guess}</p>
-              <p className="text-gray-400 text-xs mt-2">{ex.explanation}</p>
+              <p className="text-content-muted text-xs mt-2">{ex.explanation}</p>
             </div>
           </div>
 
@@ -171,7 +171,7 @@ export default function UndeterminedCoefficientsVisualizer() {
           <div className="bg-slate-800 p-6 rounded-lg">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white">Solution Steps</h3>
-              <span className="text-gray-400 text-sm">
+              <span className="text-content-muted text-sm">
                 Step {currentStep + 1} of {ex.steps.length}
               </span>
             </div>
@@ -281,7 +281,7 @@ export default function UndeterminedCoefficientsVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Guess Rules">
-            <div className="text-xs text-gray-400 space-y-2">
+            <div className="text-xs text-content-muted space-y-2">
               <div className="p-2 bg-slate-900 rounded">
                 <p className="text-blue-300 font-semibold">Polynomial xⁿ</p>
                 <p>→ Guess: Aₙxⁿ + ... + A₁x + A₀</p>
@@ -302,7 +302,7 @@ export default function UndeterminedCoefficientsVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Key Rule">
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-content-muted">
               If your guess duplicates a homogeneous solution,
               multiply by <strong className="text-red-400">x</strong> until it doesn't!
             </p>

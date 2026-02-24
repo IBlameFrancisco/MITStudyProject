@@ -83,13 +83,13 @@ export default function FunctionPlot() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         ODE Solution Plotter
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700">
+          <div className="bg-surface-secondary rounded-lg overflow-hidden border border-edge-primary">
             <Mafs
               viewBox={{
                 x: [-1, 10],
@@ -175,7 +175,7 @@ export default function FunctionPlot() {
             <select
               value={solutionType}
               onChange={(e) => setSolutionType(e.target.value as SolutionType)}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
             >
               <option value="exponential">Exponential (1st order)</option>
               <option value="oscillatory">Oscillatory (2nd order)</option>
@@ -274,7 +274,7 @@ export default function FunctionPlot() {
           </ControlPanel>
 
           <ControlPanel title="About">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-content-tertiary">
               Explore closed-form solutions to common differential equations.
               Adjust parameters to see how they affect the solution behavior.
             </p>

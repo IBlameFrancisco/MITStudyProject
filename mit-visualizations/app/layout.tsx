@@ -1,17 +1,11 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import 'katex/dist/katex.min.css';
 import { Providers } from '@/components/layout/Providers';
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
-
 export const metadata: Metadata = {
-  title: 'Francisco Zapata | MIT Course Visualizations',
-  description: 'Interactive visualizations for MIT courses by Francisco Zapata',
+  title: 'MIT Visualizations | Francisco Zapata',
+  description: 'Interactive visualizations for mastering MIT mathematics and computer science courses. Built by Francisco Zapata.',
 };
 
 export default function RootLayout({
@@ -21,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans min-h-screen bg-surface-primary`}>
+      <body className="font-sans min-h-screen bg-surface-primary text-content-primary">
         <Providers>
           {children}
         </Providers>

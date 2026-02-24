@@ -323,7 +323,7 @@ export default function BFSVisualizer() {
             {/* Legend */}
             <div className="mt-4 flex items-center justify-center gap-6 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-gray-400 rounded-full" />
+                <div className="w-4 h-4 bg-content-muted rounded-full" />
                 <span className="text-content-muted">Unvisited</span>
               </div>
               <div className="flex items-center gap-2">
@@ -386,7 +386,7 @@ export default function BFSVisualizer() {
                   <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-mono text-sm ${
                     node.state === 'visited' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' :
                     node.state === 'queued' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300' :
-                    'bg-gray-100 dark:bg-gray-800 text-gray-500'
+                    'bg-surface-tertiary dark:bg-surface-secondary text-content-muted'
                   }`}>
                     {node.distance ?? '∞'}
                   </div>

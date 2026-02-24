@@ -214,13 +214,13 @@ export default function PhasePortrait() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Phase Portrait Visualizer
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 flex justify-center">
+          <div className="bg-surface-tertiary rounded-lg p-4 flex justify-center">
             <svg ref={svgRef} width="500" height="500" viewBox="0 0 500 500" />
           </div>
 
@@ -246,7 +246,7 @@ export default function PhasePortrait() {
                 setSystemType(e.target.value as SystemType);
                 setTrajectories([]);
               }}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
             >
               <option value="harmonic">Harmonic Oscillator</option>
               <option value="damped">Damped Oscillator</option>
@@ -285,13 +285,13 @@ export default function PhasePortrait() {
                 Clear All
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-content-muted mt-2">
               {trajectories.length} trajectory(ies) shown
             </p>
           </ControlPanel>
 
           <ControlPanel title="About">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-content-tertiary">
               A phase portrait shows how a 2D dynamical system evolves over time.
               Arrows indicate the direction of motion, and colored curves are
               solution trajectories from random initial conditions.

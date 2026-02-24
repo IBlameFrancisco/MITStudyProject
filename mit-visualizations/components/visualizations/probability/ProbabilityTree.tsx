@@ -174,19 +174,19 @@ export default function ProbabilityTree() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Probability Tree & Bayes Theorem
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 overflow-x-auto">
+          <div className="bg-surface-tertiary rounded-lg p-4 overflow-x-auto">
             <svg
               ref={svgRef}
               width="100%"
               height="400"
               viewBox="0 0 700 400"
-              className="text-gray-600 dark:text-gray-300"
+              className="text-content-secondary"
             />
           </div>
 
@@ -262,7 +262,7 @@ export default function ProbabilityTree() {
                 <span className="text-red-600">P(¬E₁ ∩ ¬E₂):</span>
                 <span className="font-medium">{((1 - p1) * (1 - p2GivenNotE1)).toFixed(4)}</span>
               </div>
-              <hr className="border-gray-200 dark:border-slate-600" />
+              <hr className="border-edge-primary" />
               <div className="flex justify-between font-medium">
                 <span>Sum:</span>
                 <span>1.0000</span>
@@ -274,11 +274,11 @@ export default function ProbabilityTree() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-green-500 rounded-full" />
-                <span className="text-gray-600 dark:text-gray-300">Event occurs</span>
+                <span className="text-content-secondary">Event occurs</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-red-500 rounded-full" />
-                <span className="text-gray-600 dark:text-gray-300">Event doesn&apos;t occur</span>
+                <span className="text-content-secondary">Event doesn&apos;t occur</span>
               </div>
             </div>
           </ControlPanel>

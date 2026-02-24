@@ -446,7 +446,7 @@ export default function CLTDemo() {
               disabled={isRunning}
               className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-colors ${
                 isRunning
-                  ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                  ? 'bg-edge-secondary dark:bg-surface-tertiary text-content-muted cursor-not-allowed'
                   : 'bg-brand-500 text-white hover:bg-brand-600'
               }`}
             >
