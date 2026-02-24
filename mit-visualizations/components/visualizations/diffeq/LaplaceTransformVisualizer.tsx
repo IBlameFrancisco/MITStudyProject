@@ -308,7 +308,7 @@ export default function LaplaceTransformVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Laplace Transform Visualizer
       </h2>
 
@@ -319,7 +319,7 @@ export default function LaplaceTransformVisualizer() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Time domain */}
                 <div className="bg-slate-900 rounded-lg overflow-hidden">
-                  <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+                  <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                     Time Domain: f(t)
                   </div>
                   <canvas ref={timeCanvasRef} width={400} height={280} className="w-full" />
@@ -327,7 +327,7 @@ export default function LaplaceTransformVisualizer() {
 
                 {/* S-plane */}
                 <div className="bg-slate-900 rounded-lg overflow-hidden">
-                  <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+                  <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                     S-Plane (Poles & ROC)
                   </div>
                   <canvas ref={sPlaneCanvasRef} width={400} height={280} className="w-full" />
@@ -346,7 +346,7 @@ export default function LaplaceTransformVisualizer() {
                     <p className="text-2xl font-mono text-green-200">{currentTransform.sDomain}</p>
                   </div>
                 </div>
-                <p className="text-center text-gray-400 text-sm mt-3">
+                <p className="text-center text-content-muted text-sm mt-3">
                   Region of Convergence: <span className="text-green-400">{currentTransform.condition}</span>
                 </p>
               </div>
@@ -377,7 +377,7 @@ export default function LaplaceTransformVisualizer() {
                     </p>
                   </div>
 
-                  <p className="text-gray-300">{ODE_EXAMPLE[odeStep].explanation}</p>
+                  <p className="text-content-muted">{ODE_EXAMPLE[odeStep].explanation}</p>
                 </motion.div>
               </AnimatePresence>
 
@@ -389,7 +389,7 @@ export default function LaplaceTransformVisualizer() {
                 >
                   Previous
                 </Button>
-                <span className="text-gray-400">Step {odeStep + 1} / {ODE_EXAMPLE.length}</span>
+                <span className="text-content-muted">Step {odeStep + 1} / {ODE_EXAMPLE.length}</span>
                 <Button
                   onClick={() => setOdeStep(s => Math.min(ODE_EXAMPLE.length - 1, s + 1))}
                   variant="secondary"
@@ -419,7 +419,7 @@ export default function LaplaceTransformVisualizer() {
             <ControlPanel title="Parameters">
               {currentTransform.params.map((p, idx) => (
                 <div key={p.name} className="mb-2">
-                  <label className="block text-sm text-gray-300 mb-1">
+                  <label className="block text-sm text-content-muted mb-1">
                     {p.name} = {params[idx]?.toFixed(2)}
                   </label>
                   <input
@@ -451,7 +451,7 @@ export default function LaplaceTransformVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Key Properties">
-            <div className="text-xs text-gray-400 space-y-1">
+            <div className="text-xs text-content-muted space-y-1">
               <p>• L{'{f\'}'} = sF(s) - f(0)</p>
               <p>• L{'{f\'\'}'} = s²F - sf(0) - f'(0)</p>
               <p>• L{'{e^{at}f}'} = F(s-a)</p>
@@ -461,7 +461,7 @@ export default function LaplaceTransformVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="S-Plane Legend">
-            <div className="text-xs text-gray-400 space-y-1">
+            <div className="text-xs text-content-muted space-y-1">
               <p><span className="text-red-400">×</span> = Poles (where F(s) → ∞)</p>
               <p><span className="text-green-400">Shaded</span> = Region of Convergence</p>
               <p>Poles in left half-plane → stable</p>

@@ -9,9 +9,9 @@ interface ControlPanelProps {
 
 export default function ControlPanel({ title, children }: ControlPanelProps) {
   return (
-    <div className="bg-gray-50 dark:bg-slate-700 rounded-lg p-4">
+    <div className="bg-surface-tertiary/50 rounded-2xl p-5 border border-edge-primary">
       {title && (
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
+        <h3 className="text-sm font-semibold text-content-primary mb-4 tracking-tight">
           {title}
         </h3>
       )}

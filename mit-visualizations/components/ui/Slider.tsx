@@ -14,12 +14,12 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {(label || showValue) && (
           <div className="flex items-center justify-between mb-2">
             {label && (
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label className="text-sm font-medium text-content-secondary">
                 {label}
               </label>
             )}
             {showValue && (
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm font-mono text-accent-primary font-medium">
                 {value}
               </span>
             )}
@@ -31,13 +31,13 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
           value={value}
           min={min}
           max={max}
-          className={`w-full h-2 bg-gray-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer accent-blue-600 ${className}`}
+          className={`w-full h-1.5 bg-edge-secondary rounded-full appearance-none cursor-pointer accent-brand-500 ${className}`}
           {...props}
         />
         {(min !== undefined || max !== undefined) && (
-          <div className="flex justify-between mt-1">
-            <span className="text-xs text-gray-400">{min}</span>
-            <span className="text-xs text-gray-400">{max}</span>
+          <div className="flex justify-between mt-1.5">
+            <span className="text-xs text-content-muted">{min}</span>
+            <span className="text-xs text-content-muted">{max}</span>
           </div>
         )}
       </div>

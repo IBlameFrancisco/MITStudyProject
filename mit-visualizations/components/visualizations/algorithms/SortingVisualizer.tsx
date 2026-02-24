@@ -232,13 +232,13 @@ export default function SortingVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Sorting Algorithm Visualizer
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4 h-80 flex items-end justify-center gap-1">
+          <div className="bg-surface-tertiary rounded-lg p-4 h-80 flex items-end justify-center gap-1">
             {array.map((bar, idx) => (
               <motion.div
                 key={idx}
@@ -253,7 +253,7 @@ export default function SortingVisualizer() {
             ))}
           </div>
 
-          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-300">
+          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-content-secondary">
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 bg-blue-500 rounded" />
               <span>Unsorted</span>
@@ -276,14 +276,14 @@ export default function SortingVisualizer() {
         <div className="space-y-4">
           <ControlPanel title="Controls">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-content-secondary mb-2">
                 Algorithm
               </label>
               <select
                 value={algorithm}
                 onChange={(e) => setAlgorithm(e.target.value as SortAlgorithm)}
                 disabled={sorting}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
               >
                 <option value="bubble">Bubble Sort</option>
                 <option value="merge">Merge Sort</option>
@@ -328,11 +328,11 @@ export default function SortingVisualizer() {
             <div className="grid grid-cols-2 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-blue-600">{comparisons}</p>
-                <p className="text-xs text-gray-500">Comparisons</p>
+                <p className="text-xs text-content-muted">Comparisons</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-green-600">{swaps}</p>
-                <p className="text-xs text-gray-500">Swaps</p>
+                <p className="text-xs text-content-muted">Swaps</p>
               </div>
             </div>
           </ControlPanel>

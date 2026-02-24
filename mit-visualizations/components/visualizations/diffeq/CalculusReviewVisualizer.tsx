@@ -390,7 +390,7 @@ export default function CalculusReviewVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Calculus Prerequisites Review
       </h2>
 
@@ -405,7 +405,7 @@ export default function CalculusReviewVisualizer() {
                 className={`px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-colors ${
                   topic === key
                     ? 'bg-blue-600 text-white'
-                    : 'bg-slate-700 text-gray-300 hover:bg-slate-600'
+                    : 'bg-slate-700 text-content-muted hover:bg-slate-600'
                 }`}
               >
                 <span className="mr-2 font-mono">{val.icon}</span>
@@ -457,17 +457,17 @@ export default function CalculusReviewVisualizer() {
                 </p>
               </div>
 
-              <p className="text-gray-300 mb-4">
+              <p className="text-content-muted mb-4">
                 {currentConcept.explanation}
               </p>
 
               {/* Examples */}
               <div className="space-y-2">
-                <h4 className="text-sm font-semibold text-gray-400">Examples:</h4>
+                <h4 className="text-sm font-semibold text-content-muted">Examples:</h4>
                 {currentConcept.examples.map((ex, idx) => (
                   <div key={idx} className="flex items-center gap-4 p-2 bg-slate-900 rounded">
                     <span className="font-mono text-blue-300">{ex.input}</span>
-                    <span className="text-gray-500">→</span>
+                    <span className="text-content-muted">→</span>
                     <span className="font-mono text-green-300">{ex.output}</span>
                   </div>
                 ))}
@@ -501,7 +501,7 @@ export default function CalculusReviewVisualizer() {
               className="mt-4 p-4 bg-purple-900/30 border border-purple-500/30 rounded-lg"
             >
               <h4 className="text-purple-300 font-semibold mb-2">Quick Practice</h4>
-              <p className="text-gray-300 mb-3">
+              <p className="text-content-muted mb-3">
                 Find the derivative: <span className="font-mono text-blue-300">{currentConcept.examples[0].input}</span>
               </p>
               <div className="flex gap-2">
@@ -529,7 +529,7 @@ export default function CalculusReviewVisualizer() {
           <ControlPanel title="Visualization">
             <div className="space-y-3">
               <div>
-                <label className="block text-sm text-gray-300 mb-1">
+                <label className="block text-sm text-content-muted mb-1">
                   Parameter: {param.toFixed(1)}
                 </label>
                 <input
@@ -549,7 +549,7 @@ export default function CalculusReviewVisualizer() {
                   checked={showDerivative}
                   onChange={(e) => setShowDerivative(e.target.checked)}
                 />
-                <label htmlFor="showDeriv" className="text-sm text-gray-300">
+                <label htmlFor="showDeriv" className="text-sm text-content-muted">
                   Show derivative/integral
                 </label>
               </div>
@@ -567,10 +567,10 @@ export default function CalculusReviewVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Why This Matters">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-content-muted">
               These calculus techniques are fundamental for solving differential equations:
             </p>
-            <ul className="text-xs text-gray-500 mt-2 space-y-1">
+            <ul className="text-xs text-content-muted mt-2 space-y-1">
               <li>• <strong>Integration</strong> - finding antiderivatives</li>
               <li>• <strong>Chain rule</strong> - for substitution methods</li>
               <li>• <strong>Product rule</strong> - for integrating factors</li>
@@ -579,7 +579,7 @@ export default function CalculusReviewVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Common Integrals">
-            <div className="text-xs font-mono text-gray-400 space-y-1">
+            <div className="text-xs font-mono text-content-muted space-y-1">
               <p>∫e^(ax)dx = (1/a)e^(ax)</p>
               <p>∫sin(x)dx = -cos(x)</p>
               <p>∫cos(x)dx = sin(x)</p>

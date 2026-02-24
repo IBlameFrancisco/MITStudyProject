@@ -385,7 +385,7 @@ export default function JohnsonVisualizer() {
                             key={v}
                             className={`px-3 py-2 ${
                               u === v
-                                ? 'text-gray-400'
+                                ? 'text-content-muted'
                                 : d >= INF
                                 ? 'text-red-500'
                                 : currentSource === u

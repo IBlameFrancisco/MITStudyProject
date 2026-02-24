@@ -377,7 +377,7 @@ export default function SecondOrderVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Second-Order ODE: Damped Oscillator
       </h2>
 
@@ -386,7 +386,7 @@ export default function SecondOrderVisualizer() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Time domain */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Solution y(t) vs Time
               </div>
               <canvas ref={canvasRef} width={400} height={300} className="w-full" />
@@ -395,7 +395,7 @@ export default function SecondOrderVisualizer() {
             {/* Phase portrait */}
             {showPhase && (
               <div className="bg-slate-900 rounded-lg overflow-hidden">
-                <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+                <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                   Phase Portrait (y vs y')
                 </div>
                 <canvas ref={phaseCanvasRef} width={400} height={300} className="w-full" />
@@ -437,11 +437,11 @@ export default function SecondOrderVisualizer() {
                 exit={{ opacity: 0, y: -10 }}
                 className="mt-4 p-3 bg-slate-900 rounded"
               >
-                <p className="text-gray-300 text-sm">
+                <p className="text-content-muted text-sm">
                   <strong className="text-white">{rootInfo.type.charAt(0).toUpperCase() + rootInfo.type.slice(1)}:</strong>{' '}
                   {rootInfo.description}
                 </p>
-                <p className="text-gray-400 font-mono text-sm mt-2">
+                <p className="text-content-muted font-mono text-sm mt-2">
                   {rootInfo.solution}
                 </p>
               </motion.div>
@@ -512,14 +512,14 @@ export default function SecondOrderVisualizer() {
                 checked={showPhase}
                 onChange={(e) => setShowPhase(e.target.checked)}
               />
-              <label htmlFor="showPhase" className="text-sm text-gray-300">
+              <label htmlFor="showPhase" className="text-sm text-content-muted">
                 Show phase portrait
               </label>
             </div>
           </ControlPanel>
 
           <ControlPanel title="Damping Cases">
-            <div className="text-xs text-gray-400 space-y-2">
+            <div className="text-xs text-content-muted space-y-2">
               <p><strong className="text-green-400">Undamped (b=0):</strong> Pure oscillation</p>
               <p><strong className="text-blue-400">Underdamped (Δ{'<'}0):</strong> Decaying oscillation</p>
               <p><strong className="text-amber-400">Critical (Δ=0):</strong> Fastest non-oscillating decay</p>

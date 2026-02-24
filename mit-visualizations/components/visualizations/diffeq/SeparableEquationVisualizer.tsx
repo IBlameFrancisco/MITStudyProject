@@ -294,7 +294,7 @@ export default function SeparableEquationVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Separation of Variables
       </h2>
 
@@ -322,7 +322,7 @@ export default function SeparableEquationVisualizer() {
                 <h3 className="text-lg font-semibold text-white">
                   Step {currentStep + 1}: {ex.steps[currentStep].title}
                 </h3>
-                <span className="text-sm text-gray-400">
+                <span className="text-sm text-content-muted">
                   {currentStep + 1} / {ex.steps.length}
                 </span>
               </div>
@@ -340,7 +340,7 @@ export default function SeparableEquationVisualizer() {
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="text-2xl text-gray-400"
+                  className="text-2xl text-content-muted"
                 >
                   =
                 </motion.span>
@@ -354,7 +354,7 @@ export default function SeparableEquationVisualizer() {
                 </motion.div>
               </div>
 
-              <p className="text-gray-300 text-center">
+              <p className="text-content-muted text-center">
                 {ex.steps[currentStep].explanation}
               </p>
 
@@ -439,7 +439,7 @@ export default function SeparableEquationVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Initial Condition">
-            <label className="block text-sm text-gray-300 mb-2">
+            <label className="block text-sm text-content-muted mb-2">
               C = {C.toFixed(1)} (controls y(0))
             </label>
             <input
@@ -451,13 +451,13 @@ export default function SeparableEquationVisualizer() {
               onChange={(e) => setC(Number(e.target.value))}
               className="w-full"
             />
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-content-muted mt-2">
               Adjust to see different solution curves
             </p>
           </ControlPanel>
 
           <ControlPanel title="Key Concept">
-            <div className="text-sm text-gray-400 space-y-2">
+            <div className="text-sm text-content-muted space-y-2">
               <p><strong className="text-white">Separable Form:</strong></p>
               <p className="font-mono text-center text-blue-300">dy/dx = f(x)·g(y)</p>
               <p className="mt-3"><strong className="text-white">Method:</strong></p>

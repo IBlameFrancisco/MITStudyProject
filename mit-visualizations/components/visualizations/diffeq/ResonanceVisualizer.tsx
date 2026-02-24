@@ -294,7 +294,7 @@ export default function ResonanceVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Forced Oscillations & Resonance
       </h2>
 
@@ -303,7 +303,7 @@ export default function ResonanceVisualizer() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Time domain */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Response y(t) vs Time
               </div>
               <canvas ref={canvasRef} width={400} height={280} className="w-full" />
@@ -311,7 +311,7 @@ export default function ResonanceVisualizer() {
 
             {/* Frequency response */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Frequency Response (Amplitude vs ω)
               </div>
               <canvas ref={freqResponseRef} width={400} height={280} className="w-full" />
@@ -337,15 +337,15 @@ export default function ResonanceVisualizer() {
 
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="bg-slate-900 p-2 rounded">
-                <p className="text-gray-400 text-xs">Natural Freq (ω₀)</p>
+                <p className="text-content-muted text-xs">Natural Freq (ω₀)</p>
                 <p className="text-amber-400 font-mono">{omega0.toFixed(2)}</p>
               </div>
               <div className="bg-slate-900 p-2 rounded">
-                <p className="text-gray-400 text-xs">Forcing Freq (ω)</p>
+                <p className="text-content-muted text-xs">Forcing Freq (ω)</p>
                 <p className="text-pink-400 font-mono">{omegaF.toFixed(2)}</p>
               </div>
               <div className="bg-slate-900 p-2 rounded">
-                <p className="text-gray-400 text-xs">Amplitude Gain</p>
+                <p className="text-content-muted text-xs">Amplitude Gain</p>
                 <p className={`font-mono ${amplitude > 2 ? 'text-red-400' : 'text-green-400'}`}>
                   {amplitude.toFixed(3)}
                 </p>
@@ -432,7 +432,7 @@ export default function ResonanceVisualizer() {
           </ControlPanel>
 
           <ControlPanel title="Key Concepts">
-            <div className="text-xs text-gray-400 space-y-2">
+            <div className="text-xs text-content-muted space-y-2">
               <p><strong className="text-white">Resonance:</strong> Maximum amplitude when ω ≈ ω₀</p>
               <p><strong className="text-white">Phase lag:</strong> Response lags forcing by φ</p>
               <p><strong className="text-white">Q factor:</strong> ω₀/b measures "sharpness" of resonance</p>

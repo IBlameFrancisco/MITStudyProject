@@ -225,7 +225,7 @@ export default function HashTableVisualizer() {
                 onClick={() => { setMethod(m); resetTable(); }}
                 className={`px-4 py-2 rounded-xl font-medium text-sm transition-all ${
                   method === m
-                    ? 'bg-green-500 text-white shadow-lg'
+                    ? 'bg-green-500 text-white shadow-soft-lg'
                     : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
                 }`}
               >

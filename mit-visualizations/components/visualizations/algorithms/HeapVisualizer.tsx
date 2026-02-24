@@ -345,7 +345,7 @@ export default function HeapVisualizer() {
               disabled={isAnimating}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 heapType === 'max'
-                  ? 'bg-blue-500 text-white shadow-lg'
+                  ? 'bg-blue-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >
@@ -356,7 +356,7 @@ export default function HeapVisualizer() {
               disabled={isAnimating}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 heapType === 'min'
-                  ? 'bg-emerald-500 text-white shadow-lg'
+                  ? 'bg-emerald-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >

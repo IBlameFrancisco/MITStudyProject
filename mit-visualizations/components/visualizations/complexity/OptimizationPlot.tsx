@@ -245,19 +245,19 @@ export default function OptimizationPlot() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Optimization Algorithm Visualizer
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4">
+          <div className="bg-surface-tertiary rounded-lg p-4">
             <svg
               ref={svgRef}
               width="100%"
               height="350"
               viewBox="0 0 600 350"
-              className="text-gray-600 dark:text-gray-300"
+              className="text-content-secondary"
             />
           </div>
 
@@ -280,7 +280,7 @@ export default function OptimizationPlot() {
               value={optimizationType}
               onChange={(e) => setOptimizationType(e.target.value as OptimizationType)}
               disabled={running}
-              className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
             >
               <option value="gradient">Gradient Descent</option>
               <option value="newton">Newton&apos;s Method</option>
@@ -333,25 +333,25 @@ export default function OptimizationPlot() {
           <ControlPanel title="Status">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">Iteration:</span>
-                <span className="font-medium text-gray-900 dark:text-white">{iteration}</span>
+                <span className="text-content-tertiary">Iteration:</span>
+                <span className="font-medium text-content-primary">{iteration}</span>
               </div>
               {currentPoint && (
                 <>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Current x:</span>
-                    <span className="font-medium text-gray-900 dark:text-white">
+                    <span className="text-content-tertiary">Current x:</span>
+                    <span className="font-medium text-content-primary">
                       {currentPoint.x.toFixed(4)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">f(x):</span>
+                    <span className="text-content-tertiary">f(x):</span>
                     <span className="font-medium text-green-600">
                       {currentPoint.fx.toFixed(4)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">f&apos;(x):</span>
+                    <span className="text-content-tertiary">f&apos;(x):</span>
                     <span className="font-medium text-orange-600">
                       {fPrime(currentPoint.x).toFixed(4)}
                     </span>
@@ -365,15 +365,15 @@ export default function OptimizationPlot() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-1 bg-blue-500 rounded" />
-                <span className="text-gray-600 dark:text-gray-300">Function</span>
+                <span className="text-content-secondary">Function</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-green-500 rounded-full" />
-                <span className="text-gray-600 dark:text-gray-300">Current point</span>
+                <span className="text-content-secondary">Current point</span>
               </div>
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-1 bg-red-500 rounded" style={{ borderStyle: 'dashed' }} />
-                <span className="text-gray-600 dark:text-gray-300">Path</span>
+                <span className="text-content-secondary">Path</span>
               </div>
             </div>
           </ControlPanel>

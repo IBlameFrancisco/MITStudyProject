@@ -412,7 +412,7 @@ export default function PhaseLineVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Phase Line Analysis
       </h2>
 
@@ -421,7 +421,7 @@ export default function PhaseLineVisualizer() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Phase line */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 Phase Line (click to add trajectory)
               </div>
               <canvas
@@ -435,7 +435,7 @@ export default function PhaseLineVisualizer() {
 
             {/* Timeline */}
             <div className="bg-slate-900 rounded-lg overflow-hidden">
-              <div className="p-2 bg-slate-800 text-center text-sm text-gray-300">
+              <div className="p-2 bg-slate-800 text-center text-sm text-content-muted">
                 y(t) vs Time
               </div>
               <canvas
@@ -454,7 +454,7 @@ export default function PhaseLineVisualizer() {
               <p className="text-xl font-mono text-blue-200 text-center">
                 {ex.latex}
               </p>
-              <p className="text-sm text-gray-400 mt-2 text-center">
+              <p className="text-sm text-content-muted mt-2 text-center">
                 {ex.description}
               </p>
             </div>
@@ -463,11 +463,11 @@ export default function PhaseLineVisualizer() {
               <h4 className="text-green-300 font-semibold mb-2">Equilibria</h4>
               <div className="space-y-1">
                 {equilibria.length === 0 ? (
-                  <p className="text-gray-400 text-center">No equilibria exist</p>
+                  <p className="text-content-muted text-center">No equilibria exist</p>
                 ) : (
                   equilibria.map((eq, idx) => (
                     <div key={idx} className="flex items-center justify-between">
-                      <span className="font-mono text-gray-300">y* = {eq.y.toFixed(2)}</span>
+                      <span className="font-mono text-content-muted">y* = {eq.y.toFixed(2)}</span>
                       <span className={`text-sm px-2 py-0.5 rounded ${
                         eq.stability === 'stable' ? 'bg-green-900/50 text-green-300' :
                         eq.stability === 'unstable' ? 'bg-red-900/50 text-red-300' :
@@ -500,7 +500,7 @@ export default function PhaseLineVisualizer() {
             <ControlPanel title="Parameters">
               {ex.paramLabels.map((label, idx) => (
                 <div key={idx} className="mb-3">
-                  <label className="block text-sm text-gray-300 mb-1">
+                  <label className="block text-sm text-content-muted mb-1">
                     {label}: {params[idx]?.toFixed(2)}
                   </label>
                   <input
@@ -533,13 +533,13 @@ export default function PhaseLineVisualizer() {
                 Clear All
               </Button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-content-muted mt-2">
               Time: {time.toFixed(1)}s | Trajectories: {trajectories.length}
             </p>
           </ControlPanel>
 
           <ControlPanel title="Stability Rules">
-            <div className="text-sm text-gray-400 space-y-2">
+            <div className="text-sm text-content-muted space-y-2">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-green-500"></div>
                 <span>Stable: f'(y*) {'<'} 0</span>

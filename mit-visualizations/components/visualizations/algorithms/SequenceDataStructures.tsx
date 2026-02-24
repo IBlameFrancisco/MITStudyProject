@@ -259,7 +259,7 @@ export default function SequenceDataStructures() {
               onClick={() => { setDataStructure('array'); resetStates(); }}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 dataStructure === 'array'
-                  ? 'bg-blue-500 text-white shadow-lg'
+                  ? 'bg-blue-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >
@@ -269,7 +269,7 @@ export default function SequenceDataStructures() {
               onClick={() => { setDataStructure('linkedlist'); resetStates(); }}
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 dataStructure === 'linkedlist'
-                  ? 'bg-green-500 text-white shadow-lg'
+                  ? 'bg-green-500 text-white shadow-soft-lg'
                   : 'bg-surface-tertiary text-content-secondary hover:bg-surface-accent border border-edge-primary'
               }`}
             >

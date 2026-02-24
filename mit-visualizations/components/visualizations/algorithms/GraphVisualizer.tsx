@@ -238,17 +238,17 @@ export default function GraphVisualizer() {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      <h2 className="text-xl font-semibold text-content-primary mb-4">
         Graph Traversal Visualizer
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
-          <div className="bg-gray-100 dark:bg-slate-700 rounded-lg p-4">
+          <div className="bg-surface-tertiary rounded-lg p-4">
             <svg ref={svgRef} width="100%" height="300" viewBox="0 0 500 300" />
           </div>
 
-          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-gray-600 dark:text-gray-300">
+          <div className="mt-4 flex items-center justify-center space-x-4 text-sm text-content-secondary">
             <div className="flex items-center space-x-2">
               <div className="w-4 h-4 bg-blue-500 rounded-full" />
               <span>Unvisited</span>
@@ -271,14 +271,14 @@ export default function GraphVisualizer() {
         <div className="space-y-4">
           <ControlPanel title="Controls">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-content-secondary mb-2">
                 Algorithm
               </label>
               <select
                 value={algorithm}
                 onChange={(e) => setAlgorithm(e.target.value as Algorithm)}
                 disabled={running}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
               >
                 <option value="bfs">Breadth-First Search</option>
                 <option value="dfs">Depth-First Search</option>
@@ -286,14 +286,14 @@ export default function GraphVisualizer() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-content-secondary mb-2">
                 Start Node
               </label>
               <select
                 value={startNode}
                 onChange={(e) => setStartNode(Number(e.target.value))}
                 disabled={running}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+                className="w-full px-3 py-2 rounded-lg border border-edge-secondary dark:border-edge-secondary bg-surface-secondary text-content-primary"
               >
                 {nodes.map((node) => (
                   <option key={node.id} value={node.id}>
@@ -351,7 +351,7 @@ export default function GraphVisualizer() {
                   </span>
                 ))
               ) : (
-                <span className="text-gray-500 text-sm">Run algorithm to see order</span>
+                <span className="text-content-muted text-sm">Run algorithm to see order</span>
               )}
             </div>
           </ControlPanel>

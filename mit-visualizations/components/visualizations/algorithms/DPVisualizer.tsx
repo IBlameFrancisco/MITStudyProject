@@ -364,13 +364,13 @@ export default function DPVisualizer() {
     if (cell.path) return base + 'bg-green-500 text-white border-green-600';
     if (cell.highlighted) return base + 'bg-yellow-400 text-black border-yellow-500 scale-110';
     if (cell.computed) return base + 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border-blue-300 dark:border-blue-700';
-    return base + 'bg-gray-100 dark:bg-gray-800 text-gray-400 border-gray-300 dark:border-gray-600';
+    return base + 'bg-surface-tertiary dark:bg-surface-secondary text-content-muted border-edge-secondary';
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+        <h3 className="text-xl font-bold text-content-primary">
           Dynamic Programming Visualizer
         </h3>
       </div>
@@ -390,7 +390,7 @@ export default function DPVisualizer() {
             className={`px-4 py-2 rounded-lg font-medium transition-all ${
               problem === id
                 ? 'bg-green-600 text-white'
-                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                : 'bg-edge-secondary dark:bg-surface-tertiary text-content-secondary hover:bg-surface-elevated'
             } disabled:opacity-50`}
           >
             {label}
@@ -410,12 +410,12 @@ export default function DPVisualizer() {
         <button
           onClick={reset}
           disabled={isRunning}
-          className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50 transition-colors"
+          className="px-4 py-2 bg-surface-elevated text-content-primary rounded-xl hover:bg-surface-tertiary border border-edge-primary disabled:opacity-50 transition-colors"
         >
           Reset
         </button>
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600 dark:text-gray-400">Speed:</label>
+          <label className="text-sm text-content-tertiary">Speed:</label>
           <input
             type="range"
             min="100"
@@ -431,7 +431,7 @@ export default function DPVisualizer() {
       {/* Problem-specific inputs */}
       {problem === 'fibonacci' && (
         <div className="flex items-center gap-4">
-          <label className="text-sm text-gray-600 dark:text-gray-400">n =</label>
+          <label className="text-sm text-content-tertiary">n =</label>
           <input
             type="number"
             min="2"
@@ -439,7 +439,7 @@ export default function DPVisualizer() {
             value={fibN}
             onChange={(e) => setFibN(Math.min(20, Math.max(2, parseInt(e.target.value) || 2)))}
             disabled={isRunning}
-            className="w-20 px-2 py-1 border rounded dark:bg-gray-800 dark:border-gray-600"
+            className="w-20 px-2 py-1 border rounded dark:bg-surface-secondary dark:border-edge-secondary"
           />
         </div>
       )}
@@ -447,39 +447,39 @@ export default function DPVisualizer() {
       {problem === 'lcs' && (
         <div className="flex flex-wrap gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">String 1:</label>
+            <label className="text-sm text-content-tertiary">String 1:</label>
             <input
               type="text"
               value={lcsStr1}
               onChange={(e) => setLcsStr1(e.target.value.toUpperCase().slice(0, 10))}
               disabled={isRunning}
-              className="w-32 px-2 py-1 border rounded dark:bg-gray-800 dark:border-gray-600 font-mono"
+              className="w-32 px-2 py-1 border rounded dark:bg-surface-secondary dark:border-edge-secondary font-mono"
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 dark:text-gray-400">String 2:</label>
+            <label className="text-sm text-content-tertiary">String 2:</label>
             <input
               type="text"
               value={lcsStr2}
               onChange={(e) => setLcsStr2(e.target.value.toUpperCase().slice(0, 10))}
               disabled={isRunning}
-              className="w-32 px-2 py-1 border rounded dark:bg-gray-800 dark:border-gray-600 font-mono"
+              className="w-32 px-2 py-1 border rounded dark:bg-surface-secondary dark:border-edge-secondary font-mono"
             />
           </div>
         </div>
       )}
 
       {/* Visualization Area */}
-      <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 overflow-x-auto">
+      <div className="bg-surface-tertiary dark:bg-surface-primary rounded-lg p-4 overflow-x-auto">
         {problem === 'fibonacci' && (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-content-tertiary">
               F(n) = F(n-1) + F(n-2), with F(0)=0, F(1)=1
             </div>
             <div className="flex gap-1 flex-wrap">
               {fibTable.map((cell, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <span className="text-xs text-gray-500 mb-1">F({i})</span>
+                  <span className="text-xs text-content-muted mb-1">F({i})</span>
                   <div className={getCellClass(cell)}>{cell.value}</div>
                 </div>
               ))}
@@ -489,7 +489,7 @@ export default function DPVisualizer() {
 
         {problem === 'lcs' && (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-content-tertiary">
               Finding longest common subsequence between "{lcsStr1}" and "{lcsStr2}"
             </div>
             <div className="inline-block">
@@ -497,14 +497,14 @@ export default function DPVisualizer() {
                 <div className="w-10 h-10" />
                 <div className="w-10 h-10" />
                 {lcsStr2.split('').map((c, j) => (
-                  <div key={j} className="w-10 h-10 flex items-center justify-center font-mono font-bold text-gray-700 dark:text-gray-300">
+                  <div key={j} className="w-10 h-10 flex items-center justify-center font-mono font-bold text-content-secondary">
                     {c}
                   </div>
                 ))}
               </div>
               {lcsTable.map((row, i) => (
                 <div key={i} className="flex">
-                  <div className="w-10 h-10 flex items-center justify-center font-mono font-bold text-gray-700 dark:text-gray-300">
+                  <div className="w-10 h-10 flex items-center justify-center font-mono font-bold text-content-secondary">
                     {i === 0 ? '' : lcsStr1[i - 1]}
                   </div>
                   {row.map((cell, j) => (
@@ -523,13 +523,13 @@ export default function DPVisualizer() {
 
         {problem === 'lis' && (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-content-tertiary">
               Array: [{lisArray.join(', ')}]
             </div>
             <div className="flex gap-1 flex-wrap">
               {lisTable.map((cell, i) => (
                 <div key={i} className="flex flex-col items-center">
-                  <span className="text-xs text-gray-500 mb-1">{lisArray[i]}</span>
+                  <span className="text-xs text-content-muted mb-1">{lisArray[i]}</span>
                   <div className={getCellClass(cell)}>{cell.value}</div>
                 </div>
               ))}
@@ -544,21 +544,21 @@ export default function DPVisualizer() {
 
         {problem === 'knapsack' && (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="text-sm text-content-tertiary">
               Items: {knapsackItems.map((item, i) => `(w=${item.weight}, v=${item.value})`).join(', ')} | Capacity: {knapsackCapacity}
             </div>
             <div className="inline-block">
               <div className="flex">
                 <div className="w-12 h-10" />
                 {Array.from({ length: knapsackCapacity + 1 }, (_, w) => (
-                  <div key={w} className="w-10 h-10 flex items-center justify-center text-xs text-gray-500">
+                  <div key={w} className="w-10 h-10 flex items-center justify-center text-xs text-content-muted">
                     w={w}
                   </div>
                 ))}
               </div>
               {knapsackTable.map((row, i) => (
                 <div key={i} className="flex">
-                  <div className="w-12 h-10 flex items-center justify-center text-xs text-gray-500">
+                  <div className="w-12 h-10 flex items-center justify-center text-xs text-content-muted">
                     {i === 0 ? '0' : `i=${i}`}
                   </div>
                   {row.map((cell, j) => (
